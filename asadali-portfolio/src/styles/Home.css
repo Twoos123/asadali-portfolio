@@ -33,6 +33,22 @@
     margin: 5px;
     color: white;
   }
+
+  /* Responsive adjustments */
+@media (max-width: 768px) {
+  .about h2 {
+    font-size: 40px; /* Smaller font size for small screens */
+  }
+
+  .about .prompt {
+    width: 80%; /* Increased width for smaller screens */
+    font-size: 20px; /* Smaller text for the prompt */
+  }
+
+  .prompt svg {
+    font-size: 30px; /* Smaller icons for smaller screens */
+  }
+}
   
   .skills {
     font-size: 35px;
@@ -77,4 +93,5 @@
     .skills h2 {
       font-size: 30px;
     }
+    
   }
