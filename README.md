@@ -1,2 +1,2 @@
 # AsadAliPortfolio
- Personal website for projects
+ Personal website
