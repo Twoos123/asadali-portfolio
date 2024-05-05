@@ -4,7 +4,6 @@ import EmailIcon from '@mui/icons-material/Email';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import "../styles/Home.css";
 import { TypeAnimation } from 'react-type-animation';
-import { Link } from 'react-router-dom';
 
 
 function Home() {
@@ -28,15 +27,17 @@ function Home() {
           style={{ color: '#e9d35b', fontSize: '80px', fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif' }}
         />
         <div className="prompt"> 
-          <Link href="https://www.linkedin.com/in/asadbinali/" target="_blank" >
+          <a href="https://www.linkedin.com/in/asadbinali/" target="_blank" rel="noopener noreferrer">
             <LinkedInIcon />
-          </Link>
+          </a>
 
-          <Link href="https://github.com/Twoos123" target="_blank" >
+          <a href="https://github.com/Twoos123" target="_blank" rel="noopener noreferrer">
             <GitHubIcon />
-          </Link>
+          </a>
         
+          <a href="mailto:masadbali190@gmail.com">
           <EmailIcon />
+          </a>
         </div>
       </div>
       <div className="skills"> 

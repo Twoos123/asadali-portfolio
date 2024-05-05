@@ -10,7 +10,8 @@ import Footer from './components/Footer';
 function App() {
   return (
     <div className="App">
-      <Router>
+      <Router
+      basename='/asadali-portfolio'>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
