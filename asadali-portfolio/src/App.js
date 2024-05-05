@@ -13,9 +13,9 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="asadali-portfolio/home" element={<Home />} />
-          <Route path="asadali-portfolio/projects" element={<Projects />} />
-          <Route path="asadali-portfolio/experience" element={<Experience />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/experience" element={<Experience />} />
         </Routes>
         <Footer />
       </Router>
