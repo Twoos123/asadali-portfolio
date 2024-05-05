@@ -5,6 +5,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 
+
 function Experience() {
   return (
     <div className="experience">
@@ -66,7 +67,7 @@ function Experience() {
         icon={<WorkIcon />}
       >
         <h3 className="vertical-timeline-element-title"> 
-          Fuze: an 8x8 Company, Bells Corners, ON
+          Fuze: an 8x8 Company, Ottawa, ON
         </h3>
 
         <h4 className="vertical-timeline-element-subtitle">
