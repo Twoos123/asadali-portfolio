@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/asadali-portfolio/home/static/css/main.e151e5ba.css",
-    "main.js": "/asadali-portfolio/home/static/js/main.9198b4d3.js",
-    "static/js/453.16df7936.chunk.js": "/asadali-portfolio/home/static/js/453.16df7936.chunk.js",
-    "index.html": "/asadali-portfolio/home/index.html",
-    "main.e151e5ba.css.map": "/asadali-portfolio/home/static/css/main.e151e5ba.css.map",
-    "main.9198b4d3.js.map": "/asadali-portfolio/home/static/js/main.9198b4d3.js.map",
-    "453.16df7936.chunk.js.map": "/asadali-portfolio/home/static/js/453.16df7936.chunk.js.map"
+    "main.css": "/asadali-portfolio/static/css/main.e151e5ba.css",
+    "main.js": "/asadali-portfolio/static/js/main.b266277b.js",
+    "static/js/453.16df7936.chunk.js": "/asadali-portfolio/static/js/453.16df7936.chunk.js",
+    "index.html": "/asadali-portfolio/index.html",
+    "main.e151e5ba.css.map": "/asadali-portfolio/static/css/main.e151e5ba.css.map",
+    "main.b266277b.js.map": "/asadali-portfolio/static/js/main.b266277b.js.map",
+    "453.16df7936.chunk.js.map": "/asadali-portfolio/static/js/453.16df7936.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e151e5ba.css",
-    "static/js/main.9198b4d3.js"
+    "static/js/main.b266277b.js"
   ]
 }
