@@ -83,7 +83,7 @@ function Home() {
         <h1> Skills</h1>
         <div className="skills-grid">
           <div className="skill-category">
-            <h2> Programming Languages</h2>
+            <h2> Languages</h2>
             <div className="skill-set"> 
               {Object.entries(programmingLanguagesIcons).map(([language, Icon]) => (
                 <div className="skill" key={language}>

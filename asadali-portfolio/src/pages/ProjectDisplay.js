@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { projectList } from "../helpers/ProjectList";
 import GitHubIcon from '@mui/icons-material/GitHub';
-import "../styles/ProjectDisplay.css"
-
+import "../styles/ProjectDisplay.css";
 
 function ProjectDisplay() {
   const { id } = useParams();
   const project = projectList.find(p => p.id.toString() === id);
+
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []); 
 
   if (!project) {
       return <div>Project not found!</div>;

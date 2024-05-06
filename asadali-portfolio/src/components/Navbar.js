@@ -21,7 +21,7 @@ function Navbar() {
             const section = document.querySelector(sectionId);
             if (section) {
                 window.scrollTo({
-                    top: section.offsetTop, // Adjust the offset as needed
+                    top: section.offsetTop - 20, // Adjust the offset as needed
                     behavior: 'smooth'
                 });
             }

@@ -95,11 +95,10 @@
     margin-bottom: 20px; /* Space between skill containers */
   }
   
-  
   .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 50px;
+    gap: 40px;
     justify-items: center;
     width: 80%; /* Adjust the width as needed to center the grid */
     margin: 0 auto; /* Center the grid horizontally */

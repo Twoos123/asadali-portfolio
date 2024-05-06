@@ -1,20 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import GitHubIcon from '@mui/icons-material/GitHub';
 
-function ProjectItem({ id, image, name }) {
-  const navigate = useNavigate();
+function ProjectItem({ id, image, name, skills, repoUrl }) {
   return (
-    <Link to={`/project/${id}`}>
-      <div className="projectItem" onClick={() => {
-        navigate("/project" + id);
-        }}
-      >
-        <div style={{ backgroundImage: `url(${image})` }} className="bgImage" />
-        <h1> {name} </h1>
+    <div className="projectItem">
+      <div style={{ backgroundImage: `url(${image})` }} className="bgImage" />
+      <h1> {name} </h1>
+      <div className="projectInfo">
+        <p>{skills}</p>
+        <GitHubIcon style={{ fontSize: '2rem', cursor: 'pointer' }} onClick={() => window.open(repoUrl, '_blank')} />
       </div>
-    </Link>
+    </div>
   );
 }
-
 export default ProjectItem;
