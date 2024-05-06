@@ -1,56 +1,19 @@
-import React, {useEffect, useState }from 'react';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import EmailIcon from '@mui/icons-material/Email';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import "../styles/Home.css";
-import { TypeAnimation } from 'react-type-animation';
-
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
-
-  useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 600);
-    };
-    window.addEventListener('resize', checkIfMobile);
-    return () => window.removeEventListener('resize', checkIfMobile);
-  }, []);
-
-  return isMobile;
-}
+import Projects from './Projects';
+import Experience from './Experience';
 
 
 function Home() {
 
-  const isMobile = useIsMobile();
-
-  const style = {
-    color: '#e9d35b',
-    fontSize: isMobile ? '40px' : '80px',
-    fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
-  };
-
   return (
-    <div className="home">
+    <div id="home" className="home">
       <div className="about">
-        <TypeAnimation
-          sequence={[
-            'Hi, My Name is Asad', // Text
-            1000,
-            'Im a software engineer!', // New text replaces previous after pause
-            500, 
-            'I have a passion for learning.',
-            500,
-            'and creating innovative solutions.'
-          ]}
-          wrapper="h2"
-          cursor={true}
-          repeat={Infinity}
-          speed={40}
-          style={style}
-        />
+        <h2> Asad Ali </h2>
         <div className="prompt"> 
+          <h1> I am a 2nd year Software Engineering student at uOttawa with a passion for learning and developing innovative solutions. </h1>
           <a href="https://www.linkedin.com/in/asadbinali/" target="_blank" rel="noopener noreferrer">
             <LinkedInIcon />
           </a>
@@ -64,7 +27,7 @@ function Home() {
           </a>
         </div>
       </div>
-      <div className="skills"> 
+      <div id="skills" className="skills section"> 
         <h1> Skills</h1>
         <ol className="list">
           <li className="item">
@@ -87,8 +50,14 @@ function Home() {
           </li>
         </ol>
       </div>
+      <div id="projects" className="projects section">
+        <Projects />
+      </div>
+      <div id="experience" className="experience section">
+        <Experience />
+      </div>
     </div>
-  )
+  );
 }
 
 export default Home;

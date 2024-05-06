@@ -12,6 +12,11 @@
     font-size: 60px;
     font-weight: bolder;
   }
+
+  .section {
+    padding-top: 70px; 
+    margin-top: -70px;
+  }
   
   .projectList {
     width: 70vw;
@@ -20,8 +25,6 @@
     grid-template-columns: 1fr 1fr 1fr;
     place-items: center;
   }
-  
-  /* MENU ITEM STYLING */
   
   .projectItem {
     border-radius: 15px;

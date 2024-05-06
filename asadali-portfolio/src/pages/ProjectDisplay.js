@@ -5,15 +5,19 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 
 
 function ProjectDisplay() {
-    const { id } = useParams();
-    const project = projectList[id];
+  const { id } = useParams();
+  const project = projectList.find(p => p.id.toString() === id);
+
+  if (!project) {
+      return <div>Project not found!</div>;
+  }
 
   return (
-    <div className='project'>
-        <h1> {project.name} </h1>
-        <img src={project.image} alt={project.name} />
-        <GitHubIcon />
-    </div>
+      <div className='project'>
+          <h1> {project.name} </h1>
+          <img src={project.image} alt={project.name} />
+          <GitHubIcon />
+      </div>
   )
 }
 

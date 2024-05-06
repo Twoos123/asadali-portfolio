@@ -25,7 +25,7 @@
   }
   
   .about .prompt {
-    width: 40%;
+    width: 60%;
     font-size: 30px;
   }
   .prompt svg {
@@ -47,6 +47,11 @@
 
   .prompt svg {
     font-size: 30px; /* Smaller icons for smaller screens */
+  }
+
+  .section {
+    padding-top: 70px; 
+    margin-top: -70px;
   }
 }
   
@@ -93,5 +98,6 @@
     .skills h2 {
       font-size: 30px;
     }
+
     
   }
