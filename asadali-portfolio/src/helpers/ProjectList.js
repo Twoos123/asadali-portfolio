@@ -6,7 +6,6 @@ export const projectList = [
         id: 0,
         name: "Trivia Game Webapp",
         image: Proj1,
-        skills: "Node.js, React.js"
+        skills: "Node.js, React.js, APIs"
     },
-    // ... other projects
 ];
