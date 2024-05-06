@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/asadali-portfolio/static/css/main.eeb49c5f.css",
-    "main.js": "/asadali-portfolio/static/js/main.6b77c422.js",
+    "main.css": "/asadali-portfolio/static/css/main.f60f7410.css",
+    "main.js": "/asadali-portfolio/static/js/main.e4915001.js",
     "static/js/453.16df7936.chunk.js": "/asadali-portfolio/static/js/453.16df7936.chunk.js",
     "static/media/proj1.jpeg": "/asadali-portfolio/static/media/proj1.9e2ad5dce72cfef27dbe.jpeg",
     "static/media/EOM.jpeg": "/asadali-portfolio/static/media/EOM.54ec2b49b6fe165efb2a.jpeg",
@@ -9,12 +9,12 @@
     "static/media/uOttawa.jpg": "/asadali-portfolio/static/media/uOttawa.360c6087f3398e4a9316.jpg",
     "static/media/uOttaHack.JPG": "/asadali-portfolio/static/media/uOttaHack.ee970fbb785209077975.JPG",
     "index.html": "/asadali-portfolio/index.html",
-    "main.eeb49c5f.css.map": "/asadali-portfolio/static/css/main.eeb49c5f.css.map",
-    "main.6b77c422.js.map": "/asadali-portfolio/static/js/main.6b77c422.js.map",
+    "main.f60f7410.css.map": "/asadali-portfolio/static/css/main.f60f7410.css.map",
+    "main.e4915001.js.map": "/asadali-portfolio/static/js/main.e4915001.js.map",
     "453.16df7936.chunk.js.map": "/asadali-portfolio/static/js/453.16df7936.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.eeb49c5f.css",
-    "static/js/main.6b77c422.js"
+    "static/css/main.f60f7410.css",
+    "static/js/main.e4915001.js"
   ]
 }
