@@ -51,7 +51,7 @@ function Home() {
           sequence={[
             'Asad Ali',
             1500,   
-            'Welcome to my website!',     
+            'Welcome to my website',     
             1500,
             ''
           ]}
