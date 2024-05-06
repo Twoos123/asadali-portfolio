@@ -4,6 +4,13 @@ import "react-vertical-timeline-component/style.min.css"
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import uOttaHack from "../assets/uOttaHack.JPG"
+import uOttawa from "../assets/uOttawa.jpg"
+import EOM from "../assets/EOM.jpeg"
+import eightbyeight from "../assets/8x8.jpeg"
+import SESA from "../assets/SESA.jpg"
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import "../styles/Experience.css"
 
 
 function Experience() {
@@ -16,6 +23,7 @@ function Experience() {
         iconStyle={{ background: '#3e497a', color: '#fff' }}
         icon={<SchoolIcon />}
       >
+        <img src={EOM} alt="Earl Of March SS" className="timeline-image" />
         <h3 className="vertical-timeline-element-title"> 
           Earl Of March SS, Kanata, ON
         </h3>
@@ -24,7 +32,7 @@ function Experience() {
           Highschool Student
         </h4>
 
-        <p> Recieved my High School Diploma.</p>
+        <p> Received my High School Diploma.</p>
         </VerticalTimelineElement>
 
         <VerticalTimelineElement 
@@ -33,6 +41,7 @@ function Experience() {
         iconStyle={{ background: '#3e497a', color: '#fff' }}
         icon={<SchoolIcon />}
       >
+        <img src={uOttawa} alt="University of Ottawa" className="timeline-image" />
         <h3 className="vertical-timeline-element-title"> 
           University of Ottawa, Ottawa, ON
         </h3>
@@ -44,11 +53,12 @@ function Experience() {
         </VerticalTimelineElement>
 
         <VerticalTimelineElement 
-        className="vertical-timeline-element--"
+        className="vertical-timeline-element--volunteer"
         date="2023 June - 2024 March"
         iconStyle={{ background: '#00B34B', color: '#fff' }}
         icon={<VolunteerActivismIcon />}
       >
+        <img src={uOttaHack} alt="uOttaHack 6" className="timeline-image" />
         <h3 className="vertical-timeline-element-title"> 
           uOttaHack 6 Logistics Coordinator
         </h3>
@@ -66,30 +76,49 @@ function Experience() {
         iconStyle={{ background: '#e9d35b', color: '#fff' }}
         icon={<WorkIcon />}
       >
-        <h3 className="vertical-timeline-element-title"> 
-          Fuze: an 8x8 Company, Ottawa, ON
-        </h3>
+          <img src={eightbyeight} alt="Fuze: an 8x8 Company" className="timeline-image" />
+          <h3 className="vertical-timeline-element-title"> 
+            Fuze: an 8x8 Company, Ottawa, ON
+          </h3>
 
-        <h4 className="vertical-timeline-element-subtitle">
-          Backend Developer
-        </h4>
-        <p> CO-OP term at 8x8 as a Backend Developer, implementing and designing APIs.</p>
+          <h4 className="vertical-timeline-element-subtitle">
+            Backend Developer
+          </h4>
+          <p> CO-OP term at 8x8 as a Backend Developer, implementing and designing APIs.</p>
         </VerticalTimelineElement>
         
         <VerticalTimelineElement 
-        className="vertical-timeline-element--"
+        className="vertical-timeline-element--volunteer"
         date="2024 April - Present"
         iconStyle={{ background: '#00B34B', color: '#fff' }}
         icon={<VolunteerActivismIcon />}
       >
-        <h3 className="vertical-timeline-element-title"> 
-          uOttawa Software Engineering Student Association (SESA)
-        </h3>
+          <img src={SESA} alt="uOttawa SESA" className="timeline-image" />
+          <h3 className="vertical-timeline-element-title"> 
+            uOttawa Software Engineering Student Association (SESA)
+          </h3>
 
-        <h4 className="vertical-timeline-element-subtitle">
-          VP of Development
-        </h4>
-        <p> Leading the Development team at uOttawa SESA.</p>
+          <h4 className="vertical-timeline-element-subtitle">
+            VP of Development
+          </h4>
+          <p> Leading the Development team at uOttawa SESA.</p>
+      
+        </VerticalTimelineElement>
+
+        <VerticalTimelineElement 
+        className="vertical-timeline-element--unknown"
+        iconStyle={{ background: '#000000', color: '#fff' }}
+        icon={<QuestionMarkIcon />}
+      >
+          <h3 className="vertical-timeline-element-title"> 
+            Future experience coming soon!
+          </h3>
+
+          <h4 className="vertical-timeline-element-subtitle">
+            :)
+          </h4>
+          <p> </p>
+      
         </VerticalTimelineElement>
 
       </VerticalTimeline>
