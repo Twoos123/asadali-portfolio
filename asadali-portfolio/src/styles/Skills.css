@@ -1,0 +1,74 @@
+.skills {
+    font-size: 22px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto; 
+    text-align: center; 
+  }
+
+  .skill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px; /* increase or decrease the gap between rows */
+  }
+
+  .skill-category.developer-tools .skill-set {
+    column-count: 2; /* Adjust the number of columns as needed */
+    column-gap: 20px; /* Adjust the gap between columns as needed */
+  }
+  
+  .skills h1 {
+    color: #3e497a;
+    /* Ensure the title text is centered within the skills section */
+  }
+
+  .skill-container {
+    break-inside: avoid-column; /* Prevents the container from being split across columns */
+    page-break-inside: avoid; /* For older browsers */
+    -webkit-column-break-inside: avoid; /* For Safari */
+    margin-bottom: 5px; /* Space between skill containers */
+  }
+  
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 10px;
+    justify-items: center;
+    width: 80%; /* Adjust the width as needed to center the grid */
+    margin: 0 auto; /* Center the grid horizontally */
+  }
+
+  
+
+  /* Responsive styles for mobile */
+@media only screen and (max-width: 600px) {
+  .skill-category.developer-tools .skill-set {
+    column-count: 1; /* Single column for mobile */
+    column-gap: 10px; /* Smaller gap for mobile */
+  }
+
+  .skill-container {
+    break-inside: avoid; /* Ensure items don't break across columns */
+  }
+
+  /* Additional adjustments for mobile */
+  .skills-grid {
+    grid-template-columns: 1fr; /* Single column grid for mobile */
+    padding: 0 10px; /* Add padding to prevent content from touching the edges */
+  }
+
+  .skill {
+    align-items: flex-start; /* Align items to the start to prevent stretching */
+  }
+}
+
+@media (max-width: 768px) {
+    .skills-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+  }

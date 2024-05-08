@@ -10,14 +10,13 @@
     margin-top: 200px;
   }
   
-  .socialMedia svg {
-    color: white;
-    margin: 20px;
-    font-size: 70px;
-    cursor: pointer;
-  }
-  
   .footer p {
+    color: white;
+  }
+
+  .prompt svg {
+    font-size: 60px;
+    margin-bottom: 20px;
     color: white;
   }
   

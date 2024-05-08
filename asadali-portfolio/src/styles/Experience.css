@@ -1,3 +1,7 @@
+.experience {
+  position: relative; 
+}
+
 .timeline-image {
     width: 100px; 
     height: auto; 
@@ -5,3 +9,44 @@
     padding: 0;
     float: right;
   }
+
+  .timeline-image1 {
+    width: 100px; 
+    height: auto; 
+    margin: 0;
+    padding-top: 20px;
+    float: right;
+  }
+
+  .experience-header {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding-top: 60px;
+    text-align: center; 
+  }
+
+  .button-container {
+    text-align: center; 
+  }
+  
+  .toggle-button {
+    display: inline-block;
+    width: max-content; 
+    padding: 10px 20px;
+    background-color: #3e497a;
+    color: #e9d35b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .toggle-button:hover {
+    background-color: #2c3a5a; 
+  }
+
+  
+

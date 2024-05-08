@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import "../styles/Navbar.css";
 import ReorderIcon from '@mui/icons-material/Reorder';
+import logo from "../assets/AsadLogo.png"
 
 function Navbar() {
     const [expandNavbar, setExpandNavbar] = useState(false);
@@ -11,17 +12,16 @@ function Navbar() {
         setExpandNavbar(false);
     }, [location]);
 
-    // Function to handle scrolling to the desired section
+   
     const handleScrollToSection = (sectionId) => {
-        // Close the navbar if it's expanded
         setExpandNavbar(false);
 
-        // Wait for the navigation to complete, then scroll to the section
+        
         setTimeout(() => {
             const section = document.querySelector(sectionId);
             if (section) {
                 window.scrollTo({
-                    top: section.offsetTop - 20, // Adjust the offset as needed
+                    top: section.offsetTop - 20, 
                     behavior: 'smooth'
                 });
             }
@@ -29,7 +29,13 @@ function Navbar() {
     };
 
     return (
-        <div className="navbar" id={expandNavbar ? "open" : "close"}> 
+        <div className="navbar" id={expandNavbar ? "open" : "close"}>
+            <div className="logo-container">
+            <a href={window.location.href}>
+                <img src={logo} alt="Logo" />
+            </a>
+            </div>
+            
             <div className="toggleButton"> 
                 <button 
                     onClick={() => {
