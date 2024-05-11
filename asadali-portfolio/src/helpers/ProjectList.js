@@ -1,4 +1,7 @@
-import Proj1 from '../assets/proj1.jpeg'
+import Proj1 from '../assets/TriviaGame.jpeg'
+import Proj2 from '../assets/MenuMate.png'
+import Proj3 from '../assets/RoadOptimization.png'
+
 
 
 export const projectList = [
@@ -9,4 +12,19 @@ export const projectList = [
         skills: "Node.js, React.js, APIs",
         repoUrl: "https://github.com/Twoos123/OutStemChallenge"
     },
+    {
+        id: 1,
+        name: "Menu Mate",
+        image: Proj2,
+        skills: "Python, Flask, React.js, Web Scraping",
+        repoUrl: "https://github.com/Twoos123/MenuMate"
+    },
+    {
+        id: 2,
+        name: "Road Optimization",
+        image: Proj3,
+        skills: "Java, Javascript, HTML, CSS",
+        repoUrl: "https://github.com/Twoos123/RoadOptimization"
+    },
+
 ];

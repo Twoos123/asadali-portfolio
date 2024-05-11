@@ -36,7 +36,7 @@
     width: max-content; 
     padding: 10px 20px;
     background-color: #3e497a;
-    color: #e9d35b;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -47,6 +47,34 @@
   .toggle-button:hover {
     background-color: #2c3a5a; 
   }
+
+  @media only screen and (max-width: 600px) {
+    .skill-set {
+      gap: 10px; 
+      justify-items: center; 
+      align-items: center; 
+    }
+  
+    .skill {
+      align-items: center; 
+      text-align: center; 
+    }
+  
+    .skills-grid {
+      padding: 0 10px; 
+    }
+  }
+  @media (max-width: 768px) {
+    .toggle-button {
+      margin-right: 245px;
+    }
+
+    .toggle-button:hover {
+      background-color: #2c3a5a; 
+    }
+  }
+
+
 
   
 

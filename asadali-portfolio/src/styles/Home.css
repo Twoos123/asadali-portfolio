@@ -3,6 +3,7 @@
     align-items: center;
     font-family: "Arial", sans-serif;
     color: #3e497a;
+    overflow-x: hidden;
   }
   
   .about {
@@ -13,7 +14,6 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: #21325e;
     color: #f0f0f0;
     margin-top: 50px;
   }
@@ -22,7 +22,7 @@
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 80px;
     color: #e9d35b;
-    height: 50px;
+    /* height: 50px;*/ 
   }
   
   .about .prompt {
@@ -67,7 +67,6 @@
 
 
 
-  /* Responsive adjustments */
 @media (max-width: 768px) {
   .about h2 {
     font-size: 40px; /* Smaller font size for small screens */

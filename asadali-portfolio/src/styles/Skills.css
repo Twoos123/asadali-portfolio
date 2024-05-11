@@ -14,17 +14,19 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-bottom: 20px; /* increase or decrease the gap between rows */
   }
 
-  .skill-category.developer-tools .skill-set {
-    column-count: 2; /* Adjust the number of columns as needed */
-    column-gap: 20px; /* Adjust the gap between columns as needed */
+  .skill-set {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Creates three columns */
+    gap: 10px; /* Adjust the gap between icons as needed */
+    justify-items: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
   }
   
   .skills h1 {
     color: #3e497a;
-    /* Ensure the title text is centered within the skills section */
+
   }
 
   .skill-container {
@@ -39,13 +41,12 @@
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 10px;
     justify-items: center;
-    width: 80%; /* Adjust the width as needed to center the grid */
-    margin: 0 auto; /* Center the grid horizontally */
+    width: 80%; 
+    margin: 0 auto;
   }
 
   
 
-  /* Responsive styles for mobile */
 @media only screen and (max-width: 600px) {
   .skill-category.developer-tools .skill-set {
     column-count: 1; /* Single column for mobile */
@@ -53,22 +54,21 @@
   }
 
   .skill-container {
-    break-inside: avoid; /* Ensure items don't break across columns */
+    break-inside: avoid; 
   }
 
-  /* Additional adjustments for mobile */
   .skills-grid {
-    grid-template-columns: 1fr; /* Single column grid for mobile */
-    padding: 0 10px; /* Add padding to prevent content from touching the edges */
+    grid-template-columns: 1fr; 
+    padding: 0 10px; 
   }
 
   .skill {
-    align-items: flex-start; /* Align items to the start to prevent stretching */
+    align-items: flex-start; 
   }
 }
 
 @media (max-width: 768px) {
     .skills-grid {
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
   }

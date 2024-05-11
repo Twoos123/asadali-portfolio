@@ -7,33 +7,33 @@ import { TbBrandOauth } from 'react-icons/tb';
 import "../styles/Skills.css";
 
 const programmingLanguagesIcons = {
-    Java: <FaJava />,
-    Python: <FaPython />,
-    HTML: <FaHtml5 />,
-    CSS: <FaCss3 />,
-    JavaScript: <IoLogoJavascript />,
-    LaTeX: <SiLatex />,
+    Java: <a href="https://www.java.com" target="_blank" rel="noopener noreferrer"><FaJava /></a>,
+    Python: <a href="https://www.python.org" target="_blank" rel="noopener noreferrer"><FaPython /></a>,
+    HTML: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener noreferrer"><FaHtml5 /></a>,
+    CSS: <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener noreferrer"><FaCss3 /></a>,
+    JavaScript: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener noreferrer"><IoLogoJavascript /></a>,
+    LaTeX: <a href="https://www.latex-project.org/" target="_blank" rel="noopener noreferrer"><SiLatex /></a>,
   };
   
   const frameworksIcons = {
-    React: <FaReact />,
-    Node: <FaNode />,
-    SpringBoot: <SiSpringboot />,
-    Maven: <SiApachemaven />,
+    React: <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer"><FaReact /></a>,
+    Node: <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer"><FaNode /></a>,
+    SpringBoot: <a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener noreferrer"><SiSpringboot /></a>,
+    Maven: <a href="https://maven.apache.org/" target="_blank" rel="noopener noreferrer"><SiApachemaven /></a>,
   };
   
   const developerToolsIcons = {
-    Docker: <FaDocker />,
-    GitHub: <FaGithub />,
-    Git: <FaGitAlt />,
-    Bash: <VscTerminalBash />,
-    AndroidStudio: <SiAndroidstudio />,
-    Firebase: <IoLogoFirebase />,
-    Postman: <SiPostman />,
-    Kubernetes: <SiKubernetes />,
-    JIRA: <FaJira />,
-    Jenkins: <FaJenkins />,
-    OAuth: <TbBrandOauth />,
+    Docker: <a href="https://www.docker.com/" target="_blank" rel="noopener noreferrer"><FaDocker /></a>,
+    GitHub: <a href="https://github.com" target="_blank" rel="noopener noreferrer"><FaGithub /></a>,
+    Git: <a href="https://git-scm.com/" target="_blank" rel="noopener noreferrer"><FaGitAlt /></a>,
+    Bash: <a href="https://www.gnu.org/software/bash/" target="_blank" rel="noopener noreferrer"><VscTerminalBash /></a>,
+    AndroidStudio: <a href="https://developer.android.com/studio" target="_blank" rel="noopener noreferrer"><SiAndroidstudio /></a>,
+    Firebase: <a href="https://firebase.google.com/" target="_blank" rel="noopener noreferrer"><IoLogoFirebase /></a>,
+    Postman: <a href="https://www.postman.com/" target="_blank" rel="noopener noreferrer"><SiPostman /></a>,
+    Kubernetes: <a href="https://kubernetes.io/" target="_blank" rel="noopener noreferrer"><SiKubernetes /></a>,
+    JIRA: <a href="https://www.atlassian.com/software/jira" target="_blank" rel="noopener noreferrer"><FaJira /></a>,
+    Jenkins: <a href="https://www.jenkins.io/" target="_blank" rel="noopener noreferrer"><FaJenkins /></a>,
+    OAuth: <a href="https://oauth.net/" target="_blank" rel="noopener noreferrer"><TbBrandOauth /></a>,
   };
 
   
