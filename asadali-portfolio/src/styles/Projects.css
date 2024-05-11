@@ -114,3 +114,23 @@
     height: 300px;
   }
 }
+
+.dark-mode .projects .projectTitle,
+.dark-mode .projectItem h1,
+.dark-mode .projectInfo,
+.dark-mode .projects{
+  color: #e6e6e6; 
+}
+
+.dark-mode .projectItem {
+  background-color: #1a1a2e; 
+  box-shadow: 0px 3px 15px rgba(255, 255, 255, 0.1); 
+}
+
+.dark-mode .projectItem:hover {
+  box-shadow: 0px 3px 15px rgba(255, 255, 255, 0.3); 
+}
+
+.dark-mode .projectInfo {
+  background: #2c3a5a;
+}

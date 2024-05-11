@@ -75,6 +75,28 @@
   }
 
 
+.dark-mode .vertical-timeline-element--education .vertical-timeline-element-content,
+.dark-mode .vertical-timeline-element--volunteer .vertical-timeline-element-content,
+.dark-mode .vertical-timeline-element--work .vertical-timeline-element-content {
+  background: #1a1a2e !important; 
+  color: #e6e6e6 !important; 
+}
+
+.dark-mode .vertical-timeline-element-content .vertical-timeline-element-title,
+.dark-mode .vertical-timeline-element-content .vertical-timeline-element-subtitle {
+  color: #e6e6e6 !important; 
+}
+
+
+.dark-mode .vertical-timeline::before {
+  background: #3e497a !important;
+}
+
+.dark-mode .experience {
+  color: #e6e6e6 !important; 
+}
+
+
 
   
 

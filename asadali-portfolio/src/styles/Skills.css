@@ -72,3 +72,23 @@
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
   }
+
+.dark-mode .skills h1,
+.dark-mode .skills h2,
+.dark-mode .skill-set,
+.dark-mode .skill-container {
+  color: #e6e6e6; 
+}
+
+.dark-mode .skill a {
+  color: #e6e6e6; 
+  transition: color 0.3s; 
+}
+
+.dark-mode .skill a:hover {
+  color: #c7c7c7; 
+}
+
+.dark-mode .skill svg {
+  fill: #e6e6e6; 
+}

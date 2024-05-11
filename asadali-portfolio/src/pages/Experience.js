@@ -6,7 +6,6 @@ import WorkIcon from '@mui/icons-material/Work';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import uOttaHack from "../assets/uOttaHack.JPG"
 import uOttawa from "../assets/uOttawa.jpg"
-import EOM from "../assets/EOM.jpeg"
 import eightbyeight from "../assets/8x8.svg"
 import SESA from "../assets/SESA.jpg"
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
@@ -26,24 +25,6 @@ function Experience() {
         <h1>Experience</h1>
       </div>
       <VerticalTimeline lineColor="#3e497a">
-        <VerticalTimelineElement 
-        className="vertical-timeline-element--education"
-        date="2018 - 2022"
-        iconStyle={{ background: '#3e497a', color: '#fff' }}
-        icon={<SchoolIcon />}
-      >
-        <img src={EOM} alt="Earl Of March SS" className="timeline-image" />
-        <h3 className="vertical-timeline-element-title"> 
-          Earl Of March SS, Kanata, ON
-        </h3>
-
-        <h4 className="vertical-timeline-element-subtitle">
-          Highschool Student
-        </h4>
-
-        <p> Received my High School Diploma.</p>
-        </VerticalTimelineElement>
-
         <VerticalTimelineElement 
         className="vertical-timeline-element--education"
         date="2018 - Present"
@@ -123,7 +104,7 @@ function Experience() {
             </VerticalTimelineElement>
 
             <VerticalTimelineElement 
-              className="vertical-timeline-element--unknown"
+              className="vertical-timeline-element--work"
               iconStyle={{ background: '#000000', color: '#fff' }}
               icon={<QuestionMarkIcon />}
             >

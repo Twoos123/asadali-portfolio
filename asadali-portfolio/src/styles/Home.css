@@ -1,3 +1,4 @@
+
 .home {
     width: 100%;
     align-items: center;
@@ -65,20 +66,35 @@
     transform: translateX(-50%) translateY(-10px);
   }
 
+  .icon-link.linkedin:hover svg {
+  color: #0077b5;
+}
+
+.icon-link.github:hover svg {
+  color: #333; 
+}
+
+.icon-link.email:hover svg {
+  color: #D44638;
+}
+
+.icon-link.badge:hover svg {
+  color: #4A90E2;
+}
 
 
 @media (max-width: 768px) {
   .about h2 {
-    font-size: 40px; /* Smaller font size for small screens */
+    font-size: 40px; 
   }
 
   .about .prompt {
-    width: 80%; /* Increased width for smaller screens */
-    font-size: 20px; /* Smaller text for the prompt */
+    width: 80%; 
+    font-size: 20px;
   }
 
   .prompt svg {
-    font-size: 30px; /* Smaller icons for smaller screens */
+    font-size: 30px;
   }
 
   .section {

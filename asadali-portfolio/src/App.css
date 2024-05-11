@@ -12,3 +12,12 @@ body {
   margin: 0;
 }
 
+body.dark-mode {
+  background-color: #1a1a2e; 
+}
+
+body.dark-mode .App {
+  background-color: #0f0f4d; 
+  color: #e6e6e6; 
+}
+

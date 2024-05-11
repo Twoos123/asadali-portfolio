@@ -42,6 +42,8 @@
   .toggleButton {
     width: 3000000px;
     height: 100px;
+    top: 0;
+    right: 0;
     display: flex;
     justify-content: flex-end;
   }
@@ -55,15 +57,19 @@
     border: none;
     color: white;
     cursor: pointer;
+    display: flex;
+    top: 0;
+    right: 0;
+    position: absolute;
+    width: auto;
+    margin-right: 100px;
+    margin-top: 20px;
   }
   
   #open {
     height: 100vh;
   }
 
-  #open .toggleButton {
-    display: none;
-  }
 
   #open .logo-container {
     display: flex;
@@ -78,7 +84,7 @@
     align-items: center; 
     justify-content: center; 
     height: 100vh; 
-    padding-right: 110px;
+    padding-right: 125px;
   }
   
   #open a {
@@ -123,3 +129,29 @@
       flex-direction: row;
     }
   }
+
+  
+.dark-mode .navbar {
+  background-color: #1a1a2e; 
+  color: #e6e6e6; 
+}
+
+.dark-mode .navbar a {
+  color: #e6e6e6;
+}
+
+.dark-mode .navbar svg {
+  color: inherit; 
+}
+
+@media (max-width: 600px) {
+.dark-toggle {
+  display: flex;
+    top: 0;
+    right: 0;
+    position: absolute;
+    width: auto;
+    margin-right: 20px;
+    margin-top: 26px;
+}
+}

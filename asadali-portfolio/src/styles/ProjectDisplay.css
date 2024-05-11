@@ -26,3 +26,17 @@
     font-size: 60px;
     color: #3e497a;
   }
+
+.dark-mode .project {
+   background-color: #1a1a2e; 
+}
+
+.dark-mode .project h1,
+.dark-mode .project p,
+.dark-mode .project svg {
+  color: #e6e6e6; 
+}
+
+.dark-mode .project img {
+  background-color: #333;
+}
