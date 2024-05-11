@@ -1,21 +1,24 @@
 {
   "files": {
-    "main.css": "/asadali-portfolio/static/css/main.2d046650.css",
-    "main.js": "/asadali-portfolio/static/js/main.40c687d0.js",
+    "main.css": "/asadali-portfolio/static/css/main.468b83a7.css",
+    "main.js": "/asadali-portfolio/static/js/main.b740720a.js",
     "static/js/453.16df7936.chunk.js": "/asadali-portfolio/static/js/453.16df7936.chunk.js",
-    "static/media/proj1.jpeg": "/asadali-portfolio/static/media/proj1.9e2ad5dce72cfef27dbe.jpeg",
+    "static/media/TriviaGame.jpeg": "/asadali-portfolio/static/media/TriviaGame.9e2ad5dce72cfef27dbe.jpeg",
+    "static/media/MenuMate.png": "/asadali-portfolio/static/media/MenuMate.4c9f45be8fcb37f83005.png",
     "static/media/EOM.jpeg": "/asadali-portfolio/static/media/EOM.54ec2b49b6fe165efb2a.jpeg",
+    "static/media/RoadOptimization.png": "/asadali-portfolio/static/media/RoadOptimization.044409a3bdff04850db8.png",
     "static/media/uOttawa.jpg": "/asadali-portfolio/static/media/uOttawa.360c6087f3398e4a9316.jpg",
     "static/media/AsadLogo.png": "/asadali-portfolio/static/media/AsadLogo.ed3c3154b6d00dbdc932.png",
+    "static/media/Background.svg": "/asadali-portfolio/static/media/Background.e5be7e0b34d52127475342ea33479c2d.svg",
     "static/media/uOttaHack.JPG": "/asadali-portfolio/static/media/uOttaHack.ee970fbb785209077975.JPG",
     "static/media/8x8.svg": "/asadali-portfolio/static/media/8x8.3a08beee00ef424214fe1c92be3f1e07.svg",
     "index.html": "/asadali-portfolio/index.html",
-    "main.2d046650.css.map": "/asadali-portfolio/static/css/main.2d046650.css.map",
-    "main.40c687d0.js.map": "/asadali-portfolio/static/js/main.40c687d0.js.map",
+    "main.468b83a7.css.map": "/asadali-portfolio/static/css/main.468b83a7.css.map",
+    "main.b740720a.js.map": "/asadali-portfolio/static/js/main.b740720a.js.map",
     "453.16df7936.chunk.js.map": "/asadali-portfolio/static/js/453.16df7936.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2d046650.css",
-    "static/js/main.40c687d0.js"
+    "static/css/main.468b83a7.css",
+    "static/js/main.b740720a.js"
   ]
 }
