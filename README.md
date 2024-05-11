@@ -4,7 +4,7 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/twoos123/asadali-portfolio?style=flat-square)
 ![GitHub stars](https://img.shields.io/github/stars/twoos123/asadali-portfolio?style=flat-square)
 
-This is the personal website and portfolio of Asad Ali. It showcases his projects, skills, and experiences. The portfolio is built using React.js and features various libraries including react-dark-toggle, devicons, and react-parallax.
+Welcome to my personal portfolio! Here, I showcase my projects, skills, and experiences. This portfolio is built using React.js and features various libraries including react-dark-toggle, devicons, and react-parallax.
 
 ## Demo
 
@@ -12,10 +12,10 @@ You can access the live demo of the portfolio [here](https://twoos123.github.io/
 
 ## Features
 
-- **Responsive Design:** The portfolio is designed to be fully responsive, ensuring a seamless experience across all devices.
-- **Dark Mode Toggle:** Utilizes the react-dark-toggle library to provide users with the option to switch between light and dark modes.
-- **Interactive UI:** Incorporates devicons to visually represent Asad Ali's skills, making the portfolio visually engaging.
-- **Parallax Effect:** Implements react-parallax for a captivating scrolling experience.
+- **Responsive Design:** My portfolio is designed to be fully responsive, ensuring a seamless experience across all devices.
+- **Dark Mode Toggle:** I utilize the react-dark-toggle library to provide users with the option to switch between light and dark modes.
+- **Interactive UI:** I've incorporated devicons to visually represent my skills, making the portfolio visually engaging.
+- **Parallax Effect:** The portfolio implements react-parallax for a captivating scrolling experience.
 
 Installation
 ------------
