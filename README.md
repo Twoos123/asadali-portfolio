@@ -19,37 +19,40 @@ You can access the live demo of the portfolio [here](https://twoos123.github.io/
 
 ## Installation
 
-To run this project locally, follow these steps:
+Asad Ali's Portfolio
+====================
+
+This is the personal website and portfolio of Asad Ali. It showcases his projects, skills, and experiences. The portfolio is built using React.js and features various libraries including react-dark-toggle, devicons, and react-parallax.
+
+Demo
+----
+
+You can access the live demo of the portfolio [here](https://twoos123.github.io/asadali-portfolio/).
+
+Features
+--------
+
+-   Responsive Design: The portfolio is designed to be fully responsive, ensuring a seamless experience across all devices.
+-   Dark Mode Toggle: Utilizes the react-dark-toggle library to provide users with the option to switch between light and dark modes.
+-   Interactive UI: Incorporates devicons to visually represent Asad Ali's skills, making the portfolio visually engaging.
+-   Parallax Effect: Implements react-parallax for a captivating scrolling experience.
+
+Installation
+------------
 
 1.  Clone the repository:
-
-    bash
-
-    Copy code
 
     `git clone https://github.com/twoos123/asadali-portfolio.git`
 
 2.  Navigate to the project directory:
 
-    bash
-
-    Copy code
-
     `cd asadali-portfolio`
 
 3.  Install dependencies:
 
-    bash
-
-    Copy code
-
     `npm install`
 
 4.  Start the development server:
-
-    bash
-
-    Copy code
 
     `npm start`
 
@@ -58,6 +61,10 @@ Contributing
 
 Contributions are welcome! Feel free to open an issue or submit a pull request.
 
+License
+-------
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 License
 -------
 
