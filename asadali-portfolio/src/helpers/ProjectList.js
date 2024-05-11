@@ -1,6 +1,7 @@
 import Proj1 from '../assets/TriviaGame.jpeg'
 import Proj2 from '../assets/MenuMate.png'
 import Proj3 from '../assets/RoadOptimization.png'
+import Proj4 from '../assets/PokeApp.png'
 
 
 
@@ -26,5 +27,11 @@ export const projectList = [
         skills: "Java, Javascript, HTML, CSS",
         repoUrl: "https://github.com/Twoos123/RoadOptimization"
     },
-
+    {
+        id: 3,
+        name: "Poke App",
+        image: Proj4,
+        skills: "React.js, Vite, Open API",
+        repoUrl: "https://github.com/Twoos123/PokeApp"
+    }
 ];
