@@ -1,24 +1,23 @@
 {
   "files": {
-    "main.css": "/asadali-portfolio/static/css/main.2584f19a.css",
-    "main.js": "/asadali-portfolio/static/js/main.a5e47f9a.js",
+    "main.css": "/asadali-portfolio/static/css/main.5eca70b0.css",
+    "main.js": "/asadali-portfolio/static/js/main.a71b8dae.js",
     "static/js/453.16df7936.chunk.js": "/asadali-portfolio/static/js/453.16df7936.chunk.js",
     "static/media/TriviaGame.jpeg": "/asadali-portfolio/static/media/TriviaGame.9e2ad5dce72cfef27dbe.jpeg",
     "static/media/MenuMate.png": "/asadali-portfolio/static/media/MenuMate.4c9f45be8fcb37f83005.png",
     "static/media/RoadOptimization.png": "/asadali-portfolio/static/media/RoadOptimization.044409a3bdff04850db8.png",
-    "static/media/uOttawa.jpg": "/asadali-portfolio/static/media/uOttawa.360c6087f3398e4a9316.jpg",
     "static/media/AsadLogo.png": "/asadali-portfolio/static/media/AsadLogo.ed3c3154b6d00dbdc932.png",
     "static/media/PokeApp.png": "/asadali-portfolio/static/media/PokeApp.91c840b95021d33fd9e9.png",
     "static/media/Background.svg": "/asadali-portfolio/static/media/Background.e5be7e0b34d52127475342ea33479c2d.svg",
     "static/media/uOttaHack.JPG": "/asadali-portfolio/static/media/uOttaHack.ee970fbb785209077975.JPG",
     "static/media/8x8.svg": "/asadali-portfolio/static/media/8x8.3a08beee00ef424214fe1c92be3f1e07.svg",
     "index.html": "/asadali-portfolio/index.html",
-    "main.2584f19a.css.map": "/asadali-portfolio/static/css/main.2584f19a.css.map",
-    "main.a5e47f9a.js.map": "/asadali-portfolio/static/js/main.a5e47f9a.js.map",
+    "main.5eca70b0.css.map": "/asadali-portfolio/static/css/main.5eca70b0.css.map",
+    "main.a71b8dae.js.map": "/asadali-portfolio/static/js/main.a71b8dae.js.map",
     "453.16df7936.chunk.js.map": "/asadali-portfolio/static/js/453.16df7936.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2584f19a.css",
-    "static/js/main.a5e47f9a.js"
+    "static/css/main.5eca70b0.css",
+    "static/js/main.a71b8dae.js"
   ]
 }
