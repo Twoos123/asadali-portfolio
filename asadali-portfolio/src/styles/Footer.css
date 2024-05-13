@@ -16,25 +16,51 @@
 
   .prompt svg {
     font-size: 60px;
-    margin-bottom: 20px;
+    margin: 5px;
     color: white;
+    margin: 0 1px;
   }
 
-  .icon-link.linkedin:hover svg {
-    color: #0077b5;
+  .icon-link-footer {
+    position: relative;
+    display: inline-block;
+    margin-top: 20px;
   }
   
-  .icon-link.github:hover svg {
-    color: #333;
+  .icon-title-footer {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #e9d35b;
+    font-size: 24px;
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
   }
   
-  .icon-link.email:hover svg {
-    color: #D44638;
+  .icon-link-footer:hover .icon-title-footer {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px);
   }
-  
-  .icon-link.badge:hover svg {
-    color: #4A90E2;
-  }
+
+.icon-link-footer.linkedin:hover svg {
+  color: #0077b5;
+}
+
+.icon-link-footer.github:hover svg {
+  color: #333; 
+}
+
+.icon-link-footer.email:hover svg {
+  color: #D44638;
+}
+
+.icon-link-footer.badge:hover svg {
+  color: #4A90E2;
+}
   
   @media only screen and (max-width: 600px) {
     .footer svg {

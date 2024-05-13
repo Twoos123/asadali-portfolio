@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import "react-vertical-timeline-component/style.min.css"
-import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import uOttaHack from "../assets/uOttaHack.JPG"
-import uOttawa from "../assets/uOttawa.jpg"
 import eightbyeight from "../assets/8x8.svg"
 import SESA from "../assets/SESA.jpg"
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import "../styles/Experience.css"
-
+import LocationOnIcon from '@mui/icons-material/LocationOn'
 
 function Experience() {
   const [showMore, setShowMore] = useState(false);
@@ -26,20 +24,25 @@ function Experience() {
       </div>
       <VerticalTimeline lineColor="#3e497a">
         <VerticalTimelineElement 
-        className="vertical-timeline-element--education"
-        date="2018 - Present"
-        iconStyle={{ background: '#3e497a', color: '#fff' }}
-        icon={<SchoolIcon />}
-      >
-        <img src={uOttawa} alt="University of Ottawa" className="timeline-image" />
-        <h3 className="vertical-timeline-element-title"> 
-          University of Ottawa, Ottawa, ON
-        </h3>
+          className="vertical-timeline-element--work"
+          date="2024 January - 2024 May"
+          iconStyle={{ background: '#e9d35b', color: '#fff' }}
+          icon={<WorkIcon />}
+        >
 
+        <img src={eightbyeight} alt="Fuze: an 8x8 Company" className="timeline-image1" />
+          <a href='https://maps.app.goo.gl/5vaXRxQEmYTNqU229' target="_blank" rel="noopener noreferrer">
+            <div className="location-pin">
+              <LocationOnIcon />
+            </div>
+          </a>
+        <h3 className="vertical-timeline-element-title"> 
+          Fuze: an 8x8 Company
+        </h3>
         <h4 className="vertical-timeline-element-subtitle">
-          Bachelor of Software Engineering
+          Backend Developer
         </h4>
-        <p> Currently studying Software Engineering.</p>
+        <p> CO-OP term at 8x8 as a Backend Developer, implementing and designing APIs.</p>
         </VerticalTimelineElement>
 
         <VerticalTimelineElement 
@@ -58,23 +61,6 @@ function Experience() {
         </h4>
 
         <p> Assisted with food selection, networking events, and challenges during the 36-hour hackathon.</p>
-        </VerticalTimelineElement>
-
-        <VerticalTimelineElement 
-          className="vertical-timeline-element--work"
-          date="2024 January - 2024 May"
-          iconStyle={{ background: '#e9d35b', color: '#fff' }}
-          icon={<WorkIcon />}
-        >
-
-        <img src={eightbyeight} alt="Fuze: an 8x8 Company" className="timeline-image1" />
-          <h3 className="vertical-timeline-element-title"> 
-            Fuze: an 8x8 Company, Ottawa, ON
-          </h3>
-          <h4 className="vertical-timeline-element-subtitle">
-            Backend Developer
-          </h4>
-          <p> CO-OP term at 8x8 as a Backend Developer, implementing and designing APIs.</p>
         </VerticalTimelineElement>
       </VerticalTimeline>
         

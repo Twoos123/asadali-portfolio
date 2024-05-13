@@ -21,7 +21,7 @@
   
   .about h2 {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 80px;
+    font-size: 200px;
     color: #e9d35b;
     /* height: 50px;*/ 
   }
@@ -29,6 +29,7 @@
   .about .prompt {
     width: 60%;
     font-size: 30px;
+    margin-top: -100px;
   }
 
   .prompt {
@@ -39,12 +40,13 @@
     font-size: 60px;
     margin: 5px;
     color: white;
+    margin: 0 1px;
   }
 
   .icon-link {
     position: relative;
     display: inline-block;
-    margin: 0 1px;
+    margin-bottom: 200px;
   }
   
   .icon-title {
@@ -66,7 +68,7 @@
     transform: translateX(-50%) translateY(-10px);
   }
 
-  .icon-link.linkedin:hover svg {
+.icon-link.linkedin:hover svg {
   color: #0077b5;
 }
 

@@ -14,7 +14,7 @@
     width: 100px; 
     height: auto; 
     margin: 0;
-    padding-top: 20px;
+    padding-top: 30px;
     float: right;
   }
 
@@ -42,6 +42,14 @@
     cursor: pointer;
     font-size: 1rem;
     text-align: center;
+  }
+
+  .location-pin {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-30%, 30%);
+    color: white;
   }
 
   .toggle-button:hover {
