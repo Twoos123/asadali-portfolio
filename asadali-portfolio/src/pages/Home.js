@@ -30,7 +30,7 @@ function Home() {
                 <EmailIcon style={{ margin: 'auto' }}/>
                 <span className="icon-title">Email</span>
               </a>
-              <a href="https://drive.google.com/file/d/14cqOp9ahDwC2eIb9c6uhd98zDvodPfs0/view?usp=sharing" className="icon-link badge" target="_blank" rel="noopener noreferrer">
+              <a href="https://drive.google.com/file/d/1EMhPfUk3LNk80yOLjPMizadeZS6rm-SJ/view?usp=sharing" className="icon-link badge" target="_blank" rel="noopener noreferrer">
                 <ContactPageIcon style={{ margin: 'auto', marginLeft: '-5px' }}/>
                 <span className="icon-title">Resume</span>
               </a>    
