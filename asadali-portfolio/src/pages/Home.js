@@ -9,17 +9,20 @@ import Experience from './Experience';
 import { Parallax } from 'react-parallax';
 import Background from '../assets/Background.svg';
 import "../styles/Home.css";
+import MeteorShower from '../components/MeteorShower.js';
 
 function Home() {
   return (
     <div id="home" className="home">
+      <MeteorShower />
+
       <Parallax bgImage={Background} strength={100}>
         <div style={{ height: 865 }}>
           <div className="about">
             <h2>Asad Ali</h2>
             <div className="prompt"> 
               <a href="https://www.linkedin.com/in/asadbinali/" target="_blank" className="icon-link linkedin" rel="noopener noreferrer">
-              <LinkedInIcon style={{ margin: 'auto' }} />
+                <LinkedInIcon style={{ margin: 'auto' }} />
                 <span className="icon-title">LinkedIn</span>
               </a>
               <a href="https://github.com/Twoos123" target="_blank" className="icon-link github" rel="noopener noreferrer">
@@ -30,7 +33,7 @@ function Home() {
                 <EmailIcon style={{ margin: 'auto' }}/>
                 <span className="icon-title">Email</span>
               </a>
-              <a href="https://drive.google.com/file/d/1EMhPfUk3LNk80yOLjPMizadeZS6rm-SJ/view?usp=sharing" className="icon-link badge" target="_blank" rel="noopener noreferrer">
+              <a href="https://drive.google.com/file/d/1ryk_3gcH17wOEyteb3HakdiKBiGf8MaE/view?usp=sharing" className="icon-link badge" target="_blank" rel="noopener noreferrer">
                 <ContactPageIcon style={{ margin: 'auto', marginLeft: '-5px' }}/>
                 <span className="icon-title">Resume</span>
               </a>    
@@ -38,6 +41,7 @@ function Home() {
           </div>
         </div>
       </Parallax>
+
       <div id='skills'>
         <Skills />
       </div>

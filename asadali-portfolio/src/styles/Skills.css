@@ -18,22 +18,22 @@
 
   .skill-set {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Creates three columns */
-    gap: 10px; /* Adjust the gap between icons as needed */
-    justify-items: center; /* Center items horizontally */
-    align-items: center; /* Center items vertically */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px; 
+    justify-items: center; 
+    align-items: center; 
   }
   
   .skills h1 {
     color: #3e497a;
-
+    font-size: 40px;
   }
 
   .skill-container {
-    break-inside: avoid-column; /* Prevents the container from being split across columns */
-    page-break-inside: avoid; /* For older browsers */
-    -webkit-column-break-inside: avoid; /* For Safari */
-    margin-bottom: 5px; /* Space between skill containers */
+    break-inside: avoid-column; 
+    page-break-inside: avoid; 
+    -webkit-column-break-inside: avoid; 
+    margin-bottom: 5px; 
   }
   
   .skills-grid {
@@ -49,8 +49,8 @@
 
 @media only screen and (max-width: 600px) {
   .skill-category.developer-tools .skill-set {
-    column-count: 1; /* Single column for mobile */
-    column-gap: 10px; /* Smaller gap for mobile */
+    column-count: 1; 
+    column-gap: 10px; 
   }
 
   .skill-container {

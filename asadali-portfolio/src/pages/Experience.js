@@ -1,22 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
-import "react-vertical-timeline-component/style.min.css"
+import "react-vertical-timeline-component/style.min.css";
 import WorkIcon from '@mui/icons-material/Work';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
-import uOttaHack from "../assets/uOttaHack.JPG"
-import eightbyeight from "../assets/8x8.svg"
-import SESA from "../assets/SESA.jpg"
+import uOttaHack from "../assets/uOttaHack.JPG";
+import eightbyeight from "../assets/8x8.svg";
+import SESA from "../assets/SESA.jpg";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
-import "../styles/Experience.css"
-import LocationOnIcon from '@mui/icons-material/LocationOn'
+import "../styles/Experience.css";
 
 function Experience() {
-  const [showMore, setShowMore] = useState(false);
-
-  const handleShowMore = () => {
-    setShowMore(!showMore);
-  };
-
   return (
     <div className="experience">
       <div className='experience-header'>
@@ -29,81 +22,77 @@ function Experience() {
           iconStyle={{ background: '#e9d35b', color: '#fff' }}
           icon={<WorkIcon />}
         >
-
-        <img src={eightbyeight} alt="Fuze: an 8x8 Company" className="timeline-image1" />
-          <a href='https://maps.app.goo.gl/5vaXRxQEmYTNqU229' target="_blank" rel="noopener noreferrer">
-            <div className="location-pin">
-              <LocationOnIcon />
-            </div>
-          </a>
-        <h3 className="vertical-timeline-element-title"> 
-          Fuze: an 8x8 Company
-        </h3>
-        <h4 className="vertical-timeline-element-subtitle">
-          Backend Developer
-        </h4>
-        <p> CO-OP term at 8x8 as a Backend Developer, implementing and designing APIs.</p>
-        </VerticalTimelineElement>
+          <img src={eightbyeight} alt="Fuze: an 8x8 Company" className="timeline-image1" />
+          <h3 className="vertical-timeline-element-title"> 
+            Fuze: an 8x8 Company
+          </h3>
+          <h4 className="vertical-timeline-element-subtitle">
+            Backend Developer
+          </h4>
+          <p>Completed a CO-OP term at 8x8 as a Backend Developer, focusing on designing and implementing robust APIs to support scalable solutions.</p>
+          </VerticalTimelineElement>
 
         <VerticalTimelineElement 
-        className="vertical-timeline-element--volunteer"
-        date="2023 June - 2024 March"
-        iconStyle={{ background: '#00B34B', color: '#fff' }}
-        icon={<VolunteerActivismIcon />}
-      >
-        <img src={uOttaHack} alt="uOttaHack 6" className="timeline-image" />
-        <h3 className="vertical-timeline-element-title"> 
-          uOttaHack 6 Logistics Coordinator
-        </h3>
+          className="vertical-timeline-element--volunteer"
+          date="2023 June - 2024 March"
+          iconStyle={{ background: '#00B34B', color: '#fff' }}
+          icon={<VolunteerActivismIcon />}
+        >
+          <img src={uOttaHack} alt="uOttaHack 6" className="timeline-image" />
+          <h3 className="vertical-timeline-element-title"> 
+            uOttaHack 6 Logistics Coordinator
+          </h3>
+          <h4 className="vertical-timeline-element-subtitle">
+            Ottawa's Largest Hackathon
+          </h4>
+          <p>Coordinated logistics for uOttaHack 6, including food arrangements, networking activities, and challenge organization during the 36-hour event.</p>
+          </VerticalTimelineElement>
 
-        <h4 className="vertical-timeline-element-subtitle">
-          Ottawa's Largest Hackathon
-        </h4>
+        <VerticalTimelineElement 
+          className="vertical-timeline-element--volunteer"
+          date="2024 April - 2024 September"
+          iconStyle={{ background: '#00B34B', color: '#fff' }}
+          icon={<VolunteerActivismIcon />}
+        >
+          <img src={SESA} alt="uOttawa SESA" className="timeline-image" />
+          <h3 className="vertical-timeline-element-title"> 
+            uOttawa Software Engineering Student Association (SESA)
+          </h3>
+          <h4 className="vertical-timeline-element-subtitle">
+            VP of Development
+          </h4>
+          <p>Overseeing the Development team at uOttawa SESA, driving innovation and managing project execution to support the association's goals.</p>
+          </VerticalTimelineElement>
 
-        <p> Assisted with food selection, networking events, and challenges during the 36-hour hackathon.</p>
+        <VerticalTimelineElement 
+          className="vertical-timeline-element--volunteer"
+          date="2024 September - Present"
+          iconStyle={{ background: '#00B34B', color: '#fff' }}
+          icon={<VolunteerActivismIcon />}
+        >
+          <img src={SESA} alt="uOttawa SESA" className="timeline-image" />
+          <h3 className="vertical-timeline-element-title"> 
+            uOttawa Software Engineering Student Association (SESA)
+          </h3>
+          <h4 className="vertical-timeline-element-subtitle">
+            Co-Director of SESA
+          </h4>
+          <p>Co-directing the uOttawa SESA team, collaborating on strategic initiatives, and ensuring the smooth operation of all association activities.</p>
+          </VerticalTimelineElement>
+
+
+        <VerticalTimelineElement 
+          className="vertical-timeline-element--work"
+          iconStyle={{ background: '#000000', color: '#fff' }}
+          icon={<QuestionMarkIcon />}
+        >
+          <h3 className="vertical-timeline-element-title"> 
+            Future experience coming soon!
+          </h3>
         </VerticalTimelineElement>
-      </VerticalTimeline>
-        
-        <div className='button-container'>
-          <button onClick={handleShowMore} className='toggle-button'>
-            {showMore ? 'Show Less' : 'Show More'}
-          </button>
-        </div>
 
-      <VerticalTimeline lineColor="#3e497a">
-        {showMore && (
-          <div className='additional-elements'>
-            <VerticalTimelineElement 
-              className="vertical-timeline-element--volunteer"
-              date="2024 April - Present"
-              iconStyle={{ background: '#00B34B', color: '#fff' }}
-              icon={<VolunteerActivismIcon />}
-            >
-              <img src={SESA} alt="uOttawa SESA" className="timeline-image" />
-              <h3 className="vertical-timeline-element-title"> 
-                uOttawa Software Engineering Student Association (SESA)
-              </h3>
-              <h4 className="vertical-timeline-element-subtitle">
-                VP of Development
-              </h4>
-              <p> Leading the Development team at uOttawa SESA.</p>
-            </VerticalTimelineElement>
-
-            <VerticalTimelineElement 
-              className="vertical-timeline-element--work"
-              iconStyle={{ background: '#000000', color: '#fff' }}
-              icon={<QuestionMarkIcon />}
-            >
-              <h3 className="vertical-timeline-element-title"> 
-                Future experience coming soon!
-              </h3>
-              <h4 className="vertical-timeline-element-subtitle">
-              </h4>
-              <p> </p>
-            </VerticalTimelineElement>
-          </div>
-        )}
       </VerticalTimeline>
+      
     </div>
   );
 }

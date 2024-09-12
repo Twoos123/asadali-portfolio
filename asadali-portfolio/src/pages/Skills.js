@@ -146,7 +146,9 @@ function Skills({ isDarkMode }) {
 
   return (
     <div id="skills" className="skills section">
+      <div className='skills-title'>
       <h1>Skills</h1>
+      </div>
       <div className="skills-grid">
         {/* Languages */}
         <div className="skill-category">

@@ -21,7 +21,7 @@ function Footer() {
             <EmailIcon style={{ margin: 'auto' }}/>
             <span className="icon-title-footer">Email</span>
           </a>
-          <a href="https://drive.google.com/file/d/1EMhPfUk3LNk80yOLjPMizadeZS6rm-SJ/view?usp=sharing" className="icon-link-footer badge" target="_blank" rel="noopener noreferrer">
+          <a href="https://drive.google.com/file/d/1ryk_3gcH17wOEyteb3HakdiKBiGf8MaE/view?usp=sharing" className="icon-link-footer badge" target="_blank" rel="noopener noreferrer">
             <ContactPageIcon style={{ margin: 'auto', marginLeft: '-5px' }}/>
             <span className="icon-title-footer">Resume</span>
           </a>    
