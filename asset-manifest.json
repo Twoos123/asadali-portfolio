@@ -1,23 +1,26 @@
 {
   "files": {
-    "main.css": "/asadali-portfolio/static/css/main.c147b51e.css",
-    "main.js": "/asadali-portfolio/static/js/main.fb88dd18.js",
+    "main.css": "/asadali-portfolio/static/css/main.36252012.css",
+    "main.js": "/asadali-portfolio/static/js/main.22efdc40.js",
     "static/js/453.16df7936.chunk.js": "/asadali-portfolio/static/js/453.16df7936.chunk.js",
+    "static/media/Pokedex.png": "/asadali-portfolio/static/media/Pokedex.b81059ceec88c1beac9b.png",
     "static/media/TriviaGame.jpeg": "/asadali-portfolio/static/media/TriviaGame.9e2ad5dce72cfef27dbe.jpeg",
     "static/media/MenuMate.png": "/asadali-portfolio/static/media/MenuMate.4c9f45be8fcb37f83005.png",
+    "static/media/CyclingApp.png": "/asadali-portfolio/static/media/CyclingApp.e83c03d4d1397c9b4a7f.png",
+    "static/media/GPT-Clone.png": "/asadali-portfolio/static/media/GPT-Clone.2e8e8d689e130738c756.png",
     "static/media/RoadOptimization.png": "/asadali-portfolio/static/media/RoadOptimization.044409a3bdff04850db8.png",
     "static/media/AsadLogo.png": "/asadali-portfolio/static/media/AsadLogo.ed3c3154b6d00dbdc932.png",
-    "static/media/PokeApp.png": "/asadali-portfolio/static/media/PokeApp.91c840b95021d33fd9e9.png",
+    "static/media/PlanetSimulation.png": "/asadali-portfolio/static/media/PlanetSimulation.55e00ffeaad9389d9103.png",
     "static/media/Background.svg": "/asadali-portfolio/static/media/Background.e5be7e0b34d52127475342ea33479c2d.svg",
     "static/media/uOttaHack.JPG": "/asadali-portfolio/static/media/uOttaHack.ee970fbb785209077975.JPG",
     "static/media/8x8.svg": "/asadali-portfolio/static/media/8x8.3a08beee00ef424214fe1c92be3f1e07.svg",
     "index.html": "/asadali-portfolio/index.html",
-    "main.c147b51e.css.map": "/asadali-portfolio/static/css/main.c147b51e.css.map",
-    "main.fb88dd18.js.map": "/asadali-portfolio/static/js/main.fb88dd18.js.map",
+    "main.36252012.css.map": "/asadali-portfolio/static/css/main.36252012.css.map",
+    "main.22efdc40.js.map": "/asadali-portfolio/static/js/main.22efdc40.js.map",
     "453.16df7936.chunk.js.map": "/asadali-portfolio/static/js/453.16df7936.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c147b51e.css",
-    "static/js/main.fb88dd18.js"
+    "static/css/main.36252012.css",
+    "static/js/main.22efdc40.js"
   ]
 }
