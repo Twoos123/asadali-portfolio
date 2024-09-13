@@ -9,13 +9,10 @@ import Experience from './Experience';
 import { Parallax } from 'react-parallax';
 import Background from '../assets/Background.svg';
 import "../styles/Home.css";
-import MeteorShower from '../components/MeteorShower.js';
 
 function Home() {
   return (
     <div id="home" className="home">
-      <MeteorShower />
-
       <Parallax bgImage={Background} strength={100}>
         <div style={{ height: 865 }}>
           <div className="about">
