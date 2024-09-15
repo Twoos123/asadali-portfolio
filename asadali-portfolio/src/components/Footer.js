@@ -1,33 +1,53 @@
 import React from 'react';
-import "../styles/Footer.css";
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import EmailIcon from '@mui/icons-material/Email';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import ContactPageIcon from '@mui/icons-material/ContactPage';
+import { FaLinkedin, FaGithub, FaEnvelope, FaFileAlt } from 'react-icons/fa';
 
 function Footer() {
   return (
-    <div className="footer">
-        <div className="prompt"> 
-        <a href="https://www.linkedin.com/in/asadbinali/" target="_blank" className="icon-link-footer linkedin" rel="noopener noreferrer">
-            <LinkedInIcon style={{ margin: 'auto' }}/>
-            <span className="icon-title-footer">LinkedIn</span>
-          </a>
-          <a href="https://github.com/Twoos123" target="_blank" className="icon-link-footer github" rel="noopener noreferrer">
-            <GitHubIcon style={{ margin: 'auto' }}/>
-            <span className="icon-title-footer">GitHub</span>
-          </a>
-          <a href="mailto:masadbali190@gmail.com" className="icon-link-footer email">
-            <EmailIcon style={{ margin: 'auto' }}/>
-            <span className="icon-title-footer">Email</span>
-          </a>
-          <a href="https://drive.google.com/file/d/1ryk_3gcH17wOEyteb3HakdiKBiGf8MaE/view?usp=sharing" className="icon-link-footer badge" target="_blank" rel="noopener noreferrer">
-            <ContactPageIcon style={{ margin: 'auto', marginLeft: '-5px' }}/>
-            <span className="icon-title-footer">Resume</span>
-          </a>    
+    <footer className="py-8 bg-blue-800 bg-opacity-50 text-white">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="mb-4 md:mb-0">
+            <p>&copy; 2024 asadali-portfolio.com</p>
+          </div>
+          <div className="flex space-x-8">
+            <a
+              href="https://www.linkedin.com/in/asadbinali/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group hover:text-blue-300 transition-colors duration-300 transform hover:scale-110"
+            >
+              <FaLinkedin size={30} className="text-white group-hover:text-blue-300" />
+              <span className="sr-only">LinkedIn</span>
+            </a>
+            <a
+              href="https://github.com/Twoos123"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group hover:text-gray-300 transition-colors duration-300 transform hover:scale-110"
+            >
+              <FaGithub size={30} className="text-white group-hover:text-gray-300" />
+              <span className="sr-only">GitHub</span>
+            </a>
+            <a
+              href="mailto:masadbali190@gmail.com"
+              className="group hover:text-red-300 transition-colors duration-300 transform hover:scale-110"
+            >
+              <FaEnvelope size={30} className="text-white group-hover:text-red-300" />
+              <span className="sr-only">Email</span>
+            </a>
+            <a
+              href="https://drive.google.com/file/d/1ryk_3gcH17wOEyteb3HakdiKBiGf8MaE/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group hover:text-green-300 transition-colors duration-300 transform hover:scale-110"
+            >
+              <FaFileAlt size={30} className="text-white group-hover:text-green-300" />
+              <span className="sr-only">Resume</span>
+            </a>
+          </div>
         </div>
-        <p> © 2024 asadali-portfolio.com</p>
-    </div>
+      </div>
+    </footer>
   );
 }
 
