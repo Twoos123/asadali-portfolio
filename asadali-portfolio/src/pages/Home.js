@@ -6,6 +6,7 @@ import Experience from './Experience';
 
 function Home() {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [backgroundColor, setBackgroundColor] = useState('rgb(0, 255, 255)'); // Initial color
   const skillsRef = useRef(null);
 
   useEffect(() => {
@@ -38,12 +39,13 @@ function Home() {
     createParticles();
   }, []);
 
-  const getBackgroundColor = () => {
+  useEffect(() => {
+    // Update the background color based on scroll position
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     const scrollPercentage = scrollPosition / maxScroll;
     const blue = Math.max(0, 255 - Math.floor(scrollPercentage * 255));
-    return `rgb(0, ${blue}, ${Math.floor(blue * 1.5)})`;
-  };
+    setBackgroundColor(`rgb(0, ${blue}, ${Math.floor(blue * 1.5)})`);
+  }, [scrollPosition]);
 
   // Smooth scroll function
   const scrollToSkills = () => {
@@ -53,7 +55,7 @@ function Home() {
   };
 
   return (
-    <div id="home" className="min-h-screen transition-colors duration-300" style={{ backgroundColor: getBackgroundColor() }}>
+    <div id="home" className="min-h-screen transition-colors duration-300" style={{ backgroundColor }}>
       <div className="relative">
 
         <div id="particles" className="fixed inset-0 pointer-events-none overflow-hidden"></div>
