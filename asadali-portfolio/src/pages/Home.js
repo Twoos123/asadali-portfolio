@@ -70,10 +70,10 @@ function Home() {
               Full-Stack Developer | Problem Solver | Tech Enthusiast
             </p>
             <div className="flex justify-center space-x-6 animate-fade-in-up animation-delay-600">
-              <SocialLink href="https://www.linkedin.com/in/asadbinali/" icon={FaLinkedin} label="LinkedIn" hoverColor="hover:text-blue-300" />
-              <SocialLink href="https://github.com/Twoos123" icon={FaGithub} label="GitHub" hoverColor="hover:text-gray-300" />
-              <SocialLink href="mailto:masadbali190@gmail.com" icon={FaEnvelope} label="Email" hoverColor="hover:text-red-300" />
-              <SocialLink href="https://drive.google.com/file/d/1ryk_3gcH17wOEyteb3HakdiKBiGf8MaE/view?usp=sharing" icon={FaFileAlt} label="Resume" hoverColor="hover:text-green-300" />
+              <SocialLink href="https://www.linkedin.com/in/asadbinali/" icon={FaLinkedin} label="LinkedIn" hoverColor="hover:text-blue-500" />
+              <SocialLink href="https://github.com/Twoos123" icon={FaGithub} label="GitHub" hoverColor="hover:text-gray-500" />
+              <SocialLink href="mailto:masadbali190@gmail.com" icon={FaEnvelope} label="Email" hoverColor="hover:text-red-500" />
+              <SocialLink href="https://drive.google.com/file/d/1ryk_3gcH17wOEyteb3HakdiKBiGf8MaE/view?usp=sharing" icon={FaFileAlt} label="Resume" hoverColor="hover:text-green-500" />
             </div>
           </div>
 

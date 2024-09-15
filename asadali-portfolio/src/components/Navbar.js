@@ -23,7 +23,7 @@ function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center">
-            <button onClick={scrollToTop} className="flex-shrink-0">
+            <button onClick={scrollToTop} className="flex-shrink-0 z-50">
               <img className="h-8 w-8" src={logo} alt="Logo" />
             </button>
           </div>
@@ -36,7 +36,7 @@ function Navbar() {
             </div>
           </div>
           <div className="flex items-center">
-            <div className="-mr-2 flex md:hidden">
+            <div className="-mr-2 flex md:hidden z-50">
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 type="button"
@@ -52,16 +52,19 @@ function Navbar() {
         </div>
       </div>
 
-      {isOpen && (
-        <div className="md:hidden" id="mobile-menu">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link to="/" onClick={() => handleScrollToSection('#home')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Home</Link>
-            <Link to="/" onClick={() => handleScrollToSection('#skills')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Skills</Link>
-            <Link to="/" onClick={() => handleScrollToSection('#projects')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Projects</Link>
-            <Link to="/" onClick={() => handleScrollToSection('#experience')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Experience</Link>
-          </div>
+      <div
+        className={`md:hidden fixed inset-0 bg-gray-50 z-30 transform transition-transform duration-300 ease-out ${
+          isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        } h-1/4 pt-10`}
+        id="mobile-menu"
+      >
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <Link to="/" onClick={() => handleScrollToSection('#home')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Home</Link>
+          <Link to="/" onClick={() => handleScrollToSection('#skills')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Skills</Link>
+          <Link to="/" onClick={() => handleScrollToSection('#projects')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Projects</Link>
+          <Link to="/" onClick={() => handleScrollToSection('#experience')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Experience</Link>
         </div>
-      )}
+      </div>
     </nav>
   );
 }
