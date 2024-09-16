@@ -23,7 +23,7 @@ function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center">
-            <button onClick={scrollToTop} className="flex-shrink-0 z-50">
+            <button onClick={scrollToTop} className="flex-shrink-0 z-20">
               <img className="h-8 w-8" src={logo} alt="Logo" />
             </button>
           </div>
@@ -42,7 +42,7 @@ function Navbar() {
                 type="button"
                 className="bg-gray-100 inline-flex items-center justify-center p-2 rounded-md text-gray-800 hover:text-black hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                 aria-controls="mobile-menu"
-                aria-expanded="false"
+                aria-expanded={isOpen ? "true" : "false"}
               >
                 <span className="sr-only">Open main menu</span>
                 <FaBars className="block h-6 w-6" aria-hidden="true" />
@@ -53,9 +53,9 @@ function Navbar() {
       </div>
 
       <div
-        className={`md:hidden fixed inset-0 bg-gray-50 z-30 transform transition-transform duration-300 ease-out ${
+        className={`md:hidden fixed inset-x-0 top-0 bg-gray-50 z-30 transition-all duration-300 ease-in-out transform ${
           isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-        } h-1/4 pt-10`}
+        }`}
         id="mobile-menu"
       >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
