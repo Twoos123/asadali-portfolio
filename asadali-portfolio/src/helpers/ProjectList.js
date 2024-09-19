@@ -10,9 +10,9 @@ import Proj7 from '../assets/Projects/RoadOptimization.png'
 export const projectList = [
     {
         id: 0,
-        name: "E-Commerce App",
+        name: "Shopify Clone",
         image: Proj0,
-        skills: "React, Node, Express, Stripe, JWT, Tailwind CSS, Cloudinary",
+        skills: "React, Node, Express, Stripe, MongoDB, Redis, JWT, Tailwind CSS, Cloudinary",
         repoUrl: "https://github.com/Twoos123/ecomm-mern"
     },
     {
@@ -54,7 +54,7 @@ export const projectList = [
         id: 6,
         name: "MenuMate",
         image: Proj6,
-        skills: "React.js, Flask, Co:Here NLP",
+        skills: "React, Flask, Co:Here NLP",
         repoUrl: "https://github.com/Twoos123/MenuMate"
     },{
         id: 7,
