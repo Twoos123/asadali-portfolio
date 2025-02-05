@@ -1,11 +1,12 @@
 {
   "files": {
     "main.css": "/asadali-portfolio/static/css/main.5bc23f47.css",
-    "main.js": "/asadali-portfolio/static/js/main.44b3b8f4.js",
+    "main.js": "/asadali-portfolio/static/js/main.5570039b.js",
     "static/js/453.16df7936.chunk.js": "/asadali-portfolio/static/js/453.16df7936.chunk.js",
     "static/media/Pokedex.png": "/asadali-portfolio/static/media/Pokedex.b81059ceec88c1beac9b.png",
     "static/media/ECommerceApp.png": "/asadali-portfolio/static/media/ECommerceApp.4c35409daa8fba72a9c5.png",
     "static/media/TriviaGame.jpeg": "/asadali-portfolio/static/media/TriviaGame.9e2ad5dce72cfef27dbe.jpeg",
+    "static/media/pawnversation.png": "/asadali-portfolio/static/media/pawnversation.8e0be8f166f9381a316e.png",
     "static/media/MenuMate.png": "/asadali-portfolio/static/media/MenuMate.4c9f45be8fcb37f83005.png",
     "static/media/CyclingApp.png": "/asadali-portfolio/static/media/CyclingApp.e83c03d4d1397c9b4a7f.png",
     "static/media/GPT-Clone.png": "/asadali-portfolio/static/media/GPT-Clone.2e8e8d689e130738c756.png",
@@ -16,11 +17,11 @@
     "static/media/8x8.svg": "/asadali-portfolio/static/media/8x8.3a08beee00ef424214fe1c92be3f1e07.svg",
     "index.html": "/asadali-portfolio/index.html",
     "main.5bc23f47.css.map": "/asadali-portfolio/static/css/main.5bc23f47.css.map",
-    "main.44b3b8f4.js.map": "/asadali-portfolio/static/js/main.44b3b8f4.js.map",
+    "main.5570039b.js.map": "/asadali-portfolio/static/js/main.5570039b.js.map",
     "453.16df7936.chunk.js.map": "/asadali-portfolio/static/js/453.16df7936.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5bc23f47.css",
-    "static/js/main.44b3b8f4.js"
+    "static/js/main.5570039b.js"
   ]
 }
