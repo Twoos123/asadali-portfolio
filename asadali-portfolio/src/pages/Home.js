@@ -73,7 +73,7 @@ function Home() {
               <SocialLink href="https://www.linkedin.com/in/asadbinali/" icon={FaLinkedin} label="LinkedIn" hoverColor="hover:text-blue-500" />
               <SocialLink href="https://github.com/Twoos123" icon={FaGithub} label="GitHub" hoverColor="hover:text-gray-500" />
               <SocialLink href="mailto:masadbali190@gmail.com" icon={FaEnvelope} label="Email" hoverColor="hover:text-red-500" />
-              <SocialLink href="https://drive.google.com/file/d/1RyDnBatC194wkTawedGw72RPMTvpdTFR/view?usp=sharing" icon={FaFileAlt} label="Resume" hoverColor="hover:text-green-500" />
+              <SocialLink href="https://drive.google.com/file/d/17k-FbUlKWx263njOeZHt0rcvE-LiNiSi/view?usp=sharing" icon={FaFileAlt} label="Resume" hoverColor="hover:text-green-500" />
             </div>
           </div>
 
