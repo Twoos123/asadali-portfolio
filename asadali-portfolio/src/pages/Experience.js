@@ -136,7 +136,7 @@ function Experience() {
                   transition={{ duration: 0.3 }}
                 />
               </motion.div>
-              <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Junior Analyst Intern</h4>
+              <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Software Engineer Intern</h4>
               <p className="text-blue-100 text-center leading-relaxed">Developing dynamic fullstack applications using Python and Streamlit to streamline data analysis and enhance decision-making processes for health policy initiatives.</p>
             </div>
           </VerticalTimelineElement>
@@ -190,8 +190,8 @@ function Experience() {
                 <h3 className="text-xl font-bold text-blue-100">Fuze: an 8x8 Company</h3>
                 <img src={eightbyeight} alt="Fuze: an 8x8 Company" className="w-12 h-12 ml-3 rounded object-contain bg-white p-1 shadow-lg hover:scale-110 transition-transform duration-300" />
               </div>
-              <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Backend Developer</h4>
-              <p className="text-blue-100 text-center leading-relaxed">Completed a CO-OP term at 8x8 as a Backend Developer, focusing on designing and implementing robust APIs to support scalable solutions.</p>
+              <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Software Engineer Intern</h4>
+              <p className="text-blue-100 text-center leading-relaxed">Completed a CO-OP term at 8x8 as a Software Engineer Intern, focusing on designing and implementing robust APIs to support scalable solutions.</p>
             </div>
           </VerticalTimelineElement>
 
