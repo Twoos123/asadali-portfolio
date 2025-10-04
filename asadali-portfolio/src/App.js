@@ -8,6 +8,7 @@ import './index.css';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import { PageTransition } from './components/animations';
 
 function App() {
   return (
@@ -17,12 +18,14 @@ function App() {
         <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
         <Navbar />
         <main className='flex-grow'>
+        <PageTransition>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/project/:id" element={<ProjectDisplay/>} />
           <Route path="/experience" element={<Experience />} />
         </Routes>
+        </PageTransition>
         </main>
         <Footer />
         </div>

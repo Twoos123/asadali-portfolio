@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import "react-vertical-timeline-component/style.min.css";
 import { FaBriefcase, FaHandsHelping } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { FadeInSection } from '../components/animations';
 import uOttaHack from "../assets/uOttaHack.JPG";
 import eightbyeight from "../assets/8x8.svg";
 import SESA from "../assets/SESA.jpg";
@@ -68,11 +70,15 @@ function Experience() {
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
     }}>
-      <div className='py-16 text-center relative z-10'>
-        <h1 className="text-4xl font-bold text-blue-100 animate-fade-in-up">Experience</h1>
-      </div>
+      <FadeInSection direction="up" delay={0.2} threshold={0.3}>
+        <div className='py-16 text-center relative z-10'>
+          <h1 className="text-4xl font-bold text-blue-100">Experience</h1>
+        </div>
+      </FadeInSection>
+      
       <div className="relative z-10">
-        <VerticalTimeline lineColor="#ffffff">
+        <FadeInSection direction="up" delay={0.3} threshold={0.2}>
+          <VerticalTimeline lineColor="#ffffff">
           <VerticalTimelineElement 
             className="vertical-timeline-element--work"
             date={<span className="text-blue-200 font-semibold">2025 October - Present</span>}
@@ -81,11 +87,24 @@ function Experience() {
             contentStyle={{ background: 'rgba(0, 0, 128, 0.7)', color: '#fff', transform: 'scale(1.02)' }}
             contentArrowStyle={{ borderRight: '7px solid rgba(0, 0, 128, 0.7)' }}
           >
-            <div className="mb-3 animate-fade-in-up">
-              <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
+            <div className="mb-3">
+              <motion.div 
+                className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 transition-all duration-500"
+                whileHover={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                }}
+              >
                 <h3 className="text-xl font-bold text-blue-100">University of Ottawa - Faculty of Law</h3>
-                <img src={uOttawa} alt="uOttawa" className="w-15 h-14 ml-3 rounded-full object-cover bg-white p-1 shadow-lg hover:scale-110 transition-transform duration-300" />
-              </div>
+                <motion.img 
+                  src={uOttawa} 
+                  alt="uOttawa" 
+                  className="w-15 h-14 ml-3 rounded-full object-cover bg-white p-1 shadow-lg" 
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.div>
               <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Web Developer and Content Support</h4>
               <p className="text-blue-100 text-center leading-relaxed">Supporting web development initiatives and content management for the Faculty of Law, enhancing digital presence and user experience for academic resources.</p>
             </div>
@@ -99,11 +118,24 @@ function Experience() {
             contentStyle={{ background: 'rgba(0, 0, 128, 0.7)', color: '#fff', transform: 'scale(1.02)' }}
             contentArrowStyle={{ borderRight: '7px solid rgba(0, 0, 128, 0.7)' }}
           >
-            <div className="mb-3 animate-fade-in-up animation-delay-300">
-              <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
+            <div className="mb-3">
+              <motion.div 
+                className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 transition-all duration-500"
+                whileHover={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                }}
+              >
                 <h3 className="text-xl font-bold text-blue-100">Health Canada</h3>
-                <img src={HealthCanada} alt="Health Canada" className="w-12 h-12 ml-3 rounded object-contain bg-white p-1 shadow-lg hover:scale-110 transition-transform duration-300" />
-              </div>
+                <motion.img 
+                  src={HealthCanada} 
+                  alt="Health Canada" 
+                  className="w-12 h-12 ml-3 rounded object-contain bg-white p-1 shadow-lg" 
+                  whileHover={{ scale: 1.1, rotate: -5 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.div>
               <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Junior Analyst Intern</h4>
               <p className="text-blue-100 text-center leading-relaxed">Developing dynamic fullstack applications using Python and Streamlit to streamline data analysis and enhance decision-making processes for health policy initiatives.</p>
             </div>
@@ -184,7 +216,8 @@ function Experience() {
           <VerticalTimelineElement 
             iconStyle={{ background: 'transparent', border: 'none' }}
           />
-        </VerticalTimeline>
+          </VerticalTimeline>
+        </FadeInSection>
       </div>
       
       {/* Gradient transition to Footer */}

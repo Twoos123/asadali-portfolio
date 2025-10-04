@@ -1,13 +1,20 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FaLinkedin, FaGithub, FaEnvelope, FaFileAlt } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 import Skills from './Skills';
 import Projects from './Projects';
 import Experience from './Experience';
+import { FadeInSection, StaggerContainer, FloatingElement } from '../components/animations';
 
 function Home() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('rgb(0, 255, 255)'); // Initial color
   const skillsRef = useRef(null);
+
+  // Ensure page starts at top on load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -114,30 +121,68 @@ function Home() {
 
         {/* Hero Section - Ocean Surface */}
         <div className="h-screen flex flex-col items-center justify-center px-4 relative pb-16">
-          <div className="text-center mb-16">
-            <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold text-white mb-8 animate-fade-in-up drop-shadow-2xl">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <motion.h1 
+              className="text-5xl md:text-7xl lg:text-9xl font-bold text-white mb-8 drop-shadow-2xl"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               Asad Ali
-            </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-8 animate-fade-in-up animation-delay-300">
+            </motion.h1>
+            <motion.p 
+              className="text-xl md:text-2xl text-blue-100 mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
               4th Year Software Engineering Student | Full-Stack Developer
-            </p>
-            <div className="flex justify-center space-x-6 animate-fade-in-up animation-delay-600">
+            </motion.p>
+            <StaggerContainer 
+              className="flex justify-center space-x-6" 
+              staggerDelay={0.1}
+              direction="up"
+              distance={20}
+            >
               <SocialLink href="https://www.linkedin.com/in/asadbinali/" icon={FaLinkedin} label="LinkedIn" hoverColor="hover:text-blue-300" />
               <SocialLink href="https://github.com/Twoos123" icon={FaGithub} label="GitHub" hoverColor="hover:text-gray-300" />
               <SocialLink href="mailto:masadbali190@gmail.com" icon={FaEnvelope} label="Email" hoverColor="hover:text-blue-200" />
               <SocialLink href="https://drive.google.com/file/d/17k-FbUlKWx263njOeZHt0rcvE-LiNiSi/view?usp=sharing" icon={FaFileAlt} label="Resume" hoverColor="hover:text-cyan-300" />
-            </div>
-          </div>
+            </StaggerContainer>
+          </motion.div>
 
           {/* Scroll indicator - Diving deeper */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20" onClick={scrollToSkills}> 
-            <div className="flex flex-col items-center">
-              <span className="text-blue-100 text-sm mb-2">Dive Deeper</span>
-              <svg className="w-8 h-8 text-blue-100 animate-bounce cursor-pointer hover:text-cyan-300 transition-colors duration-300" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-              </svg>
-            </div>
-          </div>
+          <motion.div 
+            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 cursor-pointer" 
+            onClick={scrollToSkills}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          > 
+            <FloatingElement intensity={1.5} duration={2}>
+              <div className="flex flex-col items-center">
+                <span className="text-blue-100 text-sm mb-2">Dive Deeper</span>
+                <motion.svg 
+                  className="w-8 h-8 text-blue-100 cursor-pointer hover:text-cyan-300 transition-colors duration-300" 
+                  fill="none" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="2" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </motion.svg>
+              </div>
+            </FloatingElement>
+          </motion.div>
         </div>
 
         {/* Gradient transition to Skills */}
@@ -161,13 +206,29 @@ function Home() {
 
 function SocialLink({ href, icon: Icon, label, hoverColor }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="group relative subtle-hover">
-      <Icon className={`text-4xl md:text-5xl text-white ${hoverColor} transition-all duration-300 transform group-hover:scale-110 drop-shadow-lg`} />
+    <motion.a 
+      href={href} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="group relative"
+      whileHover={{ 
+        scale: 1.2, 
+        y: -5,
+        transition: { duration: 0.2 }
+      }}
+      whileTap={{ scale: 0.9 }}
+    >
+      <Icon className={`text-4xl md:text-5xl text-white ${hoverColor} transition-all duration-300 drop-shadow-lg`} />
       <span className="sr-only">{label}</span>
-      <span className="opacity-0 group-hover:opacity-100 absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-sm bg-blue-900 bg-opacity-80 text-white px-3 py-1 rounded-lg transition-opacity duration-300 whitespace-nowrap">
+      <motion.span 
+        className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-sm bg-blue-900 bg-opacity-80 text-white px-3 py-1 rounded-lg whitespace-nowrap pointer-events-none"
+        initial={{ opacity: 0, y: 10 }}
+        whileHover={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+      >
         {label}
-      </span>
-    </a>
+      </motion.span>
+    </motion.a>
   );
 }
 

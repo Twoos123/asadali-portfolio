@@ -1,30 +1,130 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FaGithub } from 'react-icons/fa';
+import { motion, useInView } from 'framer-motion';
 
-function ProjectItem({ id, image, name, skills, repoUrl }) {
+function ProjectItem({ id, image, name, skills, repoUrl, animationDelay = 0 }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { threshold: 0.3, once: true });
+
   return (
-    <div className="max-w-sm w-full h-[420px] rounded overflow-hidden shadow-2xl bg-blue-900 bg-opacity-70 transition-all duration-300 transform hover:scale-105 flex flex-col subtle-hover hover:shadow-2xl hover:shadow-cyan-500/20">
-      <img className="w-full h-48 object-cover transition-transform duration-300 hover:scale-102" src={image} alt={name} />
-      <div className="px-6 py-4 flex-grow flex flex-col">
-        <div className="font-bold text-xl mb-2 text-blue-100 transition-colors duration-300 hover:text-cyan-200">{name}</div>
-        <p className="text-blue-200 text-lg font-medium flex-grow line-clamp-2 transition-colors duration-300 hover:text-blue-100">
+    <motion.div 
+      ref={ref}
+      className="rounded overflow-hidden shadow-2xl bg-blue-900 bg-opacity-70 cursor-pointer"
+      style={{ 
+        display: 'grid',
+        gridTemplateRows: '192px 1fr auto',
+        height: '420px',
+        width: '100%',
+        maxWidth: '384px'
+      }}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ 
+        duration: 0.6, 
+        delay: animationDelay, 
+        ease: "easeOut" 
+      }}
+      whileHover={{ 
+        scale: 1.05,
+        y: -10,
+        boxShadow: "0 20px 40px rgba(6, 182, 212, 0.3)",
+        transition: { duration: 0.3 }
+      }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <motion.div 
+        className="overflow-hidden"
+        whileHover={{ scale: 1.1 }}
+        transition={{ duration: 0.3 }}
+        style={{ 
+          height: '192px',
+          width: '100%'
+        }}
+      >
+        <img 
+          src={image} 
+          alt={name}
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center',
+            width: '100%',
+            height: '192px',
+            display: 'block'
+          }}
+        />
+      </motion.div>
+      
+      <div style={{ padding: '1.5rem 1.5rem 1rem 1.5rem' }}>
+        <motion.div 
+          style={{ 
+            fontWeight: 'bold', 
+            fontSize: '1.25rem', 
+            lineHeight: '1.75rem',
+            marginBottom: '0.5rem',
+            color: '#dbeafe'
+          }}
+          whileHover={{ color: "#22d3ee" }}
+          transition={{ duration: 0.2 }}
+        >
+          {name}
+        </motion.div>
+        <motion.p 
+          style={{ 
+            color: '#93c5fd',
+            fontSize: '1.125rem',
+            lineHeight: '1.75rem',
+            fontWeight: '500',
+            height: '5.25rem',
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical'
+          }}
+          whileHover={{ color: "#dbeafe" }}
+          transition={{ duration: 0.2 }}
+        >
           {skills}
-        </p>
+        </motion.p>
       </div>
-      <div className="px-6 py-4 mt-auto">
-        <div className="flex justify-center">
-          <a
-            href={repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-blue-300 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/30"
+      
+      <div style={{ padding: '1rem 1.5rem 1.5rem 1.5rem', display: 'flex', justifyContent: 'center' }}>
+        <motion.a
+          href={repoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            padding: '0.5rem 1rem',
+            fontSize: '0.875rem',
+            lineHeight: '1.25rem',
+            fontWeight: '500',
+            textAlign: 'center',
+            color: 'white',
+            backgroundColor: '#2563eb',
+            borderRadius: '0.5rem',
+            textDecoration: 'none',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+          }}
+          whileHover={{ 
+            backgroundColor: "#06b6d4",
+            scale: 1.05,
+            boxShadow: "0 10px 20px rgba(6, 182, 212, 0.4)"
+          }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.2 }}
+        >
+          <motion.div
+            whileHover={{ rotate: 360 }}
+            transition={{ duration: 0.5 }}
+            style={{ marginRight: '0.5rem' }}
           >
-            <FaGithub className="mr-2 transition-transform duration-300" />
-            View Repository
-          </a>
-        </div>
+            <FaGithub />
+          </motion.div>
+          View Repository
+        </motion.a>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

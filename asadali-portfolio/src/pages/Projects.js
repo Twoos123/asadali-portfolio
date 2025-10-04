@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ProjectItem from '../components/ProjectItem';
 import { projectList } from "../helpers/ProjectList";
+import { motion, useInView } from 'framer-motion';
 
 function Projects() {
+  const titleRef = useRef(null);
+  const titleInView = useInView(titleRef, { threshold: 0.3, once: true });
   useEffect(() => {
     const createDeepSeaCreatures = () => {
       const projectsSection = document.querySelector('.projects');
@@ -62,16 +65,25 @@ function Projects() {
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
     }}>
-      <h1 className="text-4xl font-bold text-center text-blue-100 mb-12 animate-fade-in-up relative z-10">Personal Projects</h1>
+      <motion.h1 
+        ref={titleRef}
+        className="text-4xl font-bold text-center text-blue-100 mb-12 relative z-10"
+        initial={{ opacity: 0, y: 50 }}
+        animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        Personal Projects
+      </motion.h1>
       <div className="projectList grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 max-w-7xl mx-auto justify-items-center relative z-10">
-        {projectList.map((project) => (
+        {projectList.map((project, index) => (
           <ProjectItem 
-            key={project.id} 
+            key={project.id}
             id={project.id} 
             name={project.name} 
             image={project.image} 
             skills={project.skills} 
-            repoUrl={project.repoUrl} 
+            repoUrl={project.repoUrl}
+            animationDelay={index * 0.1}
           />
         ))}
       </div>
