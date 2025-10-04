@@ -12,6 +12,7 @@ export const projectList = [
     {
         id: 0,
         name: "PawnVersation",
+        description: "A voice-controlled chess game with AI opponent powered by Groq for natural language interaction.",
         image: Proj8,
         skills: "Vite, TypeScript, React, Tailwind CSS, Groq API",
         repoUrl: "https://github.com/Twoos123/pawnversation"
@@ -19,6 +20,7 @@ export const projectList = [
     {
         id: 1,
         name: "ShopEase",
+        description: "A full-stack e-commerce platform with secure payments, user authentication, and admin dashboard.",
         image: Proj0,
         skills: "React, Node, Express, Stripe, MongoDB, Redis, JWT, Tailwind CSS, Cloudinary",
         repoUrl: "https://github.com/Twoos123/ecomm-mern"
@@ -26,6 +28,7 @@ export const projectList = [
     {
         id: 2,
         name: "SmartChat",
+        description: "An intelligent chatbot application powered by OpenAI's GPT with a modern React interface.",
         image: Proj1,
         skills: "React, Chakra UI, OpenAI, Gadget",
         repoUrl: "https://github.com/Twoos123/GPT-Clone-AA"
@@ -33,6 +36,7 @@ export const projectList = [
     {
         id: 3,
         name: "Pokedex",
+        description: "A comprehensive Pokemon database app with GraphQL API and interactive search features.",
         image: Proj2,
         skills: "Node, Express, GraphQL, React",
         repoUrl: "https://github.com/Twoos123/Pokedex"
@@ -40,6 +44,7 @@ export const projectList = [
     {
         id: 4,
         name: "Planet Simulation",
+        description: "A physics-based solar system simulation with realistic orbital mechanics and gravity effects.",
         image: Proj3,
         skills: "Python, Pygame",
         repoUrl: "https://github.com/Twoos123/Python-Planetsim"
@@ -47,6 +52,7 @@ export const projectList = [
     {
         id: 5,
         name: "Trivia Game",
+        description: "An interactive trivia game with multiple categories, scoring system, and real-time feedback.",
         image: Proj4,
         skills: "React, Node, JavaScript, Open Trivia API",
         repoUrl: "https://github.com/Twoos123/TriviaGame"
@@ -54,6 +60,7 @@ export const projectList = [
     {
         id: 6,
         name: "Cycling App",
+        description: "A mobile fitness tracking app for cyclists with route mapping and performance analytics.",
         image: Proj5,
         skills: "Kotlin, Java, Firebase, SQLite, Android Studio",
         repoUrl: "https://github.com/Twoos123/SEG200-Project"
@@ -61,12 +68,14 @@ export const projectList = [
     {
         id: 7,
         name: "MenuMate",
+        description: "An AI-powered restaurant menu recommendation system using natural language processing.",
         image: Proj6,
         skills: "React, Flask, Co:Here NLP",
         repoUrl: "https://github.com/Twoos123/MenuMate"
     },{
         id: 8,
         name: "RoadOptimization",
+        description: "A traffic optimization algorithm simulator for improving urban road network efficiency.",
         image: Proj7,
         skills: "Java, JavaScript, HTML/CSS,",
         repoUrl: "https://github.com/Twoos123/RoadOptimization"

@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { FaGithub } from 'react-icons/fa';
 import { motion, useInView } from 'framer-motion';
 
-function ProjectItem({ id, image, name, skills, repoUrl, animationDelay = 0 }) {
+function ProjectItem({ id, image, name, skills, repoUrl, description, animationDelay = 0 }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { threshold: 0.3, once: true });
 
@@ -13,7 +13,7 @@ function ProjectItem({ id, image, name, skills, repoUrl, animationDelay = 0 }) {
       style={{ 
         display: 'grid',
         gridTemplateRows: '192px 1fr auto',
-        height: '420px',
+        height: '500px',
         width: '100%',
         maxWidth: '384px'
       }}
@@ -70,14 +70,31 @@ function ProjectItem({ id, image, name, skills, repoUrl, animationDelay = 0 }) {
         </motion.div>
         <motion.p 
           style={{ 
-            color: '#93c5fd',
-            fontSize: '1.125rem',
-            lineHeight: '1.75rem',
-            fontWeight: '500',
-            height: '5.25rem',
+            color: '#cbd5e1',
+            fontSize: '0.875rem',
+            lineHeight: '1.5rem',
+            marginBottom: '0.75rem',
+            height: '3rem',
             overflow: 'hidden',
             display: '-webkit-box',
-            WebkitLineClamp: 3,
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical'
+          }}
+          whileHover={{ color: "#e2e8f0" }}
+          transition={{ duration: 0.2 }}
+        >
+          {description}
+        </motion.p>
+        <motion.p 
+          style={{ 
+            color: '#93c5fd',
+            fontSize: '1rem',
+            lineHeight: '1.5rem',
+            fontWeight: '500',
+            height: '3rem',
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical'
           }}
           whileHover={{ color: "#dbeafe" }}

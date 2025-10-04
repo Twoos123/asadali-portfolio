@@ -80,6 +80,7 @@ function Projects() {
             key={project.id}
             id={project.id} 
             name={project.name} 
+            description={project.description}
             image={project.image} 
             skills={project.skills} 
             repoUrl={project.repoUrl}
