@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/asadali-portfolio/static/css/main.aabeedac.css",
-    "main.js": "/asadali-portfolio/static/js/main.e9eb181d.js",
+    "main.css": "/asadali-portfolio/static/css/main.a8ad63a4.css",
+    "main.js": "/asadali-portfolio/static/js/main.ddf4de93.js",
     "static/js/453.16df7936.chunk.js": "/asadali-portfolio/static/js/453.16df7936.chunk.js",
     "static/media/Pokedex.png": "/asadali-portfolio/static/media/Pokedex.b81059ceec88c1beac9b.png",
     "static/media/ECommerceApp.png": "/asadali-portfolio/static/media/ECommerceApp.4c35409daa8fba72a9c5.png",
@@ -13,15 +13,16 @@
     "static/media/RoadOptimization.png": "/asadali-portfolio/static/media/RoadOptimization.044409a3bdff04850db8.png",
     "static/media/AsadLogo.png": "/asadali-portfolio/static/media/AsadLogo.ed3c3154b6d00dbdc932.png",
     "static/media/PlanetSimulation.png": "/asadali-portfolio/static/media/PlanetSimulation.55e00ffeaad9389d9103.png",
+    "static/media/uottawa.svg": "/asadali-portfolio/static/media/uottawa.c07227c045c2debfee6b724fa4161d57.svg",
     "static/media/uOttaHack.JPG": "/asadali-portfolio/static/media/uOttaHack.ee970fbb785209077975.JPG",
     "static/media/8x8.svg": "/asadali-portfolio/static/media/8x8.3a08beee00ef424214fe1c92be3f1e07.svg",
     "index.html": "/asadali-portfolio/index.html",
-    "main.aabeedac.css.map": "/asadali-portfolio/static/css/main.aabeedac.css.map",
-    "main.e9eb181d.js.map": "/asadali-portfolio/static/js/main.e9eb181d.js.map",
+    "main.a8ad63a4.css.map": "/asadali-portfolio/static/css/main.a8ad63a4.css.map",
+    "main.ddf4de93.js.map": "/asadali-portfolio/static/js/main.ddf4de93.js.map",
     "453.16df7936.chunk.js.map": "/asadali-portfolio/static/js/453.16df7936.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.aabeedac.css",
-    "static/js/main.e9eb181d.js"
+    "static/css/main.a8ad63a4.css",
+    "static/js/main.ddf4de93.js"
   ]
 }
