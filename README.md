@@ -6,10 +6,6 @@
 
 Welcome to my personal portfolio! Here, I showcase my projects, skills, and experiences. This portfolio is built using React.js and features various libraries including devicons, and react-parallax.
 
-## Demo
-
-You can access the live demo of the portfolio [here](https://twoos123.github.io/asadali-portfolio/).
-
 ## Features
 
 - **Responsive Design:** My portfolio is designed to be fully responsive, ensuring a seamless experience across all devices.
