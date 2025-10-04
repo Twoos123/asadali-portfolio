@@ -1,3 +1,488 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Jellyfish Floating */
+@keyframes jellyfish-float {
+  0% {
+    transform: translateY(0px) translateX(-100px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-30px) translateX(25vw) rotate(2deg);
+  }
+  50% {
+    transform: translateY(-50px) translateX(50vw) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-30px) translateX(75vw) rotate(-2deg);
+  }
+  100% {
+    transform: translateY(0px) translateX(calc(100vw + 100px)) rotate(0deg);
+  }
+}
+
+/* Jellyfish Gentle Float - Stays in place with subtle movement */
+@keyframes jellyfish-gentle-float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-15px) translateX(10px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-25px) translateX(0px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-15px) translateX(-10px) rotate(-1deg);
+  }
+}
+
+/* Hide horizontal scrollbars completely */
+body {
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+/* 3D Ocean Animation System */
+
+/* Bubble Stream - 3D ascending bubbles */
+@keyframes bubble-stream {
+  0% {
+    transform: translateY(100vh) translateX(0px) scale(0.3);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100px) translateX(20px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Fish Swimming - Different depths */
+/* Fish Swimming - Different depths */
+@keyframes fish-swim-surface {
+  0% {
+    transform: translateX(-100px) translateY(0px) scaleX(-1);
+  }
+  100% {
+    transform: translateX(calc(100vw + 100px)) translateY(-20px) scaleX(-1);
+  }
+}
+
+@keyframes fish-swim-deep {
+  0% {
+    transform: translateX(calc(100vw + 100px)) translateY(0px) scaleX(1);
+  }
+  100% {
+    transform: translateX(-100px) translateY(15px) scaleX(1);
+  }
+}
+
+/* Jellyfish Floating */
+@keyframes jellyfish-float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-15px) translateX(10px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(-30px) translateX(0px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-15px) translateX(-10px) rotate(-2deg);
+  }
+}
+
+/* Sea Turtle - Slow majestic movement */
+@keyframes turtle-swim {
+  0% {
+    transform: translateX(-100px) translateY(0px) scaleX(1) rotate(5deg);
+  }
+  25% {
+    transform: translateX(calc(25vw)) translateY(-40px) scaleX(1) rotate(0deg);
+  }
+  50% {
+    transform: translateX(calc(50vw)) translateY(-60px) scaleX(1) rotate(-3deg);
+  }
+  75% {
+    transform: translateX(calc(75vw)) translateY(-30px) scaleX(1) rotate(2deg);
+  }
+  100% {
+    transform: translateX(calc(100vw + 100px)) translateY(0px) scaleX(1) rotate(0deg);
+  }
+}
+
+/* Deep Sea Creatures - Bioluminescent effect */
+@keyframes deep-creature {
+  0% {
+    transform: translateX(calc(100vw + 150px)) translateY(0px);
+    filter: brightness(0.8) drop-shadow(0 0 20px rgba(0, 255, 255, 0.3));
+  }
+  100% {
+    transform: translateX(-150px) translateY(20px);
+    filter: brightness(1.2) drop-shadow(0 0 30px rgba(0, 255, 255, 0.5));
+  }
+}
+@keyframes bubble {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translateY(-30px) scale(1.2);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(-60px) scale(1);
+    opacity: 0.7;
+  }
+  75% {
+    transform: translateY(-90px) scale(1.3);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-120px) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes gentle-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-30px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-15px) rotate(-1deg);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) translateX(-50%) scale(1);
+  }
+  33% {
+    transform: translateY(-25px) translateX(-50%) scale(1.1);
+  }
+  66% {
+    transform: translateY(-35px) translateX(-50%) scale(0.9);
+  }
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+  66% {
+    transform: translateY(-25px) rotate(-1deg);
+  }
+}
+
+@keyframes wave-motion {
+  0%, 100% {
+    transform: translateX(0px) translateY(0px) scale(1);
+  }
+  25% {
+    transform: translateX(15px) translateY(-15px) scale(1.02);
+  }
+  50% {
+    transform: translateX(0px) translateY(-25px) scale(0.98);
+  }
+  75% {
+    transform: translateX(-15px) translateY(-15px) scale(1.02);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes underwater-sway {
+  0%, 100% {
+    transform: translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateX(2px) rotate(0.2deg);
+  }
+  50% {
+    transform: translateX(0px) rotate(0deg);
+  }
+  75% {
+    transform: translateX(-2px) rotate(-0.2deg);
+  }
+}
+
+@keyframes bubble-gentle {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0.05;
+  }
+  50% {
+    transform: translateY(-50px) scale(1.1);
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateY(-100px) scale(0.7);
+    opacity: 0;
+  }
+}
+
+.animate-bubble {
+  animation: bubble 8s infinite ease-in-out;
+}
+
+.animate-gentle-float {
+  animation: gentle-float 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+.animate-wave-motion {
+  animation: wave-motion 6s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1.2s ease-out forwards;
+}
+
+.animate-underwater-sway {
+  animation: underwater-sway 12s ease-in-out infinite;
+}
+
+.animate-bubble-gentle {
+  animation: bubble-gentle 20s infinite ease-in-out;
+}
+
+/* 3D Ocean Animation Classes */
+.animate-bubble-stream {
+  animation: bubble-stream 12s infinite linear;
+}
+
+.animate-fish-surface {
+  animation: fish-swim-surface 15s infinite linear;
+}
+
+.animate-fish-deep {
+  animation: fish-swim-deep 20s infinite linear;
+}
+
+.animate-jellyfish {
+  animation: jellyfish-float 10s infinite linear;
+}
+
+.animate-jellyfish-float {
+  animation: jellyfish-gentle-float 8s infinite ease-in-out;
+}
+
+.animate-turtle {
+  animation: turtle-swim 25s infinite linear;
+}
+
+.animate-deep-creature {
+  animation: deep-creature 18s infinite linear;
+}
+
+/* Skills Section Specific Animations - Contained within section */
+@keyframes skills-fish-swim {
+  0% {
+    transform: translateX(-80px) translateY(0px) scaleX(1);
+  }
+  100% {
+    transform: translateX(calc(100% + 80px)) translateY(15px) scaleX(1);
+  }
+}
+
+@keyframes skills-turtle-swim {
+  0% {
+    transform: translateX(-80px) translateY(0px) scaleX(1) rotate(5deg);
+  }
+  25% {
+    transform: translateX(25%) translateY(-40px) scaleX(1) rotate(0deg);
+  }
+  50% {
+    transform: translateX(50%) translateY(-60px) scaleX(1) rotate(-3deg);
+  }
+  75% {
+    transform: translateX(75%) translateY(-30px) scaleX(1) rotate(2deg);
+  }
+  100% {
+    transform: translateX(calc(100% + 80px)) translateY(0px) scaleX(1) rotate(0deg);
+  }
+}
+
+/* Enhanced SVG Creature Animations */
+@keyframes fish-fin-wave {
+  0%, 100% { transform: skewX(0deg); }
+  50% { transform: skewX(3deg); }
+}
+
+@keyframes fish-tail-wave {
+  0%, 100% { transform: rotateZ(0deg); }
+  25% { transform: rotateZ(-2deg); }
+  75% { transform: rotateZ(2deg); }
+}
+
+@keyframes jellyfish-pulse {
+  0%, 100% { transform: scale(1) rotateZ(0deg); }
+  50% { transform: scale(1.05) rotateZ(1deg); }
+}
+
+@keyframes octopus-tentacle-wave {
+  0%, 100% { transform: skewY(0deg) rotateZ(0deg); }
+  25% { transform: skewY(2deg) rotateZ(-1deg); }
+  75% { transform: skewY(-2deg) rotateZ(1deg); }
+}
+
+@keyframes shark-intimidate {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.02); filter: brightness(1.1); }
+}
+
+@keyframes anglerfish-lure {
+  0%, 100% { filter: brightness(1.2) drop-shadow(0 0 15px rgba(0, 255, 255, 0.4)) invert(1); }
+  50% { filter: brightness(1.5) drop-shadow(0 0 25px rgba(0, 255, 255, 0.8)) invert(1); }
+}
+
+@keyframes squid-undulate {
+  0%, 100% { transform: skewY(0deg); filter: brightness(0.8) drop-shadow(0 0 20px rgba(100, 149, 237, 0.3)) invert(1); }
+  33% { transform: skewY(1deg); filter: brightness(1.0) drop-shadow(0 0 30px rgba(100, 149, 237, 0.5)) invert(1); }
+  66% { transform: skewY(-1deg); filter: brightness(0.9) drop-shadow(0 0 25px rgba(100, 149, 237, 0.4)) invert(1); }
+}
+
+@keyframes turtle-paddle {
+  0%, 100% { transform: rotateZ(0deg); }
+  50% { transform: rotateZ(1deg); }
+}
+
+/* Ocean Creature Styles */
+.bubble-3d {
+  position: absolute;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(173, 216, 230, 0.4), rgba(0, 100, 200, 0.1));
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.fish-silhouette {
+  position: absolute;
+  opacity: 0.4;
+  pointer-events: none;
+  filter: blur(0.5px);
+  z-index: 1;
+}
+
+.jellyfish-silhouette {
+  position: absolute;
+  opacity: 0.3;
+  pointer-events: none;
+  filter: blur(0.5px);
+  z-index: 1;
+}
+
+.turtle-silhouette {
+  position: absolute;
+  opacity: 0.35;
+  pointer-events: none;
+  filter: blur(0.5px);
+  z-index: 1;
+}
+
+.deep-creature-silhouette {
+  position: absolute;
+  opacity: 0.3;
+  pointer-events: none;
+  filter: blur(0.5px);
+  z-index: 1;
+}
+
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.animation-delay-900 {
+  animation-delay: 0.9s;
+}
+
+.animation-delay-1200 {
+  animation-delay: 1.2s;
+}
+
+/* Ocean depth scroll effect with smooth transitions */
+.ocean-transition {
+  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Smooth section transitions with ocean gradient blending */
+.section-transition {
+  position: relative;
+  background: linear-gradient(to bottom, transparent 0%, currentColor 100%);
+}
+
+/* Fullscreen ocean backgrounds */
+.ocean-fullscreen {
+  background-size: 120vw 120vh !important;
+  background-position: center center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+/* Subtle hover effects for better UX */
+.subtle-hover {
+  transition: all 0.3s ease-in-out;
+}
+
+.subtle-hover:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* Custom hover scale for images */
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}

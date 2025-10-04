@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaJava, FaPython, FaHtml5, FaCss3, FaJs, FaReact, FaNodeJs, FaFlask, FaGithub } from 'react-icons/fa';
 import { SiSpringboot, SiDocker, SiGnubash, SiGit, SiAndroidstudio, SiFirebase, SiPostman, SiKubernetes, SiJira, SiJenkins, SiOpenai, SiCplusplus, SiChakraui, SiElixir } from 'react-icons/si';
 import { DiMysql } from 'react-icons/di';
@@ -9,17 +9,146 @@ const SkillIcon = ({ Icon, name, link, hoverColor }) => (
     href={link}
     target="_blank"
     rel="noopener noreferrer"
-    className="flex flex-col items-center transition-transform duration-300 transform hover:scale-110 cursor-pointer group"
+    className="flex flex-col items-center transition-all duration-300 transform hover:scale-110 cursor-pointer group subtle-hover"
   >
     <Icon
       size={50}
-      className={`text-gray-100 transition-colors duration-300 group-hover:text-[${hoverColor}]`}
+      className={`text-blue-100 transition-all duration-300 group-hover:text-[${hoverColor}] drop-shadow-lg`}
     />
-    <span className="mt-2 text-sm text-gray-100">{name}</span>
+    <span className="mt-2 text-sm text-blue-200 group-hover:text-white transition-all duration-300 font-medium">{name}</span>
   </a>
 );
 
 function Skills() {
+  useEffect(() => {
+    const createBubbles = () => {
+      const skillsSection = document.getElementById('skills');
+      let bubblesContainer = skillsSection.querySelector('.bubbles-container');
+      
+      if (!bubblesContainer) {
+        bubblesContainer = document.createElement('div');
+        bubblesContainer.className = 'bubbles-container fixed inset-0 pointer-events-none overflow-hidden z-0';
+        skillsSection.appendChild(bubblesContainer);
+      }
+      
+      bubblesContainer.innerHTML = '';
+      
+      for (let i = 0; i < 8; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'absolute bg-blue-200 rounded-full opacity-8 animate-bubble-gentle';
+        bubble.style.top = `${Math.random() * 100}%`;
+        bubble.style.left = `${Math.random() * 100}%`;
+        
+        const size = Math.random() * 4 + 2;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        
+        bubble.style.animationDelay = `${Math.random() * 12}s`;
+        bubble.style.animationDuration = `${18 + Math.random() * 10}s`;
+        
+        bubblesContainer.appendChild(bubble);
+      }
+    };
+
+    const createMidDepthCreatures = () => {
+      const skillsSection = document.getElementById('skills');
+      if (!skillsSection) {
+        console.log('Skills section not found');
+        return;
+      }
+      
+      console.log('Skills section found, creating creatures...');
+      
+      // Ensure Skills section has proper positioning context
+      skillsSection.style.position = 'relative';
+      skillsSection.style.overflow = 'hidden';
+      
+      let creaturesContainer = skillsSection.querySelector('.skills-creatures-container');
+      
+      if (!creaturesContainer) {
+        creaturesContainer = document.createElement('div');
+        creaturesContainer.className = 'skills-creatures-container';
+        creaturesContainer.style.position = 'absolute';
+        creaturesContainer.style.top = '0';
+        creaturesContainer.style.left = '0';
+        creaturesContainer.style.right = '0';
+        creaturesContainer.style.bottom = '0';
+        creaturesContainer.style.pointerEvents = 'none';
+        creaturesContainer.style.overflow = 'hidden';
+        creaturesContainer.style.zIndex = '1'; // Behind skills content but visible
+        skillsSection.appendChild(creaturesContainer);
+        console.log('Created Skills creatures container');
+      }
+      
+      creaturesContainer.innerHTML = '';
+      
+      // Add mid-depth bubbles contained within Skills section
+      for (let i = 0; i < 4; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble-3d animate-bubble-stream';
+        bubble.style.position = 'absolute';
+        bubble.style.left = `${Math.random() * 100}%`;
+        bubble.style.bottom = '0px';
+        
+        const size = Math.random() * 6 + 3;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        
+        bubble.style.animationDelay = `${Math.random() * 12}s`;
+        bubble.style.animationDuration = `${10 + Math.random() * 8}s`;
+        
+        creaturesContainer.appendChild(bubble);
+      }
+      
+      // Add tropical fish with proper gradient and direction (swimming left to right)
+      const tropicalFish = document.createElement('div');
+      tropicalFish.style.position = 'absolute';
+      tropicalFish.style.top = '45%';
+      tropicalFish.style.left = '-80px'; // Start off-screen left of Skills section
+      tropicalFish.style.opacity = '0.4'; // Same opacity as other creatures
+      tropicalFish.style.zIndex = '2';
+      tropicalFish.style.pointerEvents = 'none';
+      tropicalFish.innerHTML = `<img src="/asadali-portfolio/assets/fish/tropical-fish.svg" alt="tropical fish" style="width: 50px; height: 35px; filter: invert(0.8) sepia(0.2) saturate(1.5) hue-rotate(200deg) brightness(0.8) contrast(1.2); transform: scaleX(-1);"/>`;
+      
+      // Use CSS transition for contained movement (left to right)
+      tropicalFish.style.transition = 'transform 18s linear';
+      tropicalFish.style.transform = 'translateX(0px)';
+      
+      creaturesContainer.appendChild(tropicalFish);
+      console.log('Added tropical fish to Skills section');
+      
+      // Start fish animation after delay (moving right)
+      setTimeout(() => {
+        tropicalFish.style.transform = `translateX(${skillsSection.offsetWidth + 80}px)`;
+      }, 2000);
+      
+      // Add sea turtle with proper gradient and direction (swimming right to left)
+      const turtle = document.createElement('div');
+      turtle.style.position = 'absolute';
+      turtle.style.top = '65%';
+      turtle.style.right = '-80px'; // Start off-screen right of Skills section
+      turtle.style.opacity = '0.4'; // Same opacity as other creatures
+      turtle.style.zIndex = '2';
+      turtle.style.pointerEvents = 'none';
+      turtle.innerHTML = `<img src="/asadali-portfolio/assets/fish/sea-turtle.svg" alt="sea turtle" style="width: 65px; height: 50px; filter: invert(0.8) sepia(0.2) saturate(1.5) hue-rotate(200deg) brightness(0.8) contrast(1.2);"/>`;
+      
+      // Use CSS transition for contained movement (right to left)
+      turtle.style.transition = 'transform 25s linear';
+      turtle.style.transform = 'translateX(0px)';
+      
+      creaturesContainer.appendChild(turtle);
+      console.log('Added sea turtle to Skills section');
+      
+      // Start turtle animation after delay (moving left)
+      setTimeout(() => {
+        turtle.style.transform = `translateX(-${skillsSection.offsetWidth + 80}px)`;
+      }, 5000);
+    };
+
+    createBubbles();
+    createMidDepthCreatures();
+  }, []);
+
   const programmingLanguages = [
     { Icon: FaJava, name: "Java", link: "https://www.java.com", hoverColor: "#007396" }, // Java logo color
     { Icon: FaPython, name: "Python", link: "https://www.python.org", hoverColor: "#3776AB" }, // Python logo color
@@ -55,12 +184,16 @@ function Skills() {
   ];
 
   return (
-    <div id="skills" className="py-16 bg-opacity-70 bg-blue-800">
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center text-gray-100 mb-12">Skills</h1>
+        <div id="skills" className="min-h-screen py-20 relative bg-gradient-to-b from-blue-700 via-blue-800 to-blue-900" style={{
+      backgroundSize: '120vw 120vh',
+      backgroundPosition: 'center center',
+      backgroundAttachment: 'fixed'
+    }}>
+      <div className="container mx-auto px-4 relative z-10">
+        <h1 className="text-4xl font-bold text-center text-blue-100 mb-12 animate-fade-in-up">Skills</h1>
         <div className="flex flex-col md:flex-row gap-16">
           <div className="flex flex-col items-center md:items-center md:w-1/3">
-            <h2 className="text-2xl font-semibold text-gray-100 mb-6 text-center">Languages</h2>
+            <h2 className="text-2xl font-semibold text-blue-200 mb-6 text-center animate-fade-in-up">Languages</h2>
             <div className="flex flex-wrap justify-center gap-8">
               {programmingLanguages.map((skill, index) => (
                 <SkillIcon 
@@ -74,7 +207,7 @@ function Skills() {
             </div>
           </div>
           <div className="flex flex-col items-center md:items-center md:w-1/3">
-            <h2 className="text-2xl font-semibold text-gray-100 mb-6 text-center">Frameworks</h2>
+            <h2 className="text-2xl font-semibold text-blue-200 mb-6 text-center animate-fade-in-up">Frameworks</h2>
             <div className="flex flex-wrap justify-center gap-8">
               {frameworks.map((skill, index) => (
                 <SkillIcon 
@@ -88,7 +221,7 @@ function Skills() {
             </div>
           </div>
           <div className="flex flex-col items-center md:items-center md:w-1/3">
-            <h2 className="text-2xl font-semibold text-gray-100 mb-6 text-center">Developer Tools</h2>
+            <h2 className="text-2xl font-semibold text-blue-200 mb-6 text-center animate-fade-in-up">Developer Tools</h2>
             <div className="flex flex-wrap justify-center gap-8">
               {developerTools.map((skill, index) => (
                 <SkillIcon 
@@ -103,6 +236,9 @@ function Skills() {
           </div>
         </div>
       </div>
+      
+      {/* Gradient transition to Projects */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-blue-800 z-0"></div>
     </div>
   );
 }

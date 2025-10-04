@@ -1,12 +1,69 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ProjectItem from '../components/ProjectItem';
 import { projectList } from "../helpers/ProjectList";
 
 function Projects() {
+  useEffect(() => {
+    const createDeepSeaCreatures = () => {
+      const projectsSection = document.querySelector('.projects');
+      let creaturesContainer = projectsSection.querySelector('.creatures-container');
+      
+      if (!creaturesContainer) {
+        creaturesContainer = document.createElement('div');
+        creaturesContainer.className = 'creatures-container absolute inset-0 pointer-events-none overflow-hidden';
+        creaturesContainer.style.zIndex = '0'; // Behind content but visible
+        projectsSection.appendChild(creaturesContainer);
+      }
+      
+      creaturesContainer.innerHTML = '';
+      
+      // Fewer bubbles in deeper water
+      for (let i = 0; i < 3; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble-3d animate-bubble-stream';
+        bubble.style.left = `${Math.random() * 100}%`;
+        
+        const size = Math.random() * 5 + 2;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        
+        bubble.style.animationDelay = `${Math.random() * 15}s`;
+        bubble.style.animationDuration = `${12 + Math.random() * 10}s`;
+        
+        creaturesContainer.appendChild(bubble);
+      }
+      
+      // Add larger deep-sea fish
+      const deepFish = document.createElement('div');
+      deepFish.className = 'fish-silhouette animate-fish-deep';
+      deepFish.innerHTML = `<img src="/asadali-portfolio/assets/fish/shark.svg" alt="shark" style="width: 80px; height: 45px; filter: invert(1);"/>`;
+      deepFish.style.top = `${30 + Math.random() * 40}%`;
+      deepFish.style.animationDelay = `${Math.random() * 10}s`; // Shorter delay for testing
+      deepFish.style.animationDuration = `${15 + Math.random() * 10}s`;
+      
+      creaturesContainer.appendChild(deepFish);
+      
+      // Add an octopus
+      const octopus = document.createElement('div');
+      octopus.className = 'deep-creature-silhouette animate-fish-deep';
+      octopus.innerHTML = `<img src="/asadali-portfolio/assets/fish/octopus.svg" alt="octopus" style="width: 60px; height: 60px; filter: invert(1); animation: octopus-tentacle-wave 3s infinite ease-in-out;"/>`;
+      octopus.style.top = `${60 + Math.random() * 20}%`;
+      octopus.style.animationDelay = `${Math.random() * 8}s`; // Shorter delay for testing
+      
+      creaturesContainer.appendChild(octopus);
+    };
+
+    createDeepSeaCreatures();
+  }, []);
+
   return (
-    <div className="projects py-16 bg-opacity-70 bg-blue-800">
-      <h1 className="text-4xl font-bold text-center text-gray-100 mb-12">Personal Projects</h1>
-      <div className="projectList grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 max-w-7xl mx-auto justify-items-center">
+    <div className="projects py-16 bg-gradient-to-b from-blue-800 via-blue-900 to-blue-950 ocean-transition relative" style={{
+      backgroundSize: '120vw 120vh',
+      backgroundPosition: 'center center',
+      backgroundAttachment: 'fixed'
+    }}>
+      <h1 className="text-4xl font-bold text-center text-blue-100 mb-12 animate-fade-in-up relative z-10">Personal Projects</h1>
+      <div className="projectList grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 max-w-7xl mx-auto justify-items-center relative z-10">
         {projectList.map((project) => (
           <ProjectItem 
             key={project.id} 
@@ -18,6 +75,9 @@ function Projects() {
           />
         ))}
       </div>
+      
+      {/* Gradient transition to Experience */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-blue-900 z-0"></div>
     </div>
   );
 }

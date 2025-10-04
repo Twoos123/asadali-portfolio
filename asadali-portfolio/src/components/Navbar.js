@@ -19,7 +19,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-gray-50 shadow-lg fixed w-full z-50">
+    <nav className="bg-blue-900 bg-opacity-80 backdrop-blur-sm shadow-lg fixed w-full z-50 border-b border-blue-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center">
@@ -29,10 +29,10 @@ function Navbar() {
           </div>
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-6">
-              <Link to="/" onClick={() => handleScrollToSection('#home')} className="text-black hover:bg-gray-200 hover:text-gray-800 px-3 py-2 rounded-md text-xl font-medium">Home</Link>
-              <Link to="/" onClick={() => handleScrollToSection('#skills')} className="text-black hover:bg-gray-200 hover:text-gray-800 px-3 py-2 rounded-md text-xl font-medium">Skills</Link>
-              <Link to="/" onClick={() => handleScrollToSection('#projects')} className="text-black hover:bg-gray-200 hover:text-gray-800 px-3 py-2 rounded-md text-xl font-medium">Projects</Link>
-              <Link to="/" onClick={() => handleScrollToSection('#experience')} className="text-black hover:bg-gray-200 hover:text-gray-800 px-3 py-2 rounded-md text-xl font-medium">Experience</Link>
+              <Link to="/" onClick={() => handleScrollToSection('#home')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300">Home</Link>
+              <Link to="/" onClick={() => handleScrollToSection('#skills')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300">Skills</Link>
+              <Link to="/" onClick={() => handleScrollToSection('#projects')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300">Projects</Link>
+              <Link to="/" onClick={() => handleScrollToSection('#experience')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300">Experience</Link>
             </div>
           </div>
           <div className="flex items-center">
@@ -40,7 +40,7 @@ function Navbar() {
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 type="button"
-                className="bg-gray-100 inline-flex items-center justify-center p-2 rounded-md text-gray-800 hover:text-black hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                className="bg-blue-800 inline-flex items-center justify-center p-2 rounded-md text-blue-100 hover:text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300"
                 aria-controls="mobile-menu"
                 aria-expanded={isOpen ? "true" : "false"}
               >
@@ -53,16 +53,16 @@ function Navbar() {
       </div>
 
       <div
-        className={`md:hidden fixed inset-x-0 top-0 bg-gray-50 z-30 transition-all duration-300 ease-in-out transform ${
+        className={`md:hidden fixed inset-x-0 top-0 bg-blue-900 bg-opacity-95 backdrop-blur-sm z-30 transition-all duration-300 ease-in-out transform ${
           isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
         }`}
         id="mobile-menu"
       >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <Link to="/" onClick={() => handleScrollToSection('#home')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Home</Link>
-          <Link to="/" onClick={() => handleScrollToSection('#skills')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Skills</Link>
-          <Link to="/" onClick={() => handleScrollToSection('#projects')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Projects</Link>
-          <Link to="/" onClick={() => handleScrollToSection('#experience')} className="text-black hover:bg-gray-200 hover:text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Experience</Link>
+          <Link to="/" onClick={() => handleScrollToSection('#home')} className="text-blue-100 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300">Home</Link>
+          <Link to="/" onClick={() => handleScrollToSection('#skills')} className="text-blue-100 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300">Skills</Link>
+          <Link to="/" onClick={() => handleScrollToSection('#projects')} className="text-blue-100 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300">Projects</Link>
+          <Link to="/" onClick={() => handleScrollToSection('#experience')} className="text-blue-100 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300">Experience</Link>
         </div>
       </div>
     </nav>
