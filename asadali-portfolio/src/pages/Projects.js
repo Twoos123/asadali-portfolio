@@ -60,7 +60,7 @@ function Projects() {
   }, []);
 
   return (
-    <div className="projects py-16 bg-gradient-to-b from-blue-800 via-blue-900 to-blue-950 ocean-transition relative" style={{
+    <div className="projects py-16 ocean-transition relative" style={{
       backgroundSize: '120vw 120vh',
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
@@ -90,7 +90,6 @@ function Projects() {
       </div>
       
       {/* Gradient transition to Experience */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-blue-900 z-0"></div>
     </div>
   );
 }

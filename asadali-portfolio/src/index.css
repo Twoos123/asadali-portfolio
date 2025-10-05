@@ -1,6 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Seaweed Animations */
+@keyframes seaweed-sway {
+  0%, 100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+.animate-seaweed-sway {
+  animation: seaweed-sway ease-in-out infinite;
+}
+
 /* Jellyfish Floating */
 @keyframes jellyfish-float {
   0% {

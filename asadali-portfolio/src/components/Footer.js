@@ -3,7 +3,7 @@ import { FaLinkedin, FaGithub, FaEnvelope, FaFileAlt } from 'react-icons/fa';
 
 function Footer() {
   return (
-    <footer className="py-8 bg-blue-950 bg-opacity-95 text-white">
+    <footer className="py-8 bg-slate-900 bg-opacity-95 text-white">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">

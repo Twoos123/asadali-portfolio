@@ -210,7 +210,7 @@ function Skills() {
   ];
 
   return (
-    <div id="skills" className="min-h-screen py-20 relative bg-gradient-to-b from-blue-700 via-blue-800 to-blue-900" style={{
+    <div id="skills" className="min-h-screen py-20 relative" style={{
       backgroundSize: '120vw 120vh',
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
@@ -311,7 +311,6 @@ function Skills() {
       </div>
       
       {/* Gradient transition to Projects */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-blue-800 z-0"></div>
     </div>
   );
 }

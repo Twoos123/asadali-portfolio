@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,6 +6,32 @@ import logo from "../assets/AsadLogo.png";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [navBackground, setNavBackground] = useState('transparent');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const scrollPercent = scrollY / (windowHeight * 4); // 4 sections total
+
+      if (scrollPercent < 0.25) {
+        // Home section
+        setNavBackground('rgba(59, 130, 246, 0.3)'); // blue-500 with transparency
+      } else if (scrollPercent < 0.5) {
+        // Skills section
+        setNavBackground('rgba(30, 58, 138, 0.8)'); // blue-800 with transparency
+      } else if (scrollPercent < 0.75) {
+        // Projects section
+        setNavBackground('rgba(30, 64, 175, 0.8)'); // blue-700 with transparency
+      } else {
+        // Experience section
+        setNavBackground('rgba(15, 23, 42, 0.9)'); // slate-900 with transparency
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleScrollToSection = (sectionId) => {
     setIsOpen(false);
@@ -29,7 +55,8 @@ function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="bg-blue-900 bg-opacity-80 backdrop-blur-sm shadow-lg fixed w-full z-50 border-b border-blue-700"
+      className="backdrop-blur-sm shadow-lg fixed w-full z-50 border-b border-blue-700 border-opacity-30"
+      style={{ backgroundColor: navBackground }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">

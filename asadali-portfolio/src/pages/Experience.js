@@ -65,7 +65,7 @@ function Experience() {
   }, []);
 
   return (
-    <div className="experience-section relative min-h-screen bg-gradient-to-b from-blue-900 via-blue-950 to-blue-950" style={{
+    <div className="experience-section relative min-h-screen" style={{
       backgroundSize: '120vw 120vh',
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
@@ -221,7 +221,6 @@ function Experience() {
       </div>
       
       {/* Gradient transition to Footer */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-blue-950 z-0"></div>
     </div>
   );
 }
