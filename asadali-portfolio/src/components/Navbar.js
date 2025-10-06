@@ -55,10 +55,6 @@ function Navbar() {
     }
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   const handleLogoClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsOpen(false);

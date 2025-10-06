@@ -5,7 +5,7 @@ import Wave from 'react-wavify';
 import Skills from './Skills';
 import Projects from './Projects';
 import Experience from './Experience';
-import { FadeInSection, StaggerContainer, FloatingElement } from '../components/animations';
+import { StaggerContainer, FloatingElement } from '../components/animations';
 
 function Home() {
   const [scrollPosition, setScrollPosition] = useState(0);
