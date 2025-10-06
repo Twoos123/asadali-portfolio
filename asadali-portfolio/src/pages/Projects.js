@@ -94,7 +94,8 @@ const SkillIcon = React.memo(({ skill }) => {
         style={{ 
           color,
           transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-          transition: 'transform 0.2s ease-in-out'
+          transition: 'transform 0.2s ease-in-out',
+          filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))'
         }} 
       />
       {isHovered && (
@@ -173,7 +174,7 @@ const ProjectCard = React.memo(({ project, index }) => {
           {/* Tech Stack Icons */}
           <div className="flex flex-wrap gap-3 items-center">
             {skillsArray.map((skill, skillIndex) => (
-              <SkillIcon key={`${project.id}-${skillIndex}`} skill={skill} />
+              <SkillIcon key={`${project.id}-${skillIndex}`} skill={skill} style={"shadow-lg"} />
             ))}
           </div>
         </div>

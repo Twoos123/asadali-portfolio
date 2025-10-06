@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo from "../assets/AsadLogo.png";
+
+const logo = process.env.PUBLIC_URL + '/assets/AsadLogo.png';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

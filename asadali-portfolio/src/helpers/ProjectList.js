@@ -1,12 +1,12 @@
-import Proj0 from '../assets/Projects/ECommerceApp.png'
-import Proj1 from '../assets/Projects/GPT-Clone.png'
-import Proj2 from '../assets/Projects/Pokedex.png'
-import Proj3 from '../assets/Projects/PlanetSimulation.png'
-import Proj4 from '../assets/Projects/TriviaGame.jpeg'
-import Proj5 from '../assets/Projects/CyclingApp.png'
-import Proj6 from '../assets/Projects/MenuMate.png'
-import Proj7 from '../assets/Projects/RoadOptimization.png'
-import Proj8 from '../assets/Projects/pawnversation.png'
+const Proj0 = process.env.PUBLIC_URL + '/assets/Projects/ECommerceApp.png';
+const Proj1 = process.env.PUBLIC_URL + '/assets/Projects/GPT-Clone.png';
+const Proj2 = process.env.PUBLIC_URL + '/assets/Projects/Pokedex.png';
+const Proj3 = process.env.PUBLIC_URL + '/assets/Projects/PlanetSimulation.png';
+const Proj4 = process.env.PUBLIC_URL + '/assets/Projects/TriviaGame.jpeg';
+const Proj5 = process.env.PUBLIC_URL + '/assets/Projects/CyclingApp.png';
+const Proj6 = process.env.PUBLIC_URL + '/assets/Projects/MenuMate.png';
+const Proj7 = process.env.PUBLIC_URL + '/assets/Projects/RoadOptimization.png';
+const Proj8 = process.env.PUBLIC_URL + '/assets/Projects/pawnversation.png';
 
 export const projectList = [
     {

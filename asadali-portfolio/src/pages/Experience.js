@@ -4,11 +4,13 @@ import "react-vertical-timeline-component/style.min.css";
 import { FaBriefcase, FaHandsHelping } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { FadeInSection } from '../components/animations';
-import uOttaHack from "../assets/uOttaHack.JPG";
-import eightbyeight from "../assets/8x8.svg";
-import SESA from "../assets/SESA.svg";
-import uOttawa from "../assets/uottawa.svg";  
-import HealthCanada from "../assets/health-canada.png";
+
+// Images are now in public folder
+const uOttaHack = process.env.PUBLIC_URL + '/assets/uOttaHack.JPG';
+const eightbyeight = process.env.PUBLIC_URL + '/assets/8x8.svg';
+const SESA = process.env.PUBLIC_URL + '/assets/SESA.svg';
+const uOttawa = process.env.PUBLIC_URL + '/assets/uottawa.svg';
+const HealthCanada = process.env.PUBLIC_URL + '/assets/health-canada.png';
 
 function Experience() {
   const [isMobile, setIsMobile] = useState(false);
