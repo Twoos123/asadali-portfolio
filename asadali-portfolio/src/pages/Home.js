@@ -406,114 +406,116 @@ function Home({ backgroundColor, setBackgroundColor }) {
         <div id="home-seaweed" className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex: 1, height: '100vh'}}></div>
 
         {/* Hero Section - Sky to Ocean */}
-        <div className="h-screen relative">
-          {/* Sky Section - Top 25% on mobile (ocean goes higher), 50% on desktop */}
-          <div className="absolute top-0 left-0 w-full h-1/4 md:h-1/2" style={{
-            background: 'linear-gradient(to bottom, #87CEEB 0%, #98D8E8 30%, #B0E0E6 70%, #E0F6FF 100%)',
-            zIndex: 1
-          }}>
-            {/* Sun */}
-            <motion.div 
-              className="absolute top-8 right-16 w-20 h-20 rounded-full"
-              style={{ background: 'radial-gradient(circle, #FFD700 0%, #FFA500 100%)' }}
-              animate={{ 
-                scale: [1, 1.1, 1],
-                rotate: [0, 5, 0]
-              }}
-              transition={{ 
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-            
-            {/* Clouds - Slow animations, not scroll-based */}
-            {clouds.map((cloud) => (
-              <motion.div
-                key={cloud.id}
-                className="absolute rounded-full opacity-80 hidden md:block"
-                style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #F0F8FF 100%)',
-                  width: `${cloud.width}px`,
-                  height: `${cloud.height}px`,
-                  top: `${cloud.top}%`,
-                  left: `${cloud.left}%`,
-                  zIndex: 2,
-                  pointerEvents: 'none'
+        <div className="h-screen relative flex flex-col">
+          {/* Background Layer (Sky + Ocean) */}
+          <div className="absolute inset-0 flex flex-col z-0">
+            {/* Sky Section */}
+            <div className="h-1/4 md:h-1/2" style={{
+              background: 'linear-gradient(to bottom, #87CEEB 0%, #98D8E8 30%, #B0E0E6 70%, #E0F6FF 100%)',
+              position: 'relative' // Needed for z-index and positioning context for sun/clouds
+            }}>
+              {/* Sun */}
+              <motion.div 
+                className="absolute top-8 right-16 w-20 h-20 rounded-full"
+                style={{ background: 'radial-gradient(circle, #FFD700 0%, #FFA500 100%)' }}
+                animate={{ 
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 5, 0]
                 }}
-                animate={{
-                  x: [0, 3, 0], // Very gentle horizontal movement
-                  y: [0, -1, 0] // Very gentle vertical movement
-                }}
-                transition={{
-                  duration: 8 + cloud.id * 2, // Faster speeds: 8s, 10s, 12s, 14s, 16s, 18s
+                transition={{ 
+                  duration: 4,
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
               />
-            ))}
+              
+              {/* Clouds */}
+              {clouds.map((cloud) => (
+                <motion.div
+                  key={cloud.id}
+                  className="absolute rounded-full opacity-80 hidden md:block"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #F0F8FF 100%)',
+                    width: `${cloud.width}px`,
+                    height: `${cloud.height}px`,
+                    top: `${cloud.top}%`,
+                    left: `${cloud.left}%`,
+                    pointerEvents: 'none'
+                  }}
+                  animate={{
+                    x: [0, 3, 0],
+                    y: [0, -1, 0]
+                  }}
+                  transition={{
+                    duration: 8 + cloud.id * 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Ocean Section - This will grow to fill the remaining space */}
+            <div className="flex-grow relative" style={{ backgroundColor: backgroundColor, marginTop: '-10px' }}>
+                {/* Wave and Boats are now inside the growing ocean section */}
+                {!isMobile && (
+                  <>
+                    <div className="absolute top-0 left-0 w-full" style={{ zIndex: 3, transform: 'translateY(-100%)', height: '100px' }}>
+                      <Wave
+                        fill={backgroundColor}
+                        paused={false}
+                        options={{
+                          height: 35,
+                          amplitude: 40,
+                          speed: 0.25,
+                          points: 5
+                        }}
+                        style={{ position: 'absolute', bottom: 0, width: '100%' }}
+                      />
+                    </div>
+
+                    <div className="absolute top-0 left-0 w-full" style={{ zIndex: 4, transform: 'translateY(-100%)', height: '100px', pointerEvents: 'none' }}>
+                        {/* Boat 1 - Left side */}
+                        <div 
+                          className="absolute animate-boat-bob"
+                          style={{ 
+                            left: '20%', 
+                            bottom: '35px', // Position relative to the wave
+                            animationDelay: '0s',
+                            animationDuration: '4s'
+                          }}
+                        >
+                          <img 
+                            src="/asadali-portfolio/assets/boats/boat-1.svg" 
+                            alt="Boat 1" 
+                            className="w-16 h-auto"
+                          />
+                        </div>
+                        
+                        {/* Boat 2 - Right side */}
+                        <div 
+                          className="absolute animate-boat-bob"
+                          style={{ 
+                            left: '90%', 
+                            bottom: '50px', // Position relative to the wave
+                            animationDelay: '0s',
+                            animationDuration: '3s'
+                          }}
+                        >
+                          <img 
+                            src="/asadali-portfolio/assets/boats/boat-2.svg" 
+                            alt="Boat 2" 
+                            className="w-20 h-auto"
+                          />
+                        </div>
+                    </div>
+                  </>
+                )}
+            </div>
           </div>
 
-          {/* Wave Section - Hidden on mobile */}
-          {!isMobile && (
-            <div className="absolute bottom-0 left-0 w-full" style={{ zIndex: 3, height: '60%', top: '40%', background: 'transparent' }}>
-              {/* Wave layers for ocean surface - consistent surface color */}
-            
-              <Wave
-                fill={backgroundColor}
-                paused={false}
-                options={{
-                  height: 35, // Increased from 20 to 35 for taller waves
-                  amplitude: 40, // Increased amplitude for more dramatic waves
-                  speed: 0.25,
-                  points: 5
-                }}
-                style={{ position: 'absolute', top: '-50px', width: '100%' }}
-              />
-            </div>
-          )}
-
-          {/* Boats floating above waves - Hidden on mobile */}
-          {!isMobile && (
-            <div className="absolute bottom-0 left-0 w-full" style={{ zIndex: 4, height: '60%', top: '40%', background: 'transparent', pointerEvents: 'none' }}>
-              {/* Boat 1 - Left side */}
-              <div 
-                className="absolute animate-boat-bob"
-                style={{ 
-                  left: '20%', 
-                  top: '-5.1%',
-                  animationDelay: '0s',
-                  animationDuration: '4s'
-                }}
-              >
-                <img 
-                  src="/asadali-portfolio/assets/boats/boat-1.svg" 
-                  alt="Boat 1" 
-                  className="w-16 h-auto"
-                />
-              </div>
-              
-              {/* Boat 2 - Right side */}
-              <div 
-                className="absolute animate-boat-bob"
-                style={{ 
-                  left: '90%', 
-                  top: '-7%',
-                  animationDelay: '0s',
-                  animationDuration: '3s'
-                }}
-              >
-                <img 
-                  src="/asadali-portfolio/assets/boats/boat-2.svg" 
-                  alt="Boat 2" 
-                  className="w-20 h-auto"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Content - Centered */}
-          <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
+          {/* Foreground Content Layer */}
+          <div className="relative z-10 flex-grow flex flex-col items-center justify-center px-4">
             <motion.div 
               className="text-center mb-16"
               initial={{ opacity: 0, y: 50 }}
@@ -548,14 +550,10 @@ function Home({ backgroundColor, setBackgroundColor }) {
               </StaggerContainer>
             </motion.div>
 
-            {/* Scroll indicator - Diving deeper - Hidden on mobile */}
+            {/* Scroll indicator - Positioned at the bottom of the viewport */}
             {!isMobile && (
               <motion.div 
-                className={`absolute left-1/2 transform -translate-x-1/2 z-20 cursor-pointer ${isMobile ? 'bottom-4' : 'bottom-8'}`}
-                style={{
-                  left: '50%', // Explicit center positioning
-                  transform: 'translateX(-50%)', // Perfect horizontal centering
-                }}
+                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 cursor-pointer"
                 onClick={scrollToSkills}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
