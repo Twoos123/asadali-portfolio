@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import "react-vertical-timeline-component/style.min.css";
 import { FaBriefcase, FaHandsHelping } from 'react-icons/fa';
@@ -11,7 +11,20 @@ import uOttawa from "../assets/uottawa.svg";
 import HealthCanada from "../assets/health-canada.png";
 
 function Experience() {
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
     const createAbyssalCreatures = () => {
       const experienceSection = document.querySelector('.experience-section');
       let creaturesContainer = experienceSection.querySelector('.creatures-container');
@@ -35,7 +48,6 @@ function Experience() {
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         
-        bubble.style.animationDelay = `${Math.random() * 20}s`;
         bubble.style.animationDuration = `${15 + Math.random() * 15}s`;
         
         creaturesContainer.appendChild(bubble);
@@ -46,7 +58,6 @@ function Experience() {
       anglerfish.className = 'deep-creature-silhouette animate-deep-creature';
       anglerfish.innerHTML = `<img src="/asadali-portfolio/assets/fish/anglerfish.svg" alt="anglerfish" style="width: 55px; height: 40px; filter: invert(1); animation: anglerfish-lure 2s infinite ease-in-out;"/>`;
       anglerfish.style.top = `${40 + Math.random() * 30}%`;
-      anglerfish.style.animationDelay = `${Math.random() * 5}s`; // Shorter delay for testing
       
       creaturesContainer.appendChild(anglerfish);
       
@@ -55,7 +66,6 @@ function Experience() {
       deepCreature.className = 'deep-creature-silhouette animate-deep-creature';
       deepCreature.innerHTML = `<img src="/asadali-portfolio/assets/fish/giant-squid.svg" alt="giant squid" style="width: 75px; height: 60px; filter: invert(1); animation: squid-undulate 2.5s infinite ease-in-out;"/>`;
       deepCreature.style.top = `${60 + Math.random() * 20}%`;
-      deepCreature.style.animationDelay = `${Math.random() * 8}s`; // Shorter delay for testing
       deepCreature.style.animationDuration = '22s';
       
       creaturesContainer.appendChild(deepCreature);
@@ -88,23 +98,34 @@ function Experience() {
             contentArrowStyle={{ borderRight: '7px solid rgba(0, 0, 128, 0.7)' }}
           >
             <div className="mb-3">
-              <motion.div 
-                className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 transition-all duration-500"
-                whileHover={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  scale: 1.02,
-                  transition: { duration: 0.2 }
-                }}
-              >
-                <h3 className="text-xl font-bold text-blue-100">University of Ottawa - Faculty of Law</h3>
-                <motion.img 
-                  src={uOttawa} 
-                  alt="uOttawa" 
-                  className="w-15 h-14 ml-3 rounded-full object-cover bg-white p-1 shadow-lg" 
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.div>
+              {isMobile ? (
+                <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 transition-opacity duration-500">
+                  <h3 className="text-xl font-bold text-blue-100">University of Ottawa - Faculty of Law</h3>
+                  <img 
+                    src={uOttawa} 
+                    alt="uOttawa" 
+                    className="w-15 h-14 ml-3 rounded-full object-cover bg-white p-1 shadow-lg" 
+                  />
+                </div>
+              ) : (
+                <motion.div 
+                  className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 transition-all duration-500"
+                  whileHover={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    scale: 1.02,
+                    transition: { duration: 0.2 }
+                  }}
+                >
+                  <h3 className="text-xl font-bold text-blue-100">University of Ottawa - Faculty of Law</h3>
+                  <motion.img 
+                    src={uOttawa} 
+                    alt="uOttawa" 
+                    className="w-15 h-14 ml-3 rounded-full object-cover bg-white p-1 shadow-lg" 
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.div>
+              )}
               <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Web Developer and Content Support</h4>
               <p className="text-blue-100 text-center leading-relaxed">Supporting web development initiatives and content management for the Faculty of Law, enhancing digital presence and user experience for academic resources.</p>
             </div>
@@ -119,23 +140,34 @@ function Experience() {
             contentArrowStyle={{ borderRight: '7px solid rgba(0, 0, 128, 0.7)' }}
           >
             <div className="mb-3">
-              <motion.div 
-                className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 transition-all duration-500"
-                whileHover={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  scale: 1.02,
-                  transition: { duration: 0.2 }
-                }}
-              >
-                <h3 className="text-xl font-bold text-blue-100">Health Canada</h3>
-                <motion.img 
-                  src={HealthCanada} 
-                  alt="Health Canada" 
-                  className="w-12 h-12 ml-3 rounded object-contain bg-white p-1 shadow-lg" 
-                  whileHover={{ scale: 1.1, rotate: -5 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.div>
+              {isMobile ? (
+                <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 transition-opacity duration-500">
+                  <h3 className="text-xl font-bold text-blue-100">Health Canada</h3>
+                  <img 
+                    src={HealthCanada} 
+                    alt="Health Canada" 
+                    className="w-12 h-12 ml-3 rounded object-contain bg-white p-1 shadow-lg" 
+                  />
+                </div>
+              ) : (
+                <motion.div 
+                  className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 transition-all duration-500"
+                  whileHover={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    scale: 1.02,
+                    transition: { duration: 0.2 }
+                  }}
+                >
+                  <h3 className="text-xl font-bold text-blue-100">Health Canada</h3>
+                  <motion.img 
+                    src={HealthCanada} 
+                    alt="Health Canada" 
+                    className="w-12 h-12 ml-3 rounded object-contain bg-white p-1 shadow-lg" 
+                    whileHover={{ scale: 1.1, rotate: -5 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.div>
+              )}
               <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Software Engineer Intern</h4>
               <p className="text-blue-100 text-center leading-relaxed">Developing dynamic fullstack applications using Python and Streamlit to streamline data analysis and enhance decision-making processes for health policy initiatives.</p>
             </div>
@@ -152,7 +184,11 @@ function Experience() {
             <div className="mb-3 animate-fade-in-up animation-delay-600">
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
                 <h3 className="text-xl font-bold text-purple-100">uOttawa Software Engineering Student Association (SESA)</h3>
-                <img src={SESA} alt="uOttawa SESA" className="w-12 h-12 ml-3 rounded-full object-cover shadow-lg hover:scale-110 transition-transform duration-300" />
+                <img 
+                  src={SESA} 
+                  alt="uOttawa SESA" 
+                  className={`w-12 h-12 ml-3 rounded-full object-cover shadow-lg ${!isMobile ? 'hover:scale-110' : ''} transition-transform duration-300`} 
+                />
               </div>
               <h4 className="text-lg text-purple-200 mb-2 text-center font-semibold">Co-Director</h4>
               <p className="text-purple-100 text-center leading-relaxed">Co-directing the uOttawa SESA team, collaborating on strategic initiatives, and ensuring the smooth operation of all association activities.</p>
@@ -170,7 +206,11 @@ function Experience() {
             <div className="mb-3 animate-fade-in-up animation-delay-900">
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
                 <h3 className="text-xl font-bold text-purple-100">uOttawa Software Engineering Student Association (SESA)</h3>
-                <img src={SESA} alt="uOttawa SESA" className="w-12 h-12 ml-3 rounded-full object-cover shadow-lg hover:scale-110 transition-transform duration-300" />
+                <img 
+                  src={SESA} 
+                  alt="uOttawa SESA" 
+                  className={`w-12 h-12 ml-3 rounded-full object-cover shadow-lg ${!isMobile ? 'hover:scale-110' : ''} transition-transform duration-300`} 
+                />
               </div>
               <h4 className="text-lg text-purple-200 mb-2 text-center font-semibold">Development Lead</h4>
               <p className="text-purple-100 text-center leading-relaxed">Overseeing the Development team at uOttawa SESA, driving innovation and managing project execution to support the association's goals.</p>
@@ -188,7 +228,11 @@ function Experience() {
             <div className="mb-3 animate-fade-in-up animation-delay-1200">
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
                 <h3 className="text-xl font-bold text-blue-100">Fuze: an 8x8 Company</h3>
-                <img src={eightbyeight} alt="Fuze: an 8x8 Company" className="w-12 h-12 ml-3 rounded object-contain bg-white p-1 shadow-lg hover:scale-110 transition-transform duration-300" />
+                <img 
+                  src={eightbyeight} 
+                  alt="Fuze: an 8x8 Company" 
+                  className={`w-12 h-12 ml-3 rounded object-contain bg-white p-1 shadow-lg ${!isMobile ? 'hover:scale-110' : ''} transition-transform duration-300`} 
+                />
               </div>
               <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Software Engineer Intern</h4>
               <p className="text-blue-100 text-center leading-relaxed">Completed a CO-OP term at 8x8 as a Software Engineer Intern, focusing on designing and implementing robust APIs to support scalable solutions.</p>
@@ -206,7 +250,11 @@ function Experience() {
             <div className="mb-3 animate-fade-in-up">
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
                 <h3 className="text-xl font-bold text-purple-100">uOttaHack: Ottawa's Largest Hackathon</h3>
-                <img src={uOttaHack} alt="uOttaHack 6" className="w-12 h-12 ml-3 rounded object-cover shadow-lg hover:scale-110 transition-transform duration-300" />
+                <img 
+                  src={uOttaHack} 
+                  alt="uOttaHack 6" 
+                  className={`w-12 h-12 ml-3 rounded object-cover shadow-lg ${!isMobile ? 'hover:scale-110' : ''} transition-transform duration-300`} 
+                />
               </div>
               <h4 className="text-lg text-purple-200 mb-2 text-center font-semibold">Logistics Organizer</h4>
               <p className="text-purple-100 text-center leading-relaxed">Coordinated logistics for uOttaHack 6, including food arrangements, networking activities, and challenge organization during the 36-hour event.</p>

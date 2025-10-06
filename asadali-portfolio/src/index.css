@@ -86,7 +86,7 @@ html::-webkit-scrollbar {
     opacity: 0.3;
   }
   100% {
-    transform: translateY(-100px) translateX(20px) scale(0.8);
+    transform: translateY(40vh) translateX(20px) scale(0.8); /* Stop at wave level (40% of viewport) */
     opacity: 0;
   }
 }

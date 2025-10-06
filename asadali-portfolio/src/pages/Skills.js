@@ -69,7 +69,6 @@ function Skills() {
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         
-        bubble.style.animationDelay = `${Math.random() * 12}s`;
         bubble.style.animationDuration = `${18 + Math.random() * 10}s`;
         
         bubblesContainer.appendChild(bubble);
@@ -120,7 +119,6 @@ function Skills() {
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         
-        bubble.style.animationDelay = `${Math.random() * 12}s`;
         bubble.style.animationDuration = `${10 + Math.random() * 8}s`;
         
         creaturesContainer.appendChild(bubble);
@@ -131,7 +129,7 @@ function Skills() {
       tropicalFish.style.position = 'absolute';
       tropicalFish.style.top = '45%';
       tropicalFish.style.left = '-80px'; // Start off-screen left of Skills section
-      tropicalFish.style.opacity = '0.4'; // Same opacity as other creatures
+      tropicalFish.style.opacity = '0.5'; // Same opacity as other creatures
       tropicalFish.style.zIndex = '2';
       tropicalFish.style.pointerEvents = 'none';
       tropicalFish.innerHTML = `<img src="/asadali-portfolio/assets/fish/tropical-fish.svg" alt="tropical fish" style="width: 50px; height: 35px; filter: invert(0.8) sepia(0.2) saturate(1.5) hue-rotate(200deg) brightness(0.8) contrast(1.2); transform: scaleX(-1);"/>`;
@@ -153,7 +151,7 @@ function Skills() {
       turtle.style.position = 'absolute';
       turtle.style.top = '65%';
       turtle.style.right = '-80px'; // Start off-screen right of Skills section
-      turtle.style.opacity = '0.4'; // Same opacity as other creatures
+      turtle.style.opacity = '0.5'; // Same opacity as other creatures
       turtle.style.zIndex = '2';
       turtle.style.pointerEvents = 'none';
       turtle.innerHTML = `<img src="/asadali-portfolio/assets/fish/sea-turtle.svg" alt="sea turtle" style="width: 65px; height: 50px; filter: invert(0.8) sepia(0.2) saturate(1.5) hue-rotate(200deg) brightness(0.8) contrast(1.2);"/>`;

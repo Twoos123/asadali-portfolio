@@ -41,7 +41,6 @@ function Projects() {
       deepFish.className = 'fish-silhouette animate-fish-deep';
       deepFish.innerHTML = `<img src="/asadali-portfolio/assets/fish/shark.svg" alt="shark" style="width: 80px; height: 45px; filter: invert(1);"/>`;
       deepFish.style.top = `${30 + Math.random() * 40}%`;
-      deepFish.style.animationDelay = `${Math.random() * 10}s`; // Shorter delay for testing
       deepFish.style.animationDuration = `${15 + Math.random() * 10}s`;
       
       creaturesContainer.appendChild(deepFish);
@@ -51,7 +50,6 @@ function Projects() {
       octopus.className = 'deep-creature-silhouette animate-fish-deep';
       octopus.innerHTML = `<img src="/asadali-portfolio/assets/fish/octopus.svg" alt="octopus" style="width: 60px; height: 60px; filter: invert(1); animation: octopus-tentacle-wave 3s infinite ease-in-out;"/>`;
       octopus.style.top = `${60 + Math.random() * 20}%`;
-      octopus.style.animationDelay = `${Math.random() * 8}s`; // Shorter delay for testing
       
       creaturesContainer.appendChild(octopus);
     };
