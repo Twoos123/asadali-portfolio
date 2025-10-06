@@ -40,7 +40,7 @@ function Contact() {
     
     try {
       const apiUrl = process.env.NODE_ENV === 'production' 
-        ? 'https://asadali-portfolio.onrender.com/api/contact'  // Your Render backend URL
+        ? 'https://asadali-portfolio.onrender.com/api/contact'
         : 'http://localhost:5000/api/contact';
 
       const response = await fetch(apiUrl, {
