@@ -7,6 +7,20 @@ import logo from "../assets/AsadLogo.png";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [navBackground, setNavBackground] = useState('transparent');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,8 +73,8 @@ function Navbar() {
       style={{ backgroundColor: navBackground }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
-          <div className="flex items-center">
+        <div className={`flex items-center h-14 ${isMobile ? 'justify-center' : 'justify-between'}`}>
+          <div className={`flex items-center ${isMobile ? 'absolute left-4' : ''}`}>
             <motion.button 
               onClick={handleLogoClick} 
               className="flex-shrink-0 z-20"
@@ -87,8 +101,8 @@ function Navbar() {
               </motion.div>
             </div>
           </div>
-          <div className="flex items-center">
-            <div className="-mr-2 flex md:hidden z-50">
+          <div className={`flex items-center ${isMobile ? 'absolute right-4' : ''}`}>
+            <div className="flex md:hidden z-50">
               <motion.button
                 onClick={() => setIsOpen(!isOpen)}
                 type="button"

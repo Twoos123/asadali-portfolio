@@ -25,6 +25,9 @@ function Experience() {
     return () => {
       window.removeEventListener('resize', checkMobile);
     };
+  }, []);
+
+  useEffect(() => {
     const createAbyssalCreatures = () => {
       const experienceSection = document.querySelector('.experience-section');
       let creaturesContainer = experienceSection.querySelector('.creatures-container');
@@ -48,6 +51,7 @@ function Experience() {
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         
+        bubble.style.animationDelay = `${Math.random() * 20}s`;
         bubble.style.animationDuration = `${15 + Math.random() * 15}s`;
         
         creaturesContainer.appendChild(bubble);
@@ -58,6 +62,7 @@ function Experience() {
       anglerfish.className = 'deep-creature-silhouette animate-deep-creature';
       anglerfish.innerHTML = `<img src="/asadali-portfolio/assets/fish/anglerfish.svg" alt="anglerfish" style="width: 55px; height: 40px; filter: invert(1); animation: anglerfish-lure 2s infinite ease-in-out;"/>`;
       anglerfish.style.top = `${40 + Math.random() * 30}%`;
+      anglerfish.style.animationDelay = `${Math.random() * 5}s`; // Shorter delay for testing
       
       creaturesContainer.appendChild(anglerfish);
       
@@ -66,6 +71,7 @@ function Experience() {
       deepCreature.className = 'deep-creature-silhouette animate-deep-creature';
       deepCreature.innerHTML = `<img src="/asadali-portfolio/assets/fish/giant-squid.svg" alt="giant squid" style="width: 75px; height: 60px; filter: invert(1); animation: squid-undulate 2.5s infinite ease-in-out;"/>`;
       deepCreature.style.top = `${60 + Math.random() * 20}%`;
+      deepCreature.style.animationDelay = `${Math.random() * 8}s`; // Shorter delay for testing
       deepCreature.style.animationDuration = '22s';
       
       creaturesContainer.appendChild(deepCreature);
@@ -88,7 +94,7 @@ function Experience() {
       
       <div className="relative z-10">
         <FadeInSection direction="up" delay={0.3} threshold={0.2}>
-          <VerticalTimeline lineColor="#ffffff">
+          <VerticalTimeline lineColor="#ffffff" animate={!isMobile}>
           <VerticalTimelineElement 
             className="vertical-timeline-element--work"
             date={<span className="text-blue-200 font-semibold">2025 October - Present</span>}
@@ -181,14 +187,10 @@ function Experience() {
             contentStyle={{ background: 'rgba(0, 0, 128, 0.7)', color: '#fff', transform: 'scale(1.02)' }}
             contentArrowStyle={{ borderRight: '7px solid rgba(0, 0, 128, 0.7)' }}
           >
-            <div className="mb-3 animate-fade-in-up animation-delay-600">
+            <div className={`mb-3 ${isMobile ? 'animate-fade-in' : 'animate-fade-in-up animation-delay-600'}`}>
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
                 <h3 className="text-xl font-bold text-purple-100">uOttawa Software Engineering Student Association (SESA)</h3>
-                <img 
-                  src={SESA} 
-                  alt="uOttawa SESA" 
-                  className={`w-12 h-12 ml-3 rounded-full object-cover shadow-lg ${!isMobile ? 'hover:scale-110' : ''} transition-transform duration-300`} 
-                />
+                <img src={SESA} alt="uOttawa SESA" className="w-12 h-12 ml-3 rounded-full object-cover shadow-lg hover:scale-110 transition-transform duration-300" />
               </div>
               <h4 className="text-lg text-purple-200 mb-2 text-center font-semibold">Co-Director</h4>
               <p className="text-purple-100 text-center leading-relaxed">Co-directing the uOttawa SESA team, collaborating on strategic initiatives, and ensuring the smooth operation of all association activities.</p>
@@ -203,7 +205,7 @@ function Experience() {
             contentStyle={{ background: 'rgba(0, 0, 128, 0.7)', color: '#fff', transform: 'scale(1.02)' }}
             contentArrowStyle={{ borderRight: '7px solid rgba(0, 0, 128, 0.7)' }}
           >
-            <div className="mb-3 animate-fade-in-up animation-delay-900">
+            <div className={`mb-3 ${isMobile ? 'animate-fade-in' : 'animate-fade-in-up animation-delay-900'}`}>
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
                 <h3 className="text-xl font-bold text-purple-100">uOttawa Software Engineering Student Association (SESA)</h3>
                 <img 
@@ -225,7 +227,7 @@ function Experience() {
             contentStyle={{ background: 'rgba(0, 0, 128, 0.7)', color: '#fff', transform: 'scale(1.02)' }}
             contentArrowStyle={{ borderRight: '7px solid rgba(0, 0, 128, 0.7)' }}
           >
-            <div className="mb-3 animate-fade-in-up animation-delay-1200">
+            <div className={`mb-3 ${isMobile ? 'animate-fade-in' : 'animate-fade-in-up animation-delay-1200'}`}>
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
                 <h3 className="text-xl font-bold text-blue-100">Fuze: an 8x8 Company</h3>
                 <img 
@@ -247,7 +249,7 @@ function Experience() {
             contentStyle={{ background: 'rgba(0, 0, 128, 0.7)', color: '#fff', transform: 'scale(1.02)' }}
             contentArrowStyle={{ borderRight: '7px solid rgba(0, 0, 128, 0.7)' }}
           >
-            <div className="mb-3 animate-fade-in-up">
+            <div className={`mb-3 ${isMobile ? 'animate-fade-in' : 'animate-fade-in-up'}`}>
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
                 <h3 className="text-xl font-bold text-purple-100">uOttaHack: Ottawa's Largest Hackathon</h3>
                 <img 
@@ -269,6 +271,7 @@ function Experience() {
       </div>
       
       {/* Gradient transition to Footer */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-slate-900 z-0"></div>
     </div>
   );
 }
