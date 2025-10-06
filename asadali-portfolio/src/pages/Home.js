@@ -16,10 +16,63 @@ function Home({ backgroundColor, setBackgroundColor }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [clouds, setClouds] = useState([]);
+  const [ripples, setRipples] = useState([]);
+  const [bubbles, setBubbles] = useState([]);
   const skillsRef = useRef(null);
+  const mouseTrailRef = useRef(null);
   
   // Three.js Ocean Depth System
   const { scrollProgress, depth, depthZone, pressureEffect, lightLevel, isAtSurface } = useScrollProgress();
+
+  // Water ripple functionality
+  const createWaterRipple = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    
+    const newRipple = {
+      id: Date.now() + Math.random(),
+      x: x,
+      y: y
+    };
+    
+    setRipples(prev => [...prev, newRipple]);
+    
+    // Remove ripple after animation completes
+    setTimeout(() => {
+      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
+    }, 3000);
+  };
+
+  // Interactive bubble creation on mouse movement
+  const createBubbleTrail = (event) => {
+    if (mouseTrailRef.current) {
+      clearTimeout(mouseTrailRef.current);
+    }
+    
+    mouseTrailRef.current = setTimeout(() => {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      
+      // Only create bubbles in the lower half (ocean area)
+      if (y > rect.height * 0.5) {
+        const newBubble = {
+          id: Date.now() + Math.random(),
+          x: x,
+          y: y,
+          size: Math.random() * 15 + 5
+        };
+        
+        setBubbles(prev => [...prev, newBubble]);
+        
+        // Remove bubble after animation
+        setTimeout(() => {
+          setBubbles(prev => prev.filter(bubble => bubble.id !== newBubble.id));
+        }, 4000);
+      }
+    }, 100); // Throttle bubble creation
+  };
 
   // Ensure page starts at top on load and apply initial body background
   useEffect(() => {
@@ -244,6 +297,10 @@ function Home({ backgroundColor, setBackgroundColor }) {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = position / maxScroll;
       
+      // Update god rays opacity based on scroll - fade out as we scroll down
+      const godRaysOpacity = Math.max(0, 1 - scrollPercent * 1.25); // Disappears around 80% scroll
+      document.documentElement.style.setProperty('--god-rays-opacity', godRaysOpacity);
+      
       const sideSeaweed = document.querySelectorAll('.side-seaweed');
       sideSeaweed.forEach((seaweed, index) => {
         const sway = Math.sin(scrollPercent * 10 + index) * 3;
@@ -407,6 +464,9 @@ function Home({ backgroundColor, setBackgroundColor }) {
 
         {/* Hero Section - Sky to Ocean */}
         <div className="h-screen relative flex flex-col">
+          {/* God Rays - Volumetric lighting effect */}
+          <div className="god-rays"></div>
+          
           {/* Background Layer (Sky + Ocean) */}
           <div className="absolute inset-0 flex flex-col z-0">
             {/* Sky Section */}
@@ -457,6 +517,52 @@ function Home({ backgroundColor, setBackgroundColor }) {
 
             {/* Ocean Section - This will grow to fill the remaining space */}
             <div className="flex-grow relative" style={{ backgroundColor: backgroundColor, marginTop: '-10px' }}>
+                {/* Interactive Water Surface */}
+                <div 
+                  className="water-surface" 
+                  onClick={createWaterRipple}
+                  onTouchStart={createWaterRipple}
+                  onMouseMove={createBubbleTrail}
+                >
+                  {/* Render ripples */}
+                  {ripples.map(ripple => (
+                    <React.Fragment key={ripple.id}>
+                      <div
+                        className="water-ripple"
+                        style={{
+                          left: ripple.x - 25,
+                          top: ripple.y - 25,
+                          width: '50px',
+                          height: '50px'
+                        }}
+                      />
+                      <div
+                        className="water-ripple-large"
+                        style={{
+                          left: ripple.x - 40,
+                          top: ripple.y - 40,
+                          width: '80px',
+                          height: '80px'
+                        }}
+                      />
+                    </React.Fragment>
+                  ))}
+                  
+                  {/* Render interactive bubbles */}
+                  {bubbles.map(bubble => (
+                    <div
+                      key={bubble.id}
+                      className="bubble-trail"
+                      style={{
+                        left: bubble.x - bubble.size / 2,
+                        top: bubble.y - bubble.size / 2,
+                        width: `${bubble.size}px`,
+                        height: `${bubble.size}px`
+                      }}
+                    />
+                  ))}
+                </div>
+                
                 {/* Wave and Boats are now inside the growing ocean section */}
                 {!isMobile && (
                   <>
@@ -523,7 +629,7 @@ function Home({ backgroundColor, setBackgroundColor }) {
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <motion.h1 
-                className="text-5xl md:text-7xl lg:text-9xl font-bold text-white mb-8 drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)]"
+                className="text-5xl md:text-7xl lg:text-9xl font-bold text-white mb-8 drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)] god-rays-target"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}

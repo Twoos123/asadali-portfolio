@@ -94,6 +94,421 @@ html {
 
 /* 3D Ocean Animation System */
 
+/* CSS custom property for god rays opacity */
+:root {
+  --god-rays-opacity: 1;
+}
+
+/* God Rays - Volumetric lighting from top right */
+@keyframes god-rays {
+  0% {
+    opacity: calc(var(--god-rays-opacity) * 0.5);
+    transform: rotate(-25deg) scaleY(1);
+  }
+  50% {
+    opacity: calc(var(--god-rays-opacity) * 0.8);
+    transform: rotate(-25deg) scaleY(1.1);
+  }
+  100% {
+    opacity: calc(var(--god-rays-opacity) * 0.5);
+    transform: rotate(-25deg) scaleY(1);
+  }
+}
+
+@keyframes god-rays-shimmer {
+  0%, 100% {
+    opacity: calc(var(--god-rays-opacity) * 0.3);
+    filter: blur(1px) brightness(1);
+  }
+  33% {
+    opacity: calc(var(--god-rays-opacity) * 0.6);
+    filter: blur(0.5px) brightness(1.2);
+  }
+  66% {
+    opacity: calc(var(--god-rays-opacity) * 0.4);
+    filter: blur(1.5px) brightness(0.9);
+  }
+}
+
+.god-rays {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: 
+    /* Ray 1 - Main central ray */
+    linear-gradient(
+      -25deg,
+      transparent 0%,
+      transparent 35%,
+      rgba(255, 255, 255, calc(var(--god-rays-opacity) * 0.3)) 38%,
+      rgba(173, 216, 230, calc(var(--god-rays-opacity) * 0.4)) 40%,
+      rgba(135, 206, 235, calc(var(--god-rays-opacity) * 0.3)) 42%,
+      transparent 45%,
+      transparent 100%
+    ),
+    /* Ray 2 - Left side ray */
+    linear-gradient(
+      -30deg,
+      transparent 0%,
+      transparent 30%,
+      rgba(173, 216, 230, calc(var(--god-rays-opacity) * 0.25)) 32%,
+      rgba(255, 255, 255, calc(var(--god-rays-opacity) * 0.2)) 34%,
+      rgba(135, 206, 235, calc(var(--god-rays-opacity) * 0.18)) 36%,
+      transparent 38%,
+      transparent 100%
+    ),
+    /* Ray 3 - Right side ray */
+    linear-gradient(
+      -20deg,
+      transparent 0%,
+      transparent 45%,
+      rgba(135, 206, 235, calc(var(--god-rays-opacity) * 0.2)) 47%,
+      rgba(173, 216, 230, calc(var(--god-rays-opacity) * 0.3)) 49%,
+      rgba(255, 255, 255, calc(var(--god-rays-opacity) * 0.25)) 51%,
+      transparent 53%,
+      transparent 100%
+    );
+  pointer-events: none;
+  z-index: 1000;
+  animation: god-rays 12s ease-in-out infinite;
+  transform-origin: 100% 0%;
+}
+
+.god-rays::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    /* Additional shimmer rays */
+    linear-gradient(
+      -22deg,
+      transparent 0%,
+      transparent 40%,
+      rgba(255, 255, 255, calc(var(--god-rays-opacity) * 0.18)) 41%,
+      rgba(173, 216, 230, calc(var(--god-rays-opacity) * 0.25)) 42%,
+      rgba(135, 206, 235, calc(var(--god-rays-opacity) * 0.18)) 43%,
+      transparent 44%,
+      transparent 100%
+    );
+  animation: god-rays-shimmer 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* Enhanced lighting effect on Asad Ali text */
+.god-rays-target {
+  position: relative;
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.3),
+    0 0 20px rgba(173, 216, 230, 0.2),
+    0 0 30px rgba(135, 206, 235, 0.1);
+  animation: text-glow 4s ease-in-out infinite;
+}
+
+@keyframes text-glow {
+  0%, 100% {
+    text-shadow: 
+      0 0 10px rgba(255, 255, 255, 0.3),
+      0 0 20px rgba(173, 216, 230, 0.2),
+      0 0 30px rgba(135, 206, 235, 0.1);
+  }
+  50% {
+    text-shadow: 
+      0 0 15px rgba(255, 255, 255, 0.5),
+      0 0 25px rgba(173, 216, 230, 0.3),
+      0 0 35px rgba(135, 206, 235, 0.2);
+  }
+}
+
+/* Water Ripple Effects */
+@keyframes water-ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes water-ripple-large {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+  }
+  25% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(6);
+    opacity: 0;
+  }
+}
+
+.water-ripple {
+  position: absolute;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: water-ripple 2s ease-out forwards;
+  z-index: 10;
+}
+
+.water-ripple-large {
+  position: absolute;
+  border: 3px solid rgba(173, 216, 230, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: water-ripple-large 3s ease-out forwards;
+  animation-delay: 0.3s;
+  z-index: 9;
+}
+
+.water-ripple::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border: 1px solid rgba(135, 206, 235, 0.3);
+  border-radius: 50%;
+  animation: water-ripple 2s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+/* Clickable water surface */
+.water-surface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 8;
+}
+
+/* Enhanced Particle Systems */
+@keyframes bubble-stream-interactive {
+  0% {
+    transform: translateY(100vh) translateX(0px) scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(50vh) translateX(10px) scale(0.7) rotate(180deg);
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(40vh) translateX(25px) scale(1.0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes bubble-float-up {
+  0% {
+    transform: translateY(20px) scale(0.5);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-30px) scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-80px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes bubble-drift {
+  0%, 100% {
+    transform: translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateX(15px) rotate(90deg);
+  }
+  50% {
+    transform: translateX(-10px) rotate(180deg);
+  }
+  75% {
+    transform: translateX(20px) rotate(270deg);
+  }
+}
+
+.bubble-interactive {
+  position: absolute;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(173, 216, 230, 0.5), rgba(135, 206, 235, 0.2));
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 
+    inset 0 0 8px rgba(255, 255, 255, 0.6),
+    0 0 10px rgba(173, 216, 230, 0.3);
+  animation: bubble-float-up 6s ease-out infinite;
+  z-index: 6;
+}
+
+.bubble-interactive:hover {
+  animation-duration: 3s;
+  transform: scale(1.5);
+}
+
+.bubble-stream-enhanced {
+  animation: bubble-stream-interactive 15s infinite linear;
+}
+
+.bubble-drift-enhanced {
+  animation: bubble-drift 8s ease-in-out infinite;
+}
+
+/* Mouse-following bubbles */
+.bubble-trail {
+  position: absolute;
+  background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.8), rgba(173, 216, 230, 0.4));
+  border-radius: 50%;
+  pointer-events: none;
+  animation: bubble-float-up 4s ease-out forwards;
+  z-index: 7;
+}
+
+/* Interactive Creature Animations */
+@keyframes fish-flee {
+  0% {
+    transform: translateX(0) translateY(0) scale(1);
+  }
+  50% {
+    transform: translateX(100px) translateY(-20px) scale(1.1);
+  }
+  100% {
+    transform: translateX(200px) translateY(0) scale(1);
+  }
+}
+
+@keyframes fish-curious {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(-20px) translateY(-10px) rotate(-5deg);
+  }
+  50% {
+    transform: translateX(20px) translateY(10px) rotate(5deg);
+  }
+  75% {
+    transform: translateX(-10px) translateY(-5px) rotate(-2deg);
+  }
+  100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes jellyfish-drift-away {
+  0% {
+    transform: translateX(0) translateY(0) scale(1);
+  }
+  100% {
+    transform: translateX(-150px) translateY(-50px) scale(0.8);
+  }
+}
+
+@keyframes creature-attract {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Interactive creature classes */
+.interactive-fish {
+  transition: all 0.5s ease-out;
+  cursor: pointer;
+}
+
+.interactive-fish:hover {
+  animation: fish-curious 2s ease-in-out;
+  filter: brightness(1.3) drop-shadow(0 0 10px rgba(173, 216, 230, 0.5));
+}
+
+.interactive-jellyfish {
+  transition: all 0.8s ease-out;
+  cursor: pointer;
+}
+
+.interactive-jellyfish:hover {
+  animation: creature-attract 1.5s ease-in-out;
+  filter: brightness(1.2) drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+}
+
+.interactive-creature {
+  transition: all 0.6s ease-out;
+  cursor: pointer;
+}
+
+.interactive-creature:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2) saturate(1.3);
+}
+
+/* School behavior simulation */
+@keyframes school-formation {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(30px) translateY(-15px);
+  }
+  50% {
+    transform: translateX(0) translateY(-30px);
+  }
+  75% {
+    transform: translateX(-30px) translateY(-15px);
+  }
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+}
+
+.school-fish {
+  animation: school-formation 8s ease-in-out infinite;
+}
+
+.school-fish:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.school-fish:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.school-fish:nth-child(4) {
+  animation-delay: 1.5s;
+}
+
+/* Mouse-following behavior */
+.creature-follow-mouse {
+  transition: transform 0.3s ease-out;
+}
+
 /* Bubble Stream - 3D ascending bubbles */
 @keyframes bubble-stream {
   0% {

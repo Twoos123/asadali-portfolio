@@ -201,7 +201,7 @@ export const oceanLife = {
           width: (i) => [50, 55][i] + 'px',
           height: (i) => [60, 65][i] + 'px',
           filter: 'invert(1)',
-          opacity: '0.5',
+          opacity: '1',
         },
         animation: {
           className: 'animate-jellyfish-float',
