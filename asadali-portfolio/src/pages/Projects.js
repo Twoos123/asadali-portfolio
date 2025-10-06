@@ -6,6 +6,7 @@ import { FaGithub, FaJava, FaPython, FaHtml5, FaCss3, FaJs, FaReact, FaNodeJs, F
 import { SiSpringboot, SiDocker, SiGnubash, SiGit, SiAndroidstudio, SiFirebase, SiPostman, SiKubernetes, SiJira, SiJenkins, SiOpenai, SiCplusplus, SiChakraui, SiElixir, SiMongodb, SiRedis, SiStripe, SiCloudinary, SiGraphql, SiPygame, SiKotlin, SiSqlite, SiVite, SiTypescript, SiTailwindcss, SiExpress } from 'react-icons/si';
 import { DiMysql } from 'react-icons/di';
 import { TbBrandOauth } from "react-icons/tb";
+import { createOceanEffects } from '../helpers/animationHelper';
 import { FaSearch, FaFilter } from 'react-icons/fa';
 
 // Move skill mappings OUTSIDE to prevent recreation
@@ -94,8 +95,7 @@ const SkillIcon = React.memo(({ skill }) => {
         style={{ 
           color,
           transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-          transition: 'transform 0.2s ease-in-out',
-          filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))'
+          transition: 'transform 0.2s ease-in-out'
         }} 
       />
       {isHovered && (
@@ -174,7 +174,7 @@ const ProjectCard = React.memo(({ project, index }) => {
           {/* Tech Stack Icons */}
           <div className="flex flex-wrap gap-3 items-center">
             {skillsArray.map((skill, skillIndex) => (
-              <SkillIcon key={`${project.id}-${skillIndex}`} skill={skill} style={"shadow-lg"} />
+              <SkillIcon key={`${project.id}-${skillIndex}`} skill={skill} />
             ))}
           </div>
         </div>
@@ -248,54 +248,19 @@ function Projects() {
   };
 
   useEffect(() => {
-    const createDeepSeaCreatures = () => {
-      const projectsSection = document.querySelector('.projects');
-      if (!projectsSection) return;
-      
-      // Check if creatures already exist to prevent recreation
-      if (projectsSection.querySelector('.creatures-container')) return;
-      
-      let creaturesContainer = document.createElement('div');
-      creaturesContainer.className = 'creatures-container absolute inset-0 pointer-events-none overflow-hidden';
-      creaturesContainer.style.zIndex = '0';
-      projectsSection.appendChild(creaturesContainer);
-      
-      // Fewer bubbles in deeper water
-      for (let i = 0; i < 3; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble-3d animate-bubble-stream';
-        bubble.style.left = `${Math.random() * 100}%`;
-        
-        const size = Math.random() * 5 + 2;
-        bubble.style.width = `${size}px`;
-        bubble.style.height = `${size}px`;
-        
-        bubble.style.animationDelay = `${Math.random() * 15}s`;
-        bubble.style.animationDuration = `${12 + Math.random() * 10}s`;
-        
-        creaturesContainer.appendChild(bubble);
+    const container = document.getElementById('projects-creatures-container');
+    // Only run if the container is empty
+    if (container && container.innerHTML === '') {
+      createOceanEffects('projects-creatures-container', 'projects');
+    }
+    
+    // Return a cleanup function to clear the effects when the component unmounts
+    return () => {
+      if (container) {
+        container.innerHTML = '';
       }
-      
-      // Add larger deep-sea fish
-      const deepFish = document.createElement('div');
-      deepFish.className = 'fish-silhouette animate-fish-deep';
-      deepFish.innerHTML = `<img src="/asadali-portfolio/assets/fish/shark.svg" alt="shark" style="width: 80px; height: 45px; filter: invert(1);"/>`;
-      deepFish.style.top = `${30 + Math.random() * 40}%`;
-      deepFish.style.animationDuration = `${15 + Math.random() * 10}s`;
-      
-      creaturesContainer.appendChild(deepFish);
-      
-      // Add an octopus
-      const octopus = document.createElement('div');
-      octopus.className = 'deep-creature-silhouette animate-fish-deep';
-      octopus.innerHTML = `<img src="/asadali-portfolio/assets/fish/octopus.svg" alt="octopus" style="width: 60px; height: 60px; filter: invert(1); animation: octopus-tentacle-wave 3s infinite ease-in-out;"/>`;
-      octopus.style.top = `${60 + Math.random() * 20}%`;
-      
-      creaturesContainer.appendChild(octopus);
     };
-
-    createDeepSeaCreatures();
-  }, []); // Keep empty dependency array - only run once on mount
+  }, []);
 
   return (
     <div className="projects py-16 ocean-transition relative" style={{
@@ -303,6 +268,7 @@ function Projects() {
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
     }}>
+      <div id="projects-creatures-container" className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex: 0}}></div>
       <motion.h1 
         ref={titleRef}
         className="text-4xl font-bold text-center text-blue-100 mb-8 relative z-10"

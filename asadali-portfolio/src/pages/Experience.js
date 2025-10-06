@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import { FadeInSection } from '../components/animations';
 
 // Images are now in public folder
+import { oceanLife } from '../helpers/oceanLife';
+
 const uOttaHack = process.env.PUBLIC_URL + '/assets/uOttaHack.JPG';
 const eightbyeight = process.env.PUBLIC_URL + '/assets/8x8.svg';
 const SESA = process.env.PUBLIC_URL + '/assets/SESA.svg';
@@ -30,56 +32,62 @@ function Experience() {
   }, []);
 
   useEffect(() => {
-    const createAbyssalCreatures = () => {
-      const experienceSection = document.querySelector('.experience-section');
-      let creaturesContainer = experienceSection.querySelector('.creatures-container');
-      
-      if (!creaturesContainer) {
-        creaturesContainer = document.createElement('div');
-        creaturesContainer.className = 'creatures-container absolute inset-0 pointer-events-none overflow-hidden';
-        creaturesContainer.style.zIndex = '0'; // Behind content but visible
-        experienceSection.appendChild(creaturesContainer);
-      }
-      
-      creaturesContainer.innerHTML = '';
-      
-      // Very few bubbles in abyssal depths
-      for (let i = 0; i < 2; i++) {
+    const createOceanEffects = (containerId, section) => {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+
+      const sectionLife = oceanLife[section];
+      if (!sectionLife) return;
+
+      // Create bubbles
+      for (let i = 0; i < sectionLife.bubbles; i++) {
         const bubble = document.createElement('div');
         bubble.className = 'bubble-3d animate-bubble-stream';
         bubble.style.left = `${Math.random() * 100}%`;
-        
-        const size = Math.random() * 4 + 1;
+        const size = Math.random() * 8 + 4;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
-        
-        bubble.style.animationDelay = `${Math.random() * 20}s`;
-        bubble.style.animationDuration = `${15 + Math.random() * 15}s`;
-        
-        creaturesContainer.appendChild(bubble);
+        bubble.style.animationDuration = `${8 + Math.random() * 8}s`;
+        container.appendChild(bubble);
       }
-      
-      // Add bioluminescent deep-sea creatures
-      const anglerfish = document.createElement('div');
-      anglerfish.className = 'deep-creature-silhouette animate-deep-creature';
-      anglerfish.innerHTML = `<img src="/asadali-portfolio/assets/fish/anglerfish.svg" alt="anglerfish" style="width: 55px; height: 40px; filter: invert(1); animation: anglerfish-lure 2s infinite ease-in-out;"/>`;
-      anglerfish.style.top = `${40 + Math.random() * 30}%`;
-      anglerfish.style.animationDelay = `${Math.random() * 5}s`; // Shorter delay for testing
-      
-      creaturesContainer.appendChild(anglerfish);
-      
-      // Add a mysterious deep creature
-      const deepCreature = document.createElement('div');
-      deepCreature.className = 'deep-creature-silhouette animate-deep-creature';
-      deepCreature.innerHTML = `<img src="/asadali-portfolio/assets/fish/giant-squid.svg" alt="giant squid" style="width: 75px; height: 60px; filter: invert(1); animation: squid-undulate 2.5s infinite ease-in-out;"/>`;
-      deepCreature.style.top = `${60 + Math.random() * 20}%`;
-      deepCreature.style.animationDelay = `${Math.random() * 8}s`; // Shorter delay for testing
-      deepCreature.style.animationDuration = '22s';
-      
-      creaturesContainer.appendChild(deepCreature);
+
+      // Create creatures
+      sectionLife.creatures.forEach(creature => {
+        for (let i = 0; i < creature.count; i++) {
+          const el = document.createElement('div');
+          el.style.position = 'absolute';
+          el.style.pointerEvents = 'none';
+
+          let innerHTML = `<img src="/asadali-portfolio/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
+          for (const [key, value] of Object.entries(creature.styles)) {
+            innerHTML += `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${typeof value === 'function' ? value(i) : value}; `;
+          }
+          innerHTML += `"/>`;
+          el.innerHTML = innerHTML;
+
+          for (const [key, value] of Object.entries(creature.position)) {
+            el.style[key] = typeof value === 'function' ? value(i) : value;
+          }
+          
+          if (creature.animation.className) {
+            el.className = creature.animation.className;
+          }
+          
+          if (creature.animation.duration) {
+            el.style.animationDuration = `${typeof creature.animation.duration === 'function' ? creature.animation.duration(i) : creature.animation.duration}s`;
+          }
+
+          if (creature.zIndex) {
+            el.style.zIndex = creature.zIndex;
+          }
+          
+          container.appendChild(el);
+        }
+      });
     };
 
-    createAbyssalCreatures();
+    createOceanEffects('experience-creatures-container', 'experience');
   }, []);
 
   return (
@@ -88,6 +96,7 @@ function Experience() {
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
     }}>
+      <div id="experience-creatures-container" className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex: 0}}></div>
       <FadeInSection direction="up" delay={0.2} threshold={0.3}>
         <div className='py-16 text-center relative z-10'>
           <h1 className="text-4xl font-bold text-blue-100">Experience</h1>

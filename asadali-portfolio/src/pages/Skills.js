@@ -5,6 +5,7 @@ import { DiMysql } from 'react-icons/di';
 import { TbBrandOauth } from "react-icons/tb";
 import { motion } from 'framer-motion';
 import { FadeInSection, StaggerContainer } from '../components/animations';
+import { oceanLife } from '../helpers/oceanLife';
 
 const SkillIcon = ({ Icon, name, link, hoverColor }) => (
   <motion.a
@@ -47,49 +48,14 @@ const SkillIcon = ({ Icon, name, link, hoverColor }) => (
 
 function Skills() {
   useEffect(() => {
-    const createBubbles = () => {
+    const createOceanEffects = () => {
       const skillsSection = document.getElementById('skills');
-      let bubblesContainer = skillsSection.querySelector('.bubbles-container');
-      
-      if (!bubblesContainer) {
-        bubblesContainer = document.createElement('div');
-        bubblesContainer.className = 'bubbles-container fixed inset-0 pointer-events-none overflow-hidden z-0';
-        skillsSection.appendChild(bubblesContainer);
-      }
-      
-      bubblesContainer.innerHTML = '';
-      
-      for (let i = 0; i < 8; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'absolute bg-blue-200 rounded-full opacity-8 animate-bubble-gentle';
-        bubble.style.top = `${Math.random() * 100}%`;
-        bubble.style.left = `${Math.random() * 100}%`;
-        
-        const size = Math.random() * 4 + 2;
-        bubble.style.width = `${size}px`;
-        bubble.style.height = `${size}px`;
-        
-        bubble.style.animationDuration = `${18 + Math.random() * 10}s`;
-        
-        bubblesContainer.appendChild(bubble);
-      }
-    };
+      if (!skillsSection) return;
 
-    const createMidDepthCreatures = () => {
-      const skillsSection = document.getElementById('skills');
-      if (!skillsSection) {
-        console.log('Skills section not found');
-        return;
-      }
-      
-      console.log('Skills section found, creating creatures...');
-      
-      // Ensure Skills section has proper positioning context
       skillsSection.style.position = 'relative';
       skillsSection.style.overflow = 'hidden';
-      
+
       let creaturesContainer = skillsSection.querySelector('.skills-creatures-container');
-      
       if (!creaturesContainer) {
         creaturesContainer = document.createElement('div');
         creaturesContainer.className = 'skills-creatures-container';
@@ -100,77 +66,59 @@ function Skills() {
         creaturesContainer.style.bottom = '0';
         creaturesContainer.style.pointerEvents = 'none';
         creaturesContainer.style.overflow = 'hidden';
-        creaturesContainer.style.zIndex = '1'; // Behind skills content but visible
+        creaturesContainer.style.zIndex = '1';
         skillsSection.appendChild(creaturesContainer);
-        console.log('Created Skills creatures container');
       }
-      
       creaturesContainer.innerHTML = '';
-      
-      // Add mid-depth bubbles contained within Skills section
-      for (let i = 0; i < 4; i++) {
+
+      const sectionLife = oceanLife.skills;
+
+      // Bubbles
+      for (let i = 0; i < sectionLife.bubbles; i++) {
         const bubble = document.createElement('div');
         bubble.className = 'bubble-3d animate-bubble-stream';
         bubble.style.position = 'absolute';
         bubble.style.left = `${Math.random() * 100}%`;
         bubble.style.bottom = '0px';
-        
         const size = Math.random() * 6 + 3;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
-        
         bubble.style.animationDuration = `${10 + Math.random() * 8}s`;
-        
         creaturesContainer.appendChild(bubble);
       }
-      
-      // Add tropical fish with proper gradient and direction (swimming left to right)
-      const tropicalFish = document.createElement('div');
-      tropicalFish.style.position = 'absolute';
-      tropicalFish.style.top = '45%';
-      tropicalFish.style.left = '-80px'; // Start off-screen left of Skills section
-      tropicalFish.style.opacity = '0.9'; // Same opacity as other creatures
-      tropicalFish.style.zIndex = '2';
-      tropicalFish.style.pointerEvents = 'none';
-      tropicalFish.innerHTML = `<img src="/asadali-portfolio/assets/fish/tropical-fish.svg" alt="tropical fish" style="width: 50px; height: 35px; filter: invert(0.8) sepia(0.2) saturate(1.5) hue-rotate(200deg) brightness(0.8) contrast(1.2); transform: scaleX(-1);"/>`;
-      
-      // Use CSS transition for contained movement (left to right)
-      tropicalFish.style.transition = 'transform 18s linear';
-      tropicalFish.style.transform = 'translateX(0px)';
-      
-      creaturesContainer.appendChild(tropicalFish);
-      console.log('Added tropical fish to Skills section');
-      
-      // Start fish animation after delay (moving right)
-      setTimeout(() => {
-        tropicalFish.style.transform = `translateX(${skillsSection.offsetWidth + 80}px)`;
-      }, 2000);
-      
-      // Add sea turtle with proper gradient and direction (swimming right to left)
-      const turtle = document.createElement('div');
-      turtle.style.position = 'absolute';
-      turtle.style.top = '65%';
-      turtle.style.right = '-80px'; // Start off-screen right of Skills section
-      turtle.style.opacity = '0.9'; // Same opacity as other creatures
-      turtle.style.zIndex = '2';
-      turtle.style.pointerEvents = 'none';
-      turtle.innerHTML = `<img src="/asadali-portfolio/assets/fish/sea-turtle.svg" alt="sea turtle" style="width: 65px; height: 50px; filter: invert(0.8) sepia(0.2) saturate(1.5) hue-rotate(100deg) brightness(0.8) contrast(1.2);"/>`;
-      
-      // Use CSS transition for contained movement (right to left)
-      turtle.style.transition = 'transform 25s linear';
-      turtle.style.transform = 'translateX(0px)';
-      
-      creaturesContainer.appendChild(turtle);
-      console.log('Added sea turtle to Skills section');
-      
-      // Start turtle animation after delay (moving left)
-      setTimeout(() => {
-        turtle.style.transform = `translateX(-${skillsSection.offsetWidth + 80}px)`;
-      }, 5000);
+
+      // Creatures
+      sectionLife.creatures.forEach(creature => {
+        const el = document.createElement('div');
+        el.style.position = 'absolute';
+        el.style.pointerEvents = 'none';
+        el.style.zIndex = creature.zIndex;
+
+        let innerHTML = `<img src="/asadali-portfolio/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
+        for (const [key, value] of Object.entries(creature.styles)) {
+          innerHTML += `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${value}; `;
+        }
+        innerHTML += `"/>`;
+        el.innerHTML = innerHTML;
+
+        for (const [key, value] of Object.entries(creature.position)) {
+          el.style[key] = value;
+        }
+
+        if (creature.animation.type === 'transition') {
+          el.style.transition = `transform ${creature.animation.duration}s linear`;
+          el.style.transform = 'translateX(0px)';
+          setTimeout(() => {
+            const direction = el.style.left.includes('-') ? 1 : -1;
+            el.style.transform = `translateX(${direction * (skillsSection.offsetWidth + 160)}px)`;
+          }, creature.animation.delay * 1000);
+        }
+        
+        creaturesContainer.appendChild(el);
+      });
     };
 
-    createBubbles();
-    createMidDepthCreatures();
+    createOceanEffects();
   }, []);
 
   const programmingLanguages = [

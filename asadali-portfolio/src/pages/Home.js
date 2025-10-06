@@ -8,6 +8,7 @@ import Experience from './Experience';
 import Resume from './Resume';
 import Contact from './Contact';
 import { StaggerContainer, FloatingElement } from '../components/animations';
+import { oceanLife } from '../helpers/oceanLife';
 
 function Home({ backgroundColor, setBackgroundColor }) {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -258,71 +259,62 @@ function Home({ backgroundColor, setBackgroundColor }) {
   }, []);
 
   useEffect(() => {
-    const create3DOceanEffects = () => {
-      const particlesContainer = document.getElementById('particles');
-      if (!particlesContainer) return;
-      particlesContainer.innerHTML = ''; // Clear existing particles
-      
-      // Create 3D Bubble Stream
-      for (let i = 0; i < 8; i++) {
+    const createOceanEffects = (containerId, section) => {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+
+      const sectionLife = oceanLife[section];
+      if (!sectionLife) return;
+
+      // Create bubbles
+      for (let i = 0; i < sectionLife.bubbles; i++) {
         const bubble = document.createElement('div');
         bubble.className = 'bubble-3d animate-bubble-stream';
         bubble.style.left = `${Math.random() * 100}%`;
-        
         const size = Math.random() * 8 + 4;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
-        
         bubble.style.animationDuration = `${8 + Math.random() * 8}s`;
-        
-        particlesContainer.appendChild(bubble);
+        container.appendChild(bubble);
       }
-      
-      // Create Surface Fish (Small schooling fish) - Position in hero section underwater area
-      for (let i = 0; i < 3; i++) {
-        const fish = document.createElement('div');
-        fish.className = 'fish-silhouette animate-fish-surface';
-        fish.innerHTML = `<img src="/asadali-portfolio/assets/fish/small-fish.svg" alt="small fish" style="width: 45px; height: 30px; filter: invert(1); animation: fish-fin-wave 2s infinite ease-in-out;"/>`;
-        fish.style.top = `${75 + Math.random() * 20}%`; // Position higher in underwater section (45-65% of hero)
-        fish.style.left = '-100px'; // Start off-screen
-        fish.style.animationDuration = `${12 + Math.random() * 8}s`;
-        fish.style.position = 'absolute';
-        fish.style.zIndex = '1'; // Behind everything (seaweed z-index 3, seafloor z-index 2)
-        
-        particlesContainer.appendChild(fish);
-      }
-      
-      // Create Multiple Jellyfish - Grid-based positioning to prevent overlapping (Hidden on mobile)
-      if (!isMobile) {
-        const jellyfishGrid = [
-          { x: 15, y: 25, width: 55, height: 65, delay: 2, duration: 8 }, // Top-left area
-          { x: 50, y: 36, width: 60, height: 70, delay: 7, duration: 9 }, // Top-center area  
-          { x: 80, y: 25, width: 52, height: 62, delay: 12, duration: 7 }, // Top-right area
-          { x: 25, y: 30, width: 58, height: 68, delay: 5, duration: 10 }, // Bottom-left area
-          { x: 65, y: 35, width: 53, height: 63, delay: 10, duration: 6 }, // Bottom-center area
-          { x: 85, y: 27, width: 57, height: 67, delay: 15, duration: 8 }  // Bottom-right area
-        ];
-        
-        for (let i = 0; i < 6; i++) {
-          const jellyfish = document.createElement('div');
-          jellyfish.className = 'jellyfish-silhouette animate-jellyfish-float';
-          jellyfish.innerHTML = `<img src="/asadali-portfolio/assets/fish/jellyfish.svg" alt="jellyfish" style="width: ${jellyfishGrid[i].width}px; height: ${jellyfishGrid[i].height}px; filter: invert(1); animation: jellyfish-pulse 3s infinite ease-in-out;"/>`;
+
+      // Create creatures
+      sectionLife.creatures.forEach(creature => {
+        for (let i = 0; i < creature.count; i++) {
+          const el = document.createElement('div');
+          el.style.position = 'absolute';
+          el.style.pointerEvents = 'none';
+
+          let innerHTML = `<img src="/asadali-portfolio/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
+          for (const [key, value] of Object.entries(creature.styles)) {
+            innerHTML += `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${typeof value === 'function' ? value(i) : value}; `;
+          }
+          innerHTML += `"/>`;
+          el.innerHTML = innerHTML;
+
+          for (const [key, value] of Object.entries(creature.position)) {
+            el.style[key] = typeof value === 'function' ? value(i) : value;
+          }
           
-          // Use grid positions to prevent overlapping
-          jellyfish.style.top = `${jellyfishGrid[i].y}%`;
-          jellyfish.style.left = `${jellyfishGrid[i].x}%`;
-          jellyfish.style.animationDuration = `${jellyfishGrid[i].duration}s`;
-          jellyfish.style.position = 'absolute';
-          jellyfish.style.zIndex = '100'; // Above wave but below content
-          jellyfish.style.pointerEvents = 'none';
-          jellyfish.style.opacity = '0.6'; // Slightly transparent for natural look
+          if (creature.animation.className) {
+            el.className = creature.animation.className;
+          }
           
-          particlesContainer.appendChild(jellyfish);
+          if (creature.animation.duration) {
+            el.style.animationDuration = `${typeof creature.animation.duration === 'function' ? creature.animation.duration(i) : creature.animation.duration}s`;
+          }
+
+          if (creature.zIndex) {
+            el.style.zIndex = creature.zIndex;
+          }
+          
+          container.appendChild(el);
         }
-      }
+      });
     };
 
-    create3DOceanEffects();
+    createOceanEffects('particles', 'home');
   }, [isMobile]); // Add isMobile dependency to recreate effects when mobile state changes
 
   useEffect(() => {
