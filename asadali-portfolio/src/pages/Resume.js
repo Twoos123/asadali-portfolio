@@ -5,6 +5,7 @@ import { oceanLife } from '../helpers/oceanLife';
 
 function Resume() {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const titleRef = useRef(null);
   const titleInView = useInView(titleRef, { threshold: 0.3, once: true });
 
@@ -32,6 +33,20 @@ function Resume() {
       document.removeEventListener('keydown', handleEscapeKey);
     };
   }, [isFullscreen]);
+
+  // Mobile detection effect
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
   // Ocean life effects
   useEffect(() => {
@@ -71,8 +86,12 @@ function Resume() {
         creaturesContainer.appendChild(bubble);
       }
 
-      // Creatures
+      // Creatures - filter out kraken and jellyfish on mobile
       sectionLife.creatures.forEach((creature, creatureIndex) => {
+        // Skip kraken and jellyfish on mobile to prevent viewport issues
+        if (isMobile && (creature.type === 'kraken' || creature.type === 'jellyfish')) {
+          return; // Skip this creature on mobile
+        }
         for (let i = 0; i < creature.count; i++) {
           const el = document.createElement('div');
           el.style.position = 'absolute';
@@ -115,7 +134,7 @@ function Resume() {
     };
 
     createOceanEffects();
-  }, []);
+  }, [isMobile]); // Recreate ocean effects when mobile state changes
 
   return (
     <div className="resume-section py-16 relative bg-transparent" style={{

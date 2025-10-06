@@ -21,9 +21,6 @@ function Home({ backgroundColor, setBackgroundColor }) {
   const skillsRef = useRef(null);
   const mouseTrailRef = useRef(null);
   
-  // Three.js Ocean Depth System
-  const { scrollProgress, depth, depthZone, pressureEffect, lightLevel, isAtSurface } = useScrollProgress();
-
   // Water ripple functionality
   const createWaterRipple = (event) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -74,6 +71,7 @@ function Home({ backgroundColor, setBackgroundColor }) {
     }, 100); // Throttle bubble creation
   };
 
+
   // Ensure page starts at top on load and apply initial body background
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -98,6 +96,7 @@ function Home({ backgroundColor, setBackgroundColor }) {
     
     checkMobile();
     window.addEventListener('resize', checkMobile);
+    
     
     // Cleanup function to reset body background when component unmounts
     return () => {
@@ -341,8 +340,12 @@ function Home({ backgroundColor, setBackgroundColor }) {
         container.appendChild(bubble);
       }
 
-      // Create creatures
+      // Create creatures - filter out jellyfish on mobile
       sectionLife.creatures.forEach(creature => {
+        // Skip jellyfish on mobile to prevent viewport issues
+        if (isMobile && creature.type === 'jellyfish') {
+          return; // Skip jellyfish on mobile
+        }
         for (let i = 0; i < creature.count; i++) {
           const el = document.createElement('div');
           el.style.position = 'absolute';
@@ -448,8 +451,8 @@ function Home({ backgroundColor, setBackgroundColor }) {
     <div id="home" className="ocean-transition relative" style={{ 
       minHeight: '100vh'
     }}>
-      {/* Depth Indicator - Keep this as you like it */}
-      <DepthIndicator />
+      {/* Depth Indicator - Hidden on mobile */}
+      {!isMobile && <DepthIndicator />}
       
       <div className="relative">
 
@@ -464,8 +467,8 @@ function Home({ backgroundColor, setBackgroundColor }) {
 
         {/* Hero Section - Sky to Ocean */}
         <div className="h-screen relative flex flex-col">
-          {/* God Rays - Volumetric lighting effect */}
-          <div className="god-rays"></div>
+          {/* God Rays - Volumetric lighting effect - Hidden on mobile */}
+          {!isMobile && <div className="god-rays"></div>}
           
           {/* Background Layer (Sky + Ocean) */}
           <div className="absolute inset-0 flex flex-col z-0">
@@ -700,10 +703,8 @@ function Home({ backgroundColor, setBackgroundColor }) {
           <Experience />
         </div>
 
-        {/* Add Resume Section */}
         <Resume />
         
-        {/* Add Contact Section */}
         <Contact />
       </div>
     </div>
