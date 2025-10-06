@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/asadali-portfolio/static/css/main.c7d48349.css",
-    "main.js": "/asadali-portfolio/static/js/main.a6d49c52.js",
+    "main.css": "/asadali-portfolio/static/css/main.c81b7527.css",
+    "main.js": "/asadali-portfolio/static/js/main.6f2eed22.js",
     "static/js/453.16df7936.chunk.js": "/asadali-portfolio/static/js/453.16df7936.chunk.js",
     "static/media/Pokedex.png": "/asadali-portfolio/static/media/Pokedex.b81059ceec88c1beac9b.png",
     "static/media/ECommerceApp.png": "/asadali-portfolio/static/media/ECommerceApp.4c35409daa8fba72a9c5.png",
@@ -17,12 +17,12 @@
     "static/media/uOttaHack.JPG": "/asadali-portfolio/static/media/uOttaHack.ee970fbb785209077975.JPG",
     "static/media/8x8.svg": "/asadali-portfolio/static/media/8x8.3a08beee00ef424214fe1c92be3f1e07.svg",
     "index.html": "/asadali-portfolio/index.html",
-    "main.c7d48349.css.map": "/asadali-portfolio/static/css/main.c7d48349.css.map",
-    "main.a6d49c52.js.map": "/asadali-portfolio/static/js/main.a6d49c52.js.map",
+    "main.c81b7527.css.map": "/asadali-portfolio/static/css/main.c81b7527.css.map",
+    "main.6f2eed22.js.map": "/asadali-portfolio/static/js/main.6f2eed22.js.map",
     "453.16df7936.chunk.js.map": "/asadali-portfolio/static/js/453.16df7936.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c7d48349.css",
-    "static/js/main.a6d49c52.js"
+    "static/css/main.c81b7527.css",
+    "static/js/main.6f2eed22.js"
   ]
 }
