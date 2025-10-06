@@ -9,9 +9,8 @@ import Resume from './Resume';
 import Contact from './Contact';
 import { StaggerContainer, FloatingElement } from '../components/animations';
 
-function Home() {
+function Home({ backgroundColor, setBackgroundColor }) {
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [backgroundColor, setBackgroundColor] = useState('hsl(195, 70%, 55%)');
   const [isMobile, setIsMobile] = useState(false);
   const [clouds, setClouds] = useState([]);
   const skillsRef = useRef(null);
@@ -19,7 +18,9 @@ function Home() {
   // Ensure page starts at top on load and apply initial body background
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.body.style.backgroundColor = 'hsl(195, 70%, 55%)';
+    // Set initial background color immediately and explicitly
+    const initialColor = 'hsl(195, 70%, 55%)';
+    setBackgroundColor(initialColor);
     
     // Generate fixed cloud positions once
     const cloudData = Array.from({ length: 6 }, (_, i) => ({
@@ -41,10 +42,9 @@ function Home() {
     
     // Cleanup function to reset body background when component unmounts
     return () => {
-      document.body.style.backgroundColor = '';
       window.removeEventListener('resize', checkMobile);
     };
-  }, []);
+  }, [setBackgroundColor]);
 
   useEffect(() => {
     // Home section seaweed
@@ -108,7 +108,6 @@ function Home() {
       // Fixed coral heights for consistency - no more random sizing
       const coralHeight = isMobile ? 25 : 45; // Mobile: 25px, Desktop: 45px
       coralImg.style.height = `${coralHeight}px`;
-      coralImg.style.filter = 'hue-rotate(280deg) saturate(1.2) brightness(1.1)'; // Coral-like colors, brighter
       coralImg.style.opacity = '1.0'; // Fully opaque - no transparency
       
       coralImg.onerror = () => {
@@ -379,12 +378,10 @@ function Home() {
       const currentS = startS + (endS - startS) * localProgress;
       const currentL = startL + (endL - startL) * localProgress;
       
-      setBackgroundColor(`hsl(${currentH}, ${currentS}%, ${currentL}%)`);
+      const newColor = `hsl(${currentH}, ${currentS}%, ${currentL}%)`;
+      setBackgroundColor(newColor);
     }
-    
-    // Apply the background color to the body element for seamless full-page coverage
-    document.body.style.backgroundColor = backgroundColor;
-  }, [scrollPosition, backgroundColor]);
+  }, [scrollPosition, setBackgroundColor]);
 
   // Smooth scroll function
   const scrollToSkills = () => {
@@ -395,17 +392,6 @@ function Home() {
 
   return (
     <div id="home" className="ocean-transition relative" style={{ 
-      background: `linear-gradient(to bottom, 
-        ${backgroundColor} 0%, 
-        hsl(200, 75%, 45%) 15%, 
-        hsl(205, 80%, 35%) 35%, 
-        hsl(210, 85%, 25%) 55%, 
-        hsl(215, 88%, 20%) 70%, 
-        hsl(220, 90%, 15%) 85%, 
-        hsl(230, 95%, 8%) 100%)`,
-      backgroundSize: '100% 100%',
-      backgroundPosition: 'center top',
-      backgroundAttachment: 'fixed',
       minHeight: '100vh'
     }}>
       <div className="relative">
@@ -474,7 +460,7 @@ function Home() {
               {/* Wave layers for ocean surface - consistent surface color */}
             
               <Wave
-                fill="hsl(199, 75%, 50%)"
+                fill={backgroundColor}
                 paused={false}
                 options={{
                   height: 35, // Increased from 20 to 35 for taller waves
@@ -535,7 +521,7 @@ function Home() {
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <motion.h1 
-                className="text-5xl md:text-7xl lg:text-9xl font-bold text-white mb-8 drop-shadow-2xl"
+                className="text-5xl md:text-7xl lg:text-9xl font-bold text-white mb-8 drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)]"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
@@ -543,7 +529,7 @@ function Home() {
                 Asad Ali
               </motion.h1>
               <motion.p 
-                className="text-xl md:text-2xl text-blue-100 mb-8"
+                className="text-xl md:text-2xl text-blue-100 mb-8 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
