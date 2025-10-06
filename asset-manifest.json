@@ -1,29 +1,15 @@
 {
   "files": {
-    "main.css": "/asadali-portfolio/static/css/main.c5bfbf6c.css",
-    "main.js": "/asadali-portfolio/static/js/main.20e2956c.js",
+    "main.css": "/asadali-portfolio/static/css/main.4e022d19.css",
+    "main.js": "/asadali-portfolio/static/js/main.36d06f31.js",
     "static/js/453.024bd79a.chunk.js": "/asadali-portfolio/static/js/453.024bd79a.chunk.js",
-    "static/media/Pokedex.png": "/asadali-portfolio/static/media/Pokedex.b81059ceec88c1beac9b.png",
-    "static/media/ECommerceApp.png": "/asadali-portfolio/static/media/ECommerceApp.4c35409daa8fba72a9c5.png",
-    "static/media/TriviaGame.jpeg": "/asadali-portfolio/static/media/TriviaGame.9e2ad5dce72cfef27dbe.jpeg",
-    "static/media/pawnversation.png": "/asadali-portfolio/static/media/pawnversation.8e0be8f166f9381a316e.png",
-    "static/media/MenuMate.png": "/asadali-portfolio/static/media/MenuMate.4c9f45be8fcb37f83005.png",
-    "static/media/CyclingApp.png": "/asadali-portfolio/static/media/CyclingApp.e83c03d4d1397c9b4a7f.png",
-    "static/media/GPT-Clone.png": "/asadali-portfolio/static/media/GPT-Clone.2e8e8d689e130738c756.png",
-    "static/media/RoadOptimization.png": "/asadali-portfolio/static/media/RoadOptimization.044409a3bdff04850db8.png",
-    "static/media/AsadLogo.png": "/asadali-portfolio/static/media/AsadLogo.ed3c3154b6d00dbdc932.png",
-    "static/media/PlanetSimulation.png": "/asadali-portfolio/static/media/PlanetSimulation.55e00ffeaad9389d9103.png",
-    "static/media/uottawa.svg": "/asadali-portfolio/static/media/uottawa.c07227c045c2debfee6b724fa4161d57.svg",
-    "static/media/uOttaHack.JPG": "/asadali-portfolio/static/media/uOttaHack.ee970fbb785209077975.JPG",
-    "static/media/8x8.svg": "/asadali-portfolio/static/media/8x8.3a08beee00ef424214fe1c92be3f1e07.svg",
-    "static/media/SESA.svg": "/asadali-portfolio/static/media/SESA.d465dd7c6a4c2412ef5e9433a0f376e5.svg",
     "index.html": "/asadali-portfolio/index.html",
-    "main.c5bfbf6c.css.map": "/asadali-portfolio/static/css/main.c5bfbf6c.css.map",
-    "main.20e2956c.js.map": "/asadali-portfolio/static/js/main.20e2956c.js.map",
+    "main.4e022d19.css.map": "/asadali-portfolio/static/css/main.4e022d19.css.map",
+    "main.36d06f31.js.map": "/asadali-portfolio/static/js/main.36d06f31.js.map",
     "453.024bd79a.chunk.js.map": "/asadali-portfolio/static/js/453.024bd79a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c5bfbf6c.css",
-    "static/js/main.20e2956c.js"
+    "static/css/main.4e022d19.css",
+    "static/js/main.36d06f31.js"
   ]
 }
