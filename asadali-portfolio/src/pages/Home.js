@@ -9,12 +9,17 @@ import Resume from './Resume';
 import Contact from './Contact';
 import { StaggerContainer, FloatingElement } from '../components/animations';
 import { oceanLife } from '../helpers/oceanLife';
+import DepthIndicator from '../components/DepthIndicator';
+import useScrollProgress from '../hooks/useScrollProgress';
 
 function Home({ backgroundColor, setBackgroundColor }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [clouds, setClouds] = useState([]);
   const skillsRef = useRef(null);
+  
+  // Three.js Ocean Depth System
+  const { scrollProgress, depth, depthZone, pressureEffect, lightLevel, isAtSurface } = useScrollProgress();
 
   // Ensure page starts at top on load and apply initial body background
   useEffect(() => {
@@ -386,6 +391,9 @@ function Home({ backgroundColor, setBackgroundColor }) {
     <div id="home" className="ocean-transition relative" style={{ 
       minHeight: '100vh'
     }}>
+      {/* Depth Indicator - Keep this as you like it */}
+      <DepthIndicator />
+      
       <div className="relative">
 
         {/* Side seaweed that appears as you scroll through all sections - hidden on mobile */}

@@ -92,22 +92,22 @@ function Navbar() {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-6">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/" onClick={() => handleScrollToSection('#home')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Home</Link>
+                <Link to="/" onClick={() => handleScrollToSection('#home')} className="text-blue-50 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Home</Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/" onClick={() => handleScrollToSection('#skills')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Skills</Link>
+                <Link to="/" onClick={() => handleScrollToSection('#skills')} className="text-blue-50 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Skills</Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/" onClick={() => handleScrollToSection('#projects')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Projects</Link>
+                <Link to="/" onClick={() => handleScrollToSection('#projects')} className="text-blue-50 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Projects</Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/" onClick={() => handleScrollToSection('#experience')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Experience</Link>
+                <Link to="/" onClick={() => handleScrollToSection('#experience')} className="text-blue-50 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Experience</Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/" onClick={() => scrollToSection('.resume-section')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Resume</Link>
+                <Link to="/" onClick={() => scrollToSection('.resume-section')} className="text-blue-50 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Resume</Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/" onClick={() => scrollToSection('.contact-section')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Contact</Link>
+                <Link to="/" onClick={() => scrollToSection('.contact-section')} className="text-blue-50 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300 drop-shadow-lg">Contact</Link>
               </motion.div>
             </div>
           </div>

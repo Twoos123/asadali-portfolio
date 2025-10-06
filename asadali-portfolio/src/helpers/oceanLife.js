@@ -182,7 +182,7 @@ export const oceanLife = {
           width: '1000px',
           height: '1000px',
           filter: 'invert(0.9) sepia(0.3) saturate(2) hue-rotate(260deg) brightness(0.7) contrast(1.1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.4))',
-          opacity: '0.6',
+          opacity: '1',
         },
         animation: {
           className: 'animate-kraken',
