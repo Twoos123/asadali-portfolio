@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { FadeInSection } from '../components/animations';
 import uOttaHack from "../assets/uOttaHack.JPG";
 import eightbyeight from "../assets/8x8.svg";
-import SESA from "../assets/SESA.jpg";
+import SESA from "../assets/SESA.svg";
 import uOttawa from "../assets/uottawa.svg";  
 import HealthCanada from "../assets/health-canada.png";
 
@@ -81,7 +81,7 @@ function Experience() {
   }, []);
 
   return (
-    <div className="experience-section relative min-h-screen" style={{
+    <div className="experience-section relative min-h-screen bg-transparent" style={{
       backgroundSize: '120vw 120vh',
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
@@ -270,8 +270,7 @@ function Experience() {
         </FadeInSection>
       </div>
       
-      {/* Gradient transition to Footer */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-slate-900 z-0"></div>
+      {/* Remove the gradient transition since background is now seamless */}
     </div>
   );
 }

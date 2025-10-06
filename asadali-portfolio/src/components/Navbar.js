@@ -60,6 +60,13 @@ function Navbar() {
     setIsOpen(false);
   };
 
+  const scrollToSection = (sectionId) => {
+    const element = document.querySelector(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <motion.nav 
       initial={{ y: -100 }}
@@ -94,6 +101,12 @@ function Navbar() {
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link to="/" onClick={() => handleScrollToSection('#experience')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300">Experience</Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link to="/" onClick={() => scrollToSection('.resume-section')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300">Resume</Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link to="/" onClick={() => scrollToSection('.contact-section')} className="text-blue-100 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-xl font-medium transition-all duration-300">Contact</Link>
               </motion.div>
             </div>
           </div>
@@ -145,6 +158,12 @@ function Navbar() {
               </motion.div>
               <motion.div whileHover={{ x: 10 }} whileTap={{ scale: 0.95 }}>
                 <Link to="/" onClick={() => handleScrollToSection('#experience')} className="text-blue-100 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300">Experience</Link>
+              </motion.div>
+              <motion.div whileHover={{ x: 10 }} whileTap={{ scale: 0.95 }}>
+                <Link to="/" onClick={() => scrollToSection('.resume-section')} className="text-blue-100 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300">Resume</Link>
+              </motion.div>
+              <motion.div whileHover={{ x: 10 }} whileTap={{ scale: 0.95 }}>
+                <Link to="/" onClick={() => scrollToSection('.contact-section')} className="text-blue-100 hover:bg-blue-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300">Contact</Link>
               </motion.div>
             </motion.div>
           </motion.div>

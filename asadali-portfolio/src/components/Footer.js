@@ -3,11 +3,13 @@ import { FaLinkedin, FaGithub, FaEnvelope, FaFileAlt } from 'react-icons/fa';
 
 function Footer() {
   return (
-    <footer className="py-8 bg-slate-900 bg-opacity-95 text-white">
-      <div className="container mx-auto px-4">
+    <footer className="bg-transparent text-white py-8 relative" style={{
+      background: 'linear-gradient(to bottom, transparent 0%, hsl(230, 95%, 5%) 50%, hsl(240, 100%, 3%) 100%)'
+    }}>
+      <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
-            <p className="text-blue-200">&copy; 2025 asadali-portfolio.com</p>
+            <p className="text-blue-200">&copy; 2025 Asad Ali. All rights reserved.</p>
           </div>
           <div className="flex space-x-8">
             <a
@@ -28,23 +30,13 @@ function Footer() {
               <FaGithub size={30} className="text-blue-200 group-hover:text-gray-300" />
               <span className="sr-only">GitHub</span>
             </a>
-            <a
-              href="mailto:masadbali190@gmail.com"
-              className="group hover:text-cyan-300 transition-all duration-300 transform hover:scale-105 subtle-hover"
-            >
-              <FaEnvelope size={30} className="text-blue-200 group-hover:text-cyan-300" />
-              <span className="sr-only">Email</span>
-            </a>
-            <a
-              href="https://drive.google.com/file/d/17k-FbUlKWx263njOeZHt0rcvE-LiNiSi/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group hover:text-cyan-300 transition-all duration-300 transform hover:scale-105 subtle-hover"
-            >
-              <FaFileAlt size={30} className="text-blue-200 group-hover:text-cyan-300" />
-              <span className="sr-only">Resume</span>
-            </a>
+
           </div>
+        </div>
+        <div className="text-center text-gray-300">
+          <p className="text-sm mt-2 text-gray-400">
+            Made with ❤️ and lots of ☕
+          </p>
         </div>
       </div>
     </footer>

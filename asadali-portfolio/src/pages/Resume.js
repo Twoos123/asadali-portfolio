@@ -1,0 +1,123 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { FaDownload, FaExpand, FaCompress } from 'react-icons/fa';
+
+function Resume() {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const titleRef = useRef(null);
+  const titleInView = useInView(titleRef, { threshold: 0.3, once: true });
+
+  // Replace with your actual Google Drive resume link
+  const resumeUrl = "https://drive.google.com/file/d/17k-FbUlKWx263njOeZHt0rcvE-LiNiSi/preview";
+  const downloadUrl = "https://drive.google.com/file/d/17k-FbUlKWx263njOeZHt0rcvE-LiNiSi/view?usp=sharing";
+
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+  };
+
+  // Add escape key listener for fullscreen mode
+  useEffect(() => {
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+
+    // Add event listener when component mounts
+    document.addEventListener('keydown', handleEscapeKey);
+
+    // Cleanup event listener when component unmounts
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isFullscreen]);
+
+  return (
+    <div className="resume-section py-16 relative bg-transparent" style={{
+      minHeight: '100vh'
+    }}>
+      <div className="container mx-auto px-4 relative z-10">
+        <motion.h1 
+          ref={titleRef}
+          className="text-4xl font-bold text-center text-blue-100 mb-8"
+          initial={{ opacity: 0, y: 50 }}
+          animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          Resume
+        </motion.h1>
+
+        {/* Resume Controls */}
+        <div className="flex justify-center gap-4 mb-8">
+          <motion.a
+            href={downloadUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl backdrop-blur-md bg-white/10 border border-white/20 text-blue-100 hover:bg-white/20 transition-all duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FaDownload className="h-4 w-4" />
+            Download PDF
+          </motion.a>
+          
+          <motion.button
+            onClick={toggleFullscreen}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl backdrop-blur-md bg-white/10 border border-white/20 text-blue-100 hover:bg-white/20 transition-all duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {isFullscreen ? <FaCompress className="h-4 w-4" /> : <FaExpand className="h-4 w-4" />}
+            {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+          </motion.button>
+        </div>
+
+        {/* Resume Iframe */}
+        <motion.div
+          className={`mx-auto rounded-2xl overflow-hidden backdrop-blur-md bg-white/5 border border-white/20 shadow-2xl ${
+            isFullscreen ? 'fixed top-20 left-4 right-4 bottom-4 z-50' : 'max-w-4xl'
+          }`}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          {/* Fullscreen Close Button */}
+          {isFullscreen && (
+            <div className="absolute top-4 left-4 z-60">
+              <motion.button
+                onClick={toggleFullscreen}
+                className="flex items-center justify-center w-10 h-10 rounded-full backdrop-blur-md bg-black/20 border border-white/20 text-white hover:bg-black/40 transition-all duration-300 shadow-lg"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                title="Exit Fullscreen"
+              >
+                <FaCompress className="h-4 w-4" />
+              </motion.button>
+            </div>
+          )}
+          
+          <iframe
+            src={resumeUrl}
+            className="w-full"
+            style={{ height: isFullscreen ? 'calc(100vh - 6rem)' : '80vh' }}
+            title="Resume"
+            frameBorder="0"
+          />
+        </motion.div>
+
+        {/* Fullscreen Overlay */}
+        {isFullscreen && (
+          <motion.div
+            className="fixed inset-0 bg-black/50 z-40"
+            onClick={toggleFullscreen}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Resume;

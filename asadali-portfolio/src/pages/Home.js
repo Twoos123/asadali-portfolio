@@ -5,18 +5,21 @@ import Wave from 'react-wavify';
 import Skills from './Skills';
 import Projects from './Projects';
 import Experience from './Experience';
+import Resume from './Resume';
+import Contact from './Contact';
 import { StaggerContainer, FloatingElement } from '../components/animations';
 
 function Home() {
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [backgroundColor, setBackgroundColor] = useState('rgb(0, 255, 255)'); // Initial color
+  const [backgroundColor, setBackgroundColor] = useState('hsl(195, 70%, 55%)');
   const [isMobile, setIsMobile] = useState(false);
   const [clouds, setClouds] = useState([]);
   const skillsRef = useRef(null);
 
-  // Ensure page starts at top on load
+  // Ensure page starts at top on load and apply initial body background
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.body.style.backgroundColor = 'hsl(195, 70%, 55%)';
     
     // Generate fixed cloud positions once
     const cloudData = Array.from({ length: 6 }, (_, i) => ({
@@ -36,7 +39,9 @@ function Home() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
+    // Cleanup function to reset body background when component unmounts
     return () => {
+      document.body.style.backgroundColor = '';
       window.removeEventListener('resize', checkMobile);
     };
   }, []);
@@ -324,23 +329,62 @@ function Home() {
   useEffect(() => {
     // Ocean depth effect: darker blue at surface, deeper as you scroll
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPercentage = scrollPosition / maxScroll;
+    const scrollPercentage = Math.min(scrollPosition / maxScroll, 1);
     
-    // Create ocean depth progression - start darker for better text visibility
-    const surfaceHue = 200; // Darker blue
-    const deepHue = 220; // Deep blue
-    const currentHue = surfaceHue + (scrollPercentage * (deepHue - surfaceHue));
+    // Extended ocean depth colors to cover entire page flow
+    const colorStops = [
+      { position: 0.0, color: 'hsl(195, 70%, 55%)' },    // Surface - light ocean blue (Home)
+      { position: 0.15, color: 'hsl(200, 75%, 45%)' },   // Shallow (Skills)
+      { position: 0.35, color: 'hsl(205, 80%, 35%)' },   // Medium (Projects)
+      { position: 0.55, color: 'hsl(210, 85%, 25%)' },   // Deep (Experience)
+      { position: 0.70, color: 'hsl(215, 88%, 20%)' },   // Deeper (Resume)
+      { position: 0.85, color: 'hsl(220, 90%, 15%)' },   // Very deep (Contact)
+      { position: 1.0, color: 'hsl(230, 95%, 8%)' }      // Abyssal - near black (Footer)
+    ];
     
-    const surfaceSaturation = 80;
-    const deepSaturation = 95;
-    const currentSaturation = surfaceSaturation + (scrollPercentage * (deepSaturation - surfaceSaturation));
+    // Find the two closest color stops
+    let startStop, endStop;
+    for (let i = 0; i < colorStops.length - 1; i++) {
+      if (scrollPercentage >= colorStops[i].position && scrollPercentage <= colorStops[i + 1].position) {
+        startStop = colorStops[i];
+        endStop = colorStops[i + 1];
+        break;
+      }
+    }
     
-    const surfaceLightness = 40; // Much darker at surface for text visibility
-    const deepLightness = 10; // Very dark in depths
-    const currentLightness = surfaceLightness - (scrollPercentage * (surfaceLightness - deepLightness));
+    if (!startStop || !endStop) {
+      // Fallback if something goes wrong
+      setBackgroundColor(colorStops[colorStops.length - 1].color);
+      return;
+    }
     
-    setBackgroundColor(`hsl(${currentHue}, ${currentSaturation}%, ${currentLightness}%)`);
-  }, [scrollPosition]);
+    // Calculate interpolation between the two stops
+    const localProgress = (scrollPercentage - startStop.position) / 
+                         (endStop.position - startStop.position);
+    
+    // Parse HSL values
+    const startMatch = startStop.color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+    const endMatch = endStop.color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+    
+    if (startMatch && endMatch) {
+      const startH = parseInt(startMatch[1]);
+      const startS = parseInt(startMatch[2]);
+      const startL = parseInt(startMatch[3]);
+      
+      const endH = parseInt(endMatch[1]);
+      const endS = parseInt(endMatch[2]);
+      const endL = parseInt(endMatch[3]);
+      
+      const currentH = startH + (endH - startH) * localProgress;
+      const currentS = startS + (endS - startS) * localProgress;
+      const currentL = startL + (endL - startL) * localProgress;
+      
+      setBackgroundColor(`hsl(${currentH}, ${currentS}%, ${currentL}%)`);
+    }
+    
+    // Apply the background color to the body element for seamless full-page coverage
+    document.body.style.backgroundColor = backgroundColor;
+  }, [scrollPosition, backgroundColor]);
 
   // Smooth scroll function
   const scrollToSkills = () => {
@@ -350,17 +394,19 @@ function Home() {
   };
 
   return (
-    <div id="home" className="min-h-screen ocean-transition relative" style={{ 
+    <div id="home" className="ocean-transition relative" style={{ 
       background: `linear-gradient(to bottom, 
         ${backgroundColor} 0%, 
-        ${backgroundColor} 30%, 
-        rgb(30, 58, 138) 45%, 
-        rgb(30, 64, 175) 60%, 
-        rgb(30, 58, 138) 75%, 
-        rgb(15, 23, 42) 100%)`,
-      backgroundSize: '100% 500vh',
+        hsl(200, 75%, 45%) 15%, 
+        hsl(205, 80%, 35%) 35%, 
+        hsl(210, 85%, 25%) 55%, 
+        hsl(215, 88%, 20%) 70%, 
+        hsl(220, 90%, 15%) 85%, 
+        hsl(230, 95%, 8%) 100%)`,
+      backgroundSize: '100% 100%',
       backgroundPosition: 'center top',
-      backgroundAttachment: 'fixed'
+      backgroundAttachment: 'fixed',
+      minHeight: '100vh'
     }}>
       <div className="relative">
 
@@ -425,10 +471,10 @@ function Home() {
           {/* Wave Section - Hidden on mobile */}
           {!isMobile && (
             <div className="absolute bottom-0 left-0 w-full" style={{ zIndex: 3, height: '60%', top: '40%', background: 'transparent' }}>
-              {/* Wave layers for ocean surface - lighter blue and moved up */}
+              {/* Wave layers for ocean surface - consistent surface color */}
             
               <Wave
-                fill={backgroundColor}
+                fill="hsl(199, 75%, 50%)"
                 paused={false}
                 options={{
                   height: 35, // Increased from 20 to 35 for taller waves
@@ -438,6 +484,45 @@ function Home() {
                 }}
                 style={{ position: 'absolute', top: '-50px', width: '100%' }}
               />
+            </div>
+          )}
+
+          {/* Boats floating above waves - Hidden on mobile */}
+          {!isMobile && (
+            <div className="absolute bottom-0 left-0 w-full" style={{ zIndex: 4, height: '60%', top: '40%', background: 'transparent', pointerEvents: 'none' }}>
+              {/* Boat 1 - Left side */}
+              <div 
+                className="absolute animate-boat-bob"
+                style={{ 
+                  left: '20%', 
+                  top: '-5.1%',
+                  animationDelay: '0s',
+                  animationDuration: '4s'
+                }}
+              >
+                <img 
+                  src="/asadali-portfolio/assets/boats/boat-1.svg" 
+                  alt="Boat 1" 
+                  className="w-16 h-auto"
+                />
+              </div>
+              
+              {/* Boat 2 - Right side */}
+              <div 
+                className="absolute animate-boat-bob"
+                style={{ 
+                  left: '90%', 
+                  top: '-7%',
+                  animationDelay: '0s',
+                  animationDuration: '3s'
+                }}
+              >
+                <img 
+                  src="/asadali-portfolio/assets/boats/boat-2.svg" 
+                  alt="Boat 2" 
+                  className="w-20 h-auto"
+                />
+              </div>
             </div>
           )}
 
@@ -473,8 +558,7 @@ function Home() {
               >
                 <SocialLink href="https://www.linkedin.com/in/asadbinali/" icon={FaLinkedin} label="LinkedIn" hoverColor="hover:text-blue-300" />
                 <SocialLink href="https://github.com/Twoos123" icon={FaGithub} label="GitHub" hoverColor="hover:text-gray-300" />
-                <SocialLink href="mailto:masadbali190@gmail.com" icon={FaEnvelope} label="Email" hoverColor="hover:text-blue-200" />
-                <SocialLink href="https://drive.google.com/file/d/17k-FbUlKWx263njOeZHt0rcvE-LiNiSi/view?usp=sharing" icon={FaFileAlt} label="Resume" hoverColor="hover:text-cyan-300" />
+               
               </StaggerContainer>
             </motion.div>
 
@@ -525,6 +609,12 @@ function Home() {
         <div id="experience">
           <Experience />
         </div>
+
+        {/* Add Resume Section */}
+        <Resume />
+        
+        {/* Add Contact Section */}
+        <Contact />
       </div>
     </div>
   );

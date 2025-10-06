@@ -71,6 +71,27 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 2rem;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+/* Custom smooth scrolling with easing */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    scroll-behavior: smooth;
+  }
+}
+
 /* 3D Ocean Animation System */
 
 /* Bubble Stream - 3D ascending bubbles */
@@ -481,7 +502,7 @@ html::-webkit-scrollbar {
 
 /* Ocean depth scroll effect with smooth transitions */
 .ocean-transition {
-  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: background 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Smooth section transitions with ocean gradient blending */
@@ -514,4 +535,140 @@ html::-webkit-scrollbar {
 /* Custom hover scale for images */
 .hover\:scale-102:hover {
   transform: scale(1.02);
+}
+
+:root {
+  --ocean-primary: #4A90E2;
+  --ocean-secondary: #357ABD;
+  --wave-light: rgba(255, 255, 255, 0.1);
+  --text-contrast: #ffffff;
+  --bg-contrast: #1a365d;
+}
+
+/* Wave container should use ocean color as base */
+.wave-container, .hero-section, .ocean-bg {
+  background: linear-gradient(135deg, var(--ocean-primary) 0%, var(--ocean-secondary) 100%);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ensure waves fill the space properly */
+.wave-svg, .wave-shape {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* Responsive wave coverage */
+@media (min-width: 768px) {
+  .wave-svg, .wave-shape {
+    width: 120%; /* Extend beyond viewport to cover gaps */
+    left: -10%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .wave-svg, .wave-shape {
+    width: 150%;
+    left: -25%;
+  }
+}
+
+/* Body ocean depth transition */
+body {
+  transition: background-color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  margin: 0;
+  padding: 0;
+}
+
+/* Section transparency for seamless transitions */
+.bg-transparent {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Ensure smooth section transitions */
+.experience-section,
+.resume-section,
+.contact-section {
+  background: transparent !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Footer blend with ocean depth */
+footer {
+  background: linear-gradient(to bottom, transparent 0%, hsl(230, 95%, 5%) 50%, hsl(240, 100%, 3%) 100%) !important;
+}
+
+/* Boat bobbing animation to match wave motion */
+@keyframes boat-bob {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+.animate-boat-bob {
+  animation: boat-bob ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+/* Gentle drift animation for boats */
+@keyframes boat-drift {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(15px);
+  }
+}
+
+.animate-boat-drift {
+  animation: boat-drift 12s ease-in-out infinite alternate;
+}
+
+/* Accessibility contrast */
+.wave-container * {
+  color: var(--text-contrast);
+}
+
+.wave-container .text-content {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Glassmorphism utilities */
+.glass {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.glass-dark {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Enhanced shadow for cards */
+.shadow-3xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }

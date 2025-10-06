@@ -15,9 +15,9 @@ function App() {
     <div className="App">
       <Router
       basename='/asadali-portfolio'>
-        <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="flex flex-col min-h-screen bg-transparent">
         <Navbar />
-        <main className='flex-grow'>
+        <main className='flex-grow bg-transparent'>
         <PageTransition>
         <Routes>
           <Route path="/" element={<Home />} />
