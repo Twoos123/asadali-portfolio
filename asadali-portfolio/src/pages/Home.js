@@ -340,11 +340,11 @@ function Home({ backgroundColor, setBackgroundColor }) {
         container.appendChild(bubble);
       }
 
-      // Create creatures - filter out jellyfish on mobile
+      // Create creatures - filter out fish and jellyfish on mobile
       sectionLife.creatures.forEach(creature => {
-        // Skip jellyfish on mobile to prevent viewport issues
-        if (isMobile && creature.type === 'jellyfish') {
-          return; // Skip jellyfish on mobile
+        // Skip fish and jellyfish on mobile to prevent viewport issues and horizontal overflow
+        if (isMobile && (creature.type === 'jellyfish' || creature.type === 'small-fish' || creature.type === 'tropical-fish')) {
+          return; // Skip these creatures on mobile
         }
         for (let i = 0; i < creature.count; i++) {
           const el = document.createElement('div');
@@ -566,21 +566,39 @@ function Home({ backgroundColor, setBackgroundColor }) {
                   ))}
                 </div>
                 
-                {/* Wave and Boats are now inside the growing ocean section */}
+                {/* Custom Wave Animation using Framer Motion - Slower and more subtle */}
                 {!isMobile && (
                   <>
                     <div className="absolute top-0 left-0 w-full" style={{ zIndex: 3, transform: 'translateY(-100%)', height: '100px' }}>
-                      <Wave
-                        fill={backgroundColor}
-                        paused={false}
-                        options={{
-                          height: 35,
-                          amplitude: 40,
-                          speed: 0.25,
-                          points: 5
-                        }}
+                      <motion.svg
+                        width="100%"
+                        height="100px"
+                        viewBox="0 0 1200 100"
+                        preserveAspectRatio="none"
                         style={{ position: 'absolute', bottom: 0, width: '100%' }}
-                      />
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 2, ease: "easeInOut" }}
+                      >
+                        <motion.path
+                          d="M0,60 C120,20 240,80 360,50 C480,20 600,70 720,45 C840,20 960,75 1080,55 C1140,45 1180,50 1200,55 L1200,100 L0,100 Z"
+                          fill={backgroundColor || '#1e40af'}
+                          animate={{
+                            d: [
+                              "M0,60 C120,20 240,80 360,50 C480,20 600,70 720,45 C840,20 960,75 1080,55 C1140,45 1180,50 1200,55 L1200,100 L0,100 Z",
+                              "M0,55 C120,75 240,25 360,60 C480,80 600,30 720,55 C840,75 960,25 1080,45 C1140,55 1180,60 1200,50 L1200,100 L0,100 Z",
+                              "M0,50 C120,30 240,70 360,40 C480,75 600,25 720,60 C840,30 960,80 1080,50 C1140,40 1180,45 1200,60 L1200,100 L0,100 Z",
+                              "M0,60 C120,20 240,80 360,50 C480,20 600,70 720,45 C840,20 960,75 1080,55 C1140,45 1180,50 1200,55 L1200,100 L0,100 Z"
+                            ]
+                          }}
+                          transition={{
+                            duration: 8,
+                            ease: [0.25, 0.46, 0.45, 0.94], // Bezier curve for natural water movement
+                            repeat: Infinity,
+                            repeatType: "loop"
+                          }}
+                        />
+                      </motion.svg>
                     </div>
 
                     <div className="absolute top-0 left-0 w-full" style={{ zIndex: 4, transform: 'translateY(-100%)', height: '100px', pointerEvents: 'none' }}>
@@ -589,9 +607,9 @@ function Home({ backgroundColor, setBackgroundColor }) {
                           className="absolute animate-boat-bob"
                           style={{ 
                             left: '20%', 
-                            bottom: '35px', // Position relative to the wave
+                            bottom: '31px', // Position relative to the wave
                             animationDelay: '0s',
-                            animationDuration: '4s'
+                            animationDuration: '6s'
                           }}
                         >
                           <img 
@@ -606,7 +624,7 @@ function Home({ backgroundColor, setBackgroundColor }) {
                           className="absolute animate-boat-bob"
                           style={{ 
                             left: '90%', 
-                            bottom: '50px', // Position relative to the wave
+                            bottom: '32px', // Position relative to the wave
                             animationDelay: '0s',
                             animationDuration: '3s'
                           }}

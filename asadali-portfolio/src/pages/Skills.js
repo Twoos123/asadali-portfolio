@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaJava, FaPython, FaHtml5, FaCss3, FaJs, FaReact, FaNodeJs, FaFlask, FaGithub } from 'react-icons/fa';
 import { SiSpringboot, SiDocker, SiGnubash, SiGit, SiAndroidstudio, SiFirebase, SiPostman, SiKubernetes, SiJira, SiJenkins, SiOpenai, SiCplusplus, SiChakraui, SiElixir } from 'react-icons/si';
 import { DiMysql } from 'react-icons/di';
@@ -47,6 +47,22 @@ const SkillIcon = ({ Icon, name, link, hoverColor }) => (
 );
 
 function Skills() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Mobile detection effect
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
   useEffect(() => {
     const createOceanEffects = () => {
       const skillsSection = document.getElementById('skills');
@@ -87,8 +103,12 @@ function Skills() {
         creaturesContainer.appendChild(bubble);
       }
 
-      // Creatures
+      // Creatures - filter out fish on mobile to prevent horizontal overflow
       sectionLife.creatures.forEach(creature => {
+        // Skip fish animations on mobile to prevent viewport issues
+        if (isMobile && (creature.type === 'tropical-fish' || creature.type === 'small-fish')) {
+          return; // Skip fish on mobile
+        }
         const el = document.createElement('div');
         el.style.position = 'absolute';
         el.style.pointerEvents = 'none';
@@ -119,7 +139,7 @@ function Skills() {
     };
 
     createOceanEffects();
-  }, []);
+  }, [isMobile]); // Recreate ocean effects when mobile state changes
 
   const programmingLanguages = [
     { Icon: FaJava, name: "Java", link: "https://www.java.com", hoverColor: "#007396" },
