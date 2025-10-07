@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/asadali-portfolio/static/css/main.0dd12d18.css",
-    "main.js": "/asadali-portfolio/static/js/main.c92676aa.js",
+    "main.js": "/asadali-portfolio/static/js/main.3e035226.js",
     "static/js/453.024bd79a.chunk.js": "/asadali-portfolio/static/js/453.024bd79a.chunk.js",
     "index.html": "/asadali-portfolio/index.html",
     "main.0dd12d18.css.map": "/asadali-portfolio/static/css/main.0dd12d18.css.map",
-    "main.c92676aa.js.map": "/asadali-portfolio/static/js/main.c92676aa.js.map",
+    "main.3e035226.js.map": "/asadali-portfolio/static/js/main.3e035226.js.map",
     "453.024bd79a.chunk.js.map": "/asadali-portfolio/static/js/453.024bd79a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0dd12d18.css",
-    "static/js/main.c92676aa.js"
+    "static/js/main.3e035226.js"
   ]
 }
