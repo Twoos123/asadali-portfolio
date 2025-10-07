@@ -1,105 +1,129 @@
 import React, { useEffect, useRef, useMemo, useCallback, useState } from 'react';
-import ProjectItem from '../components/ProjectItem';
 import { projectList } from "../helpers/ProjectList";
 import { motion, useInView } from 'framer-motion';
-import { FaGithub, FaJava, FaPython, FaHtml5, FaCss3, FaJs, FaReact, FaNodeJs, FaFlask } from 'react-icons/fa';
-import { SiSpringboot, SiDocker, SiGnubash, SiGit, SiAndroidstudio, SiFirebase, SiPostman, SiKubernetes, SiJira, SiJenkins, SiOpenai, SiCplusplus, SiChakraui, SiElixir, SiMongodb, SiRedis, SiStripe, SiCloudinary, SiGraphql, SiPygame, SiKotlin, SiSqlite, SiVite, SiTypescript, SiTailwindcss, SiExpress } from 'react-icons/si';
-import { DiMysql } from 'react-icons/di';
-import { TbBrandOauth } from "react-icons/tb";
 import { createOceanEffects } from '../helpers/animationHelper';
-import { FaSearch, FaFilter } from 'react-icons/fa';
+import { FaSearch, FaFilter, FaGithub } from 'react-icons/fa';
+import { SiChakraui, SiSupabase, SiStripe } from 'react-icons/si';
 
-// Move skill mappings OUTSIDE to prevent recreation
-const skillIconMap = {
-  'Vite': SiVite,
-  'TypeScript': SiTypescript,
-  'React': FaReact,
-  'Tailwind CSS': SiTailwindcss,
-  'Groq API': SiOpenai,
-  'Node.js': FaNodeJs,
-  'Express': SiExpress,
-  'Stripe': SiStripe,
-  'MongoDB': SiMongodb,
-  'Redis': SiRedis,
-  'JWT': TbBrandOauth,
-  'Cloudinary': SiCloudinary,
-  'Chakra UI': SiChakraui,
-  'OpenAI': SiOpenai,
-  'Gadget': SiGit,
-  'GraphQL': SiGraphql,
-  'Python': FaPython,
-  'JavaScript': FaJs,
-  'Open Trivia API': FaJs,
-  'Kotlin': SiKotlin,
-  'Java': FaJava,
-  'Firebase': SiFirebase,
-  'SQLite': SiSqlite,
-  'Android Studio': SiAndroidstudio,
-  'Flask': FaFlask,
-  'Co:Here NLP': SiOpenai,
-  'HTML/CSS': FaHtml5,
-};
+// Universal SVG icon component for project skills
+const SvgIcon = ({ name, size = 20, style, className = "" }) => {
+  // Map display names to actual SVG filenames
+  const svgFileMap = {
+    'Groq API': 'Groq.svg',
+    'Co:Here NLP': 'Cohere.svg',
+    'Flask': 'Flask.svg',
+    'React': 'React.svg',
+    'Python': 'Python.svg',
+    'Java': 'Java.svg',
+    'JavaScript': 'JavaScript.svg',
+    'TypeScript': 'TypeScript.svg',
+    'Kotlin': 'Kotlin.svg',
+    'C++': 'C++ (CPlusPlus).svg',
+    'HTML5': 'HTML5.svg',
+    'CSS3': 'CSS3.svg',
+    'Next.js': 'Next.js.svg',
+    'Spring Boot': 'Spring.svg',
+    'Node.js': 'Node.js.svg',
+    'Express': 'Express.svg',
+    'Tailwind CSS': 'Tailwind CSS.svg',
+    'Chakra UI': 'Chakra UI.svg',
+    'Vite': 'Vite.js.svg',
+    'GraphQL': 'GraphQL.svg',
+    'Streamlit': 'Streamlit.svg',
+    'GitHub': 'GitHub.svg',
+    'Git': 'Git.svg',
+    'Docker': 'Docker.svg',
+    'Kubernetes': 'Kubernetes.svg',
+    'Android Studio': 'Android Studio.svg',
+    'Vercel': 'Vercel.svg',
+    'Firebase': 'Firebase.svg',
+    'Supabase': 'Supabase.svg',
+    'MongoDB': 'MongoDB.svg',
+    'PostgreSQL': 'PostgresSQL.svg',
+    'MySQL': 'MySQL.svg',
+    'Redis': 'Redis.svg',
+    'SQLite': 'SQLite.svg',
+    'Postman': 'Postman.svg',
+    'JIRA': 'Jira.svg',
+    'Jenkins': 'Jenkins.svg',
+    'Stripe': 'Stripe.svg',
+    'Cloudinary': 'Cloudinary.svg',
+    'OpenAI': 'Openai.svg',
+    'OAuth 2.0': 'Oauth.svg',
+    'Bash': 'Bash.svg'
+  };
 
-const skillColorMap = {
-  'Vite': '#646CFF',
-  'React': '#61DAFB',
-  'Tailwind CSS': '#06B6D4',
-  'Groq API': '#FF6B35',
-  'Node.js': '#339933',
-  'Express': '#000000',
-  'Stripe': '#635BFF',
-  'MongoDB': '#47A248',
-  'Redis': '#DC382D',
-  'JWT': '#000000',
-  'Cloudinary': '#3448C5',
-  'Chakra UI': '#319795',
-  'OpenAI': '#412991',
-  'Gadget': '#F05032',
-  'GraphQL': '#E10098',
-  'Python': '#3776AB',
-  'Pygame': '#3776AB',
-  'JavaScript': '#F7DF1E',
-  'Open Trivia API': '#F7DF1E',
-  'Kotlin': '#7F52FF',
-  'Java': '#ED8B00',
-  'Firebase': '#FFCA28',
-  'SQLite': '#003B57',
-  'Android Studio': '#3DDC84',
-  'Flask': '#000000',
-  'Co:Here NLP': '#412991',
-  'HTML/CSS': '#E34F26',
+  const filename = svgFileMap[name] || `${name}.svg`;
+  
+  return (
+    <img 
+      src={`${process.env.PUBLIC_URL}/assets/skills/${filename}`} 
+      alt={name} 
+      width={size} 
+      height={size}
+      style={style}
+      className={`transition-colors duration-300 drop-shadow-lg ${className}`}
+    />
+  );
 };
 
 // Move SkillIcon OUTSIDE the Projects component
 const SkillIcon = React.memo(({ skill }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const IconComponent = skillIconMap[skill];
-  const color = skillColorMap[skill] || '#6B7280';
   
-  if (!IconComponent) {
+  // Special handling for react-icons with their brand colors
+  const reactIconMap = {
+    'Chakra UI': { component: SiChakraui, color: '#319795' },
+    'Supabase': { component: SiSupabase, color: '#3ECF8E' },
+    'Stripe': { component: SiStripe, color: '#635BFF' }
+  };
+  
+  const reactIcon = reactIconMap[skill];
+  
+  if (reactIcon) {
+    const IconComponent = reactIcon.component;
     return (
-      <span className="px-2 py-1 rounded text-xs bg-white/10 text-white">
-        {skill}
-      </span>
+      <div 
+        className="relative"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <IconComponent 
+          size={20} 
+          style={{ 
+            color: reactIcon.color,
+            transform: isHovered ? 'scale(1.1)' : 'scale(1)',
+            transition: 'transform 0.2s ease-in-out',
+            filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))',
+          }} 
+        />
+        {isHovered && (
+          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 text-white text-xs rounded whitespace-nowrap z-30 pointer-events-none shadow-lg">
+            {skill}
+          </div>
+        )}
+      </div>
     );
   }
-
+  
+  // Use SVG for all other skills
   return (
     <div 
       className="relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <IconComponent 
+      <SvgIcon 
+        name={skill} 
         size={20} 
         style={{ 
-          color,
           transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-          transition: 'transform 0.2s ease-in-out'
+          transition: 'transform 0.2s ease-in-out',
+          filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))',
         }} 
       />
       {isHovered && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 text-white text-xs rounded whitespace-nowrap z-30 pointer-events-none">
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 text-white text-xs rounded whitespace-nowrap z-30 pointer-events-none shadow-lg">
           {skill}
         </div>
       )}
@@ -113,12 +137,12 @@ const ProjectCard = React.memo(({ project, index }) => {
   const isInView = useInView(cardRef, { threshold: 0.1, once: true });
 
   const handleCardClick = useCallback(() => {
-    if (project.id === 0 && project.demo) {
+    if (project.demo) {
       window.open(project.demo, '_blank');
     } else {
       window.open(project.github || project.repoUrl, '_blank');
     }
-  }, [project.id, project.demo, project.github, project.repoUrl]);
+  }, [project.demo, project.github, project.repoUrl]);
 
   const handleGitHubClick = useCallback((e) => {
     e.stopPropagation();
@@ -182,8 +206,8 @@ const ProjectCard = React.memo(({ project, index }) => {
         {/* Hover Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
         
-        {/* Demo indicator for PawnVersation */}
-        {project.id === 0 && (
+        {/* Demo indicator for projects with live demos */}
+        {project.demo && (
           <div className="absolute top-4 left-4 px-2 py-1 bg-green-500/80 text-white text-xs rounded backdrop-blur-sm">
             Live Demo
           </div>

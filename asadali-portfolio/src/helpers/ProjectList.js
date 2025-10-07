@@ -7,10 +7,21 @@ const Proj5 = process.env.PUBLIC_URL + '/assets/Projects/CyclingApp.png';
 const Proj6 = process.env.PUBLIC_URL + '/assets/Projects/MenuMate.png';
 const Proj7 = process.env.PUBLIC_URL + '/assets/Projects/RoadOptimization.png';
 const Proj8 = process.env.PUBLIC_URL + '/assets/Projects/pawnversation.png';
+const Proj9 = process.env.PUBLIC_URL + '/assets/Projects/SESA-Website.png';
 
 export const projectList = [
     {
         id: 0,
+        name: "SESA Website",
+        description: "Official website for the Software Engineering Students' Association (SESA) at uOttawa.",
+        image: Proj9,
+        skills: ["Next.js", "Vercel", "Supabase", "PostgreSQL", "TypeScript", "Tailwind CSS"],
+        github: "https://github.com/Twoos123/sesa-website",
+        repoUrl: "https://github.com/Twoos123/sesa-website",
+        demo: "https://sesa-aegl.ca"
+    },
+    {
+        id: 1,
         name: "PawnVersation",
         description: "A voice-controlled chess game with AI opponent powered by Groq for natural language interaction.",
         image: Proj8,
@@ -20,27 +31,27 @@ export const projectList = [
         demo: "https://pawnversation.vercel.app"
     },
     {
-        id: 1,
+        id: 2,
         name: "ShopEase",
         description: "A full-stack e-commerce platform with secure payments, user authentication, and admin dashboard.",
         image: Proj0,
-        skills: ["React", "Node.js", "Express", "Stripe", "MongoDB", "Redis", "JWT", "Tailwind CSS", "Cloudinary"],
+        skills: ["React", "Node.js", "Express", "Stripe", "MongoDB", "Redis", "Tailwind CSS", "Cloudinary"],
         github: "https://github.com/Twoos123/ecomm-mern",
         repoUrl: "https://github.com/Twoos123/ecomm-mern",
         demo: null
     },
     {
-        id: 2,
+        id: 3,
         name: "SmartChat",
         description: "An intelligent chatbot application powered by OpenAI's GPT with a modern React interface.",
         image: Proj1,
-        skills: ["React", "Chakra UI", "OpenAI", "Gadget"],
+        skills: ["React", "Chakra UI", "OpenAI"],
         github: "https://github.com/Twoos123/GPT-Clone-AA",
         repoUrl: "https://github.com/Twoos123/GPT-Clone-AA",
         demo: null
     },
     {
-        id: 3,
+        id: 4,
         name: "Pokedex",
         description: "A comprehensive Pokemon database app with GraphQL API and interactive search features.",
         image: Proj2,
@@ -50,7 +61,7 @@ export const projectList = [
         demo: null
     },
     {
-        id: 4,
+        id: 5,
         name: "Planet Simulation",
         description: "A physics-based solar system simulation with realistic orbital mechanics and gravity effects.",
         image: Proj3,
@@ -60,7 +71,7 @@ export const projectList = [
         demo: null
     },
     {
-        id: 5,
+        id: 6,
         name: "Trivia Game",
         description: "An interactive trivia game with multiple categories, scoring system, and real-time feedback.",
         image: Proj4,
@@ -70,7 +81,7 @@ export const projectList = [
         demo: null
     },
     {
-        id: 6,
+        id: 7,
         name: "Cycling App",
         description: "A mobile fitness tracking app for cyclists with route mapping and performance analytics.",
         image: Proj5,
@@ -80,7 +91,7 @@ export const projectList = [
         demo: null
     },
     {
-        id: 7,
+        id: 8,
         name: "MenuMate",
         description: "An AI-powered restaurant menu recommendation system using natural language processing.",
         image: Proj6,
@@ -90,11 +101,11 @@ export const projectList = [
         demo: null
     },
     {
-        id: 8,
+        id: 9,
         name: "RoadOptimization",
         description: "A traffic optimization algorithm simulator for improving urban road network efficiency.",
         image: Proj7,
-        skills: ["Java", "JavaScript", "HTML/CSS"],
+        skills: ["Java", "JavaScript", "HTML5", "CSS3"],
         github: "https://github.com/Twoos123/RoadOptimization",
         repoUrl: "https://github.com/Twoos123/RoadOptimization",
         demo: null

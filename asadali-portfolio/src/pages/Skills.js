@@ -1,50 +1,165 @@
 import React, { useEffect, useState } from 'react';
-import { FaJava, FaPython, FaHtml5, FaCss3, FaJs, FaReact, FaNodeJs, FaFlask, FaGithub } from 'react-icons/fa';
-import { SiSpringboot, SiDocker, SiGnubash, SiGit, SiAndroidstudio, SiFirebase, SiPostman, SiKubernetes, SiJira, SiJenkins, SiOpenai, SiCplusplus, SiChakraui, SiElixir } from 'react-icons/si';
-import { DiMysql } from 'react-icons/di';
-import { TbBrandOauth } from "react-icons/tb";
 import { motion } from 'framer-motion';
 import { FadeInSection, StaggerContainer } from '../components/animations';
 import { oceanLife } from '../helpers/oceanLife';
+import { SiChakraui, SiSupabase, SiStripe } from 'react-icons/si';
 
-const SkillIcon = ({ Icon, name, link, hoverColor }) => (
-  <motion.a
-    href={link}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex flex-col items-center cursor-pointer group"
-    whileHover={{ 
-      scale: 1.15,
-      y: -8,
-      transition: { duration: 0.2 }
-    }}
-    whileTap={{ scale: 0.9 }}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-  >
-    <motion.div
-      whileHover={{ 
-        rotate: [0, -10, 10, -10, 0],
-        transition: { duration: 0.5 }
-      }}
-    >
-      <Icon
-        size={50}
-        className="text-blue-100 group-hover:text-cyan-300 transition-colors duration-300 drop-shadow-lg"
-        style={{
-          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+// Universal SVG icon component
+const SvgIcon = ({ name, size = 50, style, className = "" }) => {
+  // Map display names to actual SVG filenames
+  const svgFileMap = {
+    'Groq API': 'Groq.svg',
+    'Co:Here NLP': 'Cohere.svg',
+    'Flask': 'Flask.svg',
+    'React': 'React.svg',
+    'Python': 'Python.svg',
+    'Java': 'Java.svg',
+    'JavaScript': 'JavaScript.svg',
+    'TypeScript': 'TypeScript.svg',
+    'Kotlin': 'Kotlin.svg',
+    'C++': 'C++ (CPlusPlus).svg',
+    'HTML5': 'HTML5.svg',
+    'CSS3': 'CSS3.svg',
+    'Next.js': 'Next.js.svg',
+    'Spring Boot': 'Spring.svg',
+    'Node.js': 'Node.js.svg',
+    'Express': 'Express.svg',
+    'Tailwind CSS': 'Tailwind CSS.svg',
+    'Chakra UI': 'Chakra UI.svg',
+    'Vite': 'Vite.js.svg',
+    'GraphQL': 'GraphQL.svg',
+    'Streamlit': 'Streamlit.svg',
+    'GitHub': 'GitHub.svg',
+    'Git': 'Git.svg',
+    'Docker': 'Docker.svg',
+    'Kubernetes': 'Kubernetes.svg',
+    'Android Studio': 'Android Studio.svg',
+    'Vercel': 'Vercel.svg',
+    'Firebase': 'Firebase.svg',
+    'Supabase': 'Supabase.svg',
+    'MongoDB': 'MongoDB.svg',
+    'PostgreSQL': 'PostgresSQL.svg',
+    'MySQL': 'MySQL.svg',
+    'Redis': 'Redis.svg',
+    'SQLite': 'SQLite.svg',
+    'Postman': 'Postman.svg',
+    'JIRA': 'Jira.svg',
+    'Jenkins': 'Jenkins.svg',
+    'Stripe': 'Stripe.svg',
+    'Cloudinary': 'Cloudinary.svg',
+    'OpenAI': 'Openai.svg',
+    'OAuth 2.0': 'Oauth.svg',
+    'Bash': 'Bash.svg'
+  };
+
+  const filename = svgFileMap[name] || `${name}.svg`;
+  
+  return (
+    <img 
+      src={`${process.env.PUBLIC_URL}/assets/skills/${filename}`} 
+      alt={name} 
+      width={size} 
+      height={size}
+      style={style}
+      className={`transition-colors duration-300 drop-shadow-lg ${className}`}
+    />
+  );
+};
+
+const SkillIcon = ({ name, link }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  // Special handling for react-icons with their brand colors
+  const reactIconMap = {
+    'Chakra UI': { component: SiChakraui, color: '#319795' },
+    'Supabase': { component: SiSupabase, color: '#3ECF8E' },
+    'Stripe': { component: SiStripe, color: '#635BFF' }
+  };
+  
+  const reactIcon = reactIconMap[name];
+  
+  if (reactIcon) {
+    const IconComponent = reactIcon.component;
+    return (
+      <motion.a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex flex-col items-center cursor-pointer group"
+        whileHover={{ 
+          scale: 1.15,
+          y: -8,
+          transition: { duration: 0.2 }
         }}
-      />
-    </motion.div>
-    <motion.span 
-      className="mt-2 text-sm text-blue-200 group-hover:text-white transition-colors duration-300 font-medium"
-      whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.9 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <motion.div
+          whileHover={{ 
+            rotate: [0, -10, 10, -10, 0],
+            transition: { duration: 0.5 }
+          }}
+        >
+          <IconComponent
+            size={50}
+            className="transition-colors duration-300 drop-shadow-lg"
+            style={{
+              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
+              color: reactIcon.color
+            }}
+          />
+        </motion.div>
+        <span className="mt-3 text-sm text-blue-100 text-center font-medium group-hover:text-white transition-colors duration-300">
+          {name}
+        </span>
+      </motion.a>
+    );
+  }
+  
+  // Use SVG for all other skills
+  return (
+    <motion.a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex flex-col items-center cursor-pointer group"
+      whileHover={{ 
+        scale: 1.15,
+        y: -8,
+        transition: { duration: 0.2 }
+      }}
+      whileTap={{ scale: 0.9 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {name}
-    </motion.span>
-  </motion.a>
-);
+      <motion.div
+        whileHover={{ 
+          rotate: [0, -10, 10, -10, 0],
+          transition: { duration: 0.5 }
+        }}
+      >
+        <SvgIcon
+          name={name}
+          size={50}
+          className="transition-colors duration-300 drop-shadow-lg"
+          style={{
+            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+          }}
+        />
+      </motion.div>
+      <span className="mt-3 text-sm text-blue-100 text-center font-medium group-hover:text-white transition-colors duration-300">
+        {name}
+      </span>
+    </motion.a>
+  );
+};
 
 function Skills() {
   const [isMobile, setIsMobile] = useState(false);
@@ -142,37 +257,54 @@ function Skills() {
   }, [isMobile]); // Recreate ocean effects when mobile state changes
 
   const programmingLanguages = [
-    { Icon: FaJava, name: "Java", link: "https://www.java.com", hoverColor: "#007396" },
-    { Icon: FaPython, name: "Python", link: "https://www.python.org", hoverColor: "#3776AB" },
-    { Icon: FaHtml5, name: "HTML", link: "https://developer.mozilla.org/en-US/docs/Web/HTML", hoverColor: "#E34F26" },
-    { Icon: FaCss3, name: "CSS", link: "https://developer.mozilla.org/en-US/docs/Web/CSS", hoverColor: "#1572B6" },
-    { Icon: FaJs, name: "JavaScript", link: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", hoverColor: "#F7DF1E" },
-    { Icon: DiMysql, name: "SQL", link: "https://www.mysql.com", hoverColor: "#4479A1" },
-    { Icon: SiCplusplus, name: "C/C++", link: "https://www.cplusplus.com", hoverColor: "#00599C" },
-    { Icon: SiElixir, name: "Elixir", link: "https://elixir-lang.org", hoverColor: "#4B275F" },
+    { name: "Java", link: "https://www.java.com" },
+    { name: "Python", link: "https://www.python.org" },
+    { name: "JavaScript", link: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+    { name: "TypeScript", link: "https://www.typescriptlang.org" },
+    { name: "Kotlin", link: "https://kotlinlang.org" },
+    { name: "HTML5", link: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+    { name: "CSS3", link: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+    { name: "C++", link: "https://www.cplusplus.com" }
   ];
 
   const frameworks = [
-    { Icon: FaReact, name: "React", link: "https://reactjs.org", hoverColor: "#61DAFB" },
-    { Icon: SiSpringboot, name: "Spring Boot", link: "https://spring.io/projects/spring-boot", hoverColor: "#6DB33F" },
-    { Icon: FaNodeJs, name: "Node.js", link: "https://nodejs.org", hoverColor: "#339933" },
-    { Icon: FaFlask, name: "Flask", link: "https://flask.palletsprojects.com", hoverColor: "#000000" },
-    { Icon: SiChakraui, name: "Chakra UI", link: "https://chakra-ui.com", hoverColor: "#319795" },
+    { name: "React", link: "https://reactjs.org" },
+    { name: "Next.js", link: "https://nextjs.org" },
+    { name: "Spring Boot", link: "https://spring.io/projects/spring-boot" },
+    { name: "Node.js", link: "https://nodejs.org" },
+    { name: "Express", link: "https://expressjs.com" },
+    { name: "Flask", link: "https://flask.palletsprojects.com" },
+    { name: "Tailwind CSS", link: "https://tailwindcss.com" },
+    { name: "Chakra UI", link: "https://chakra-ui.com" },
+    { name: "Vite", link: "https://vitejs.dev" },
+    { name: "GraphQL", link: "https://graphql.org" },
+    { name: "Streamlit", link: "https://streamlit.io" }
   ];
 
   const developerTools = [
-    { Icon: FaGithub, name: "GitHub", link: "https://github.com", hoverColor: "#181717" },
-    { Icon: SiGit, name: "Git", link: "https://git-scm.com", hoverColor: "#F05032" },
-    { Icon: SiAndroidstudio, name: "Android Studio", link: "https://developer.android.com/studio", hoverColor: "#3DDC84" },
-    { Icon: SiFirebase, name: "Firebase", link: "https://firebase.google.com", hoverColor: "#FFCA28" },
-    { Icon: SiPostman, name: "Postman", link: "https://www.postman.com", hoverColor: "#FF6C37" },
-    { Icon: SiKubernetes, name: "Kubernetes", link: "https://kubernetes.io", hoverColor: "#326CE5" },
-    { Icon: SiJira, name: "JIRA", link: "https://www.atlassian.com/software/jira", hoverColor: "#0052CC" },
-    { Icon: SiJenkins, name: "Jenkins", link: "https://www.jenkins.io", hoverColor: "#D24939" },
-    { Icon: TbBrandOauth, name: "OAuth 2.0", link: "https://oauth.net/2/", hoverColor: "#00ADEE" },
-    { Icon: SiOpenai, name: "OpenAI", link: "https://www.openai.com", hoverColor: "#412991" },
-    { Icon: SiDocker, name: "Docker", link: "https://www.docker.com", hoverColor: "#2496ED" },
-    { Icon: SiGnubash, name: "Bash", link: "https://www.gnu.org/software/bash/", hoverColor: "#4EAA25" },
+    { name: "GitHub", link: "https://github.com" },
+    { name: "Git", link: "https://git-scm.com" },
+    { name: "Docker", link: "https://www.docker.com" },
+    { name: "Kubernetes", link: "https://kubernetes.io" },
+    { name: "Android Studio", link: "https://developer.android.com/studio" },
+    { name: "Vercel", link: "https://vercel.com" },
+    { name: "Firebase", link: "https://firebase.google.com" },
+    { name: "Supabase", link: "https://supabase.com" },
+    { name: "MongoDB", link: "https://www.mongodb.com" },
+    { name: "PostgreSQL", link: "https://www.postgresql.org" },
+    { name: "MySQL", link: "https://www.mysql.com" },
+    { name: "Redis", link: "https://redis.io" },
+    { name: "SQLite", link: "https://www.sqlite.org" },
+    { name: "Postman", link: "https://www.postman.com" },
+    { name: "JIRA", link: "https://www.atlassian.com/software/jira" },
+    { name: "Jenkins", link: "https://www.jenkins.io" },
+    { name: "Stripe", link: "https://stripe.com" },
+    { name: "Cloudinary", link: "https://cloudinary.com" },
+    { name: "Groq API", link: "https://groq.com" },
+    { name: "Co:Here NLP", link: "https://cohere.ai" },
+    { name: "OpenAI", link: "https://openai.com" },
+    { name: "OAuth 2.0", link: "https://oauth.net/2/" },
+    { name: "Bash", link: "https://www.gnu.org/software/bash/" }
   ];
 
   return (
@@ -206,10 +338,8 @@ function Skills() {
                 {programmingLanguages.map((skill, index) => (
                   <SkillIcon 
                     key={index} 
-                    Icon={skill.Icon} 
                     name={skill.name} 
                     link={skill.link} 
-                    hoverColor={skill.hoverColor}
                   />
                 ))}
               </StaggerContainer>
@@ -235,10 +365,8 @@ function Skills() {
                 {frameworks.map((skill, index) => (
                   <SkillIcon 
                     key={index} 
-                    Icon={skill.Icon} 
                     name={skill.name} 
                     link={skill.link} 
-                    hoverColor={skill.hoverColor}
                   />
                 ))}
               </StaggerContainer>
@@ -264,10 +392,8 @@ function Skills() {
                 {developerTools.map((skill, index) => (
                   <SkillIcon 
                     key={index} 
-                    Icon={skill.Icon} 
                     name={skill.name} 
                     link={skill.link} 
-                    hoverColor={skill.hoverColor}
                   />
                 ))}
               </StaggerContainer>
