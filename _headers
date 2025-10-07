@@ -1,0 +1,75 @@
+# Cache configuration for edge network deployment (Netlify)
+
+# Cache static assets for 1 year
+/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache JavaScript and CSS files for 1 year with immutable directive
+*.js
+  Cache-Control: public, max-age=31536000, immutable
+*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache images for 1 year
+*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+*.png
+  Cache-Control: public, max-age=31536000, immutable
+*.gif
+  Cache-Control: public, max-age=31536000, immutable
+*.webp
+  Cache-Control: public, max-age=31536000, immutable
+*.svg
+  Cache-Control: public, max-age=31536000, immutable
+*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache fonts for 1 year
+*.woff
+  Cache-Control: public, max-age=31536000, immutable
+*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+*.eot
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache JSON files for 1 hour
+*.json
+  Cache-Control: public, max-age=3600
+
+# Cache HTML files for 5 minutes to balance freshness and performance
+/*.html
+  Cache-Control: public, max-age=300, must-revalidate
+  # Security headers for external iframe embedding (Google Drive)
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: frame-src 'self' https://*.google.com https://*.googleusercontent.com https://drive.google.com https://docs.google.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'
+
+# Root HTML file - cache for 5 minutes
+/
+  Cache-Control: public, max-age=300, must-revalidate
+  # Security headers for external iframe embedding (Google Drive)
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: frame-src 'self' https://*.google.com https://*.googleusercontent.com https://drive.google.com https://docs.google.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'
+
+# Asset manifest - cache for 1 hour
+/asset-manifest.json
+  Cache-Control: public, max-age=3600
+
+# Service worker - no cache to ensure updates
+/service-worker.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Manifest file - cache for 1 day
+/manifest.json
+  Cache-Control: public, max-age=86400
+
+# Google Drive iframe optimization
+/*
+  # Referrer policy for Google Drive compatibility
+  Referrer-Policy: strict-origin-when-cross-origin
+  # CORS headers for Google Drive resources
+  Access-Control-Allow-Origin: https://drive.google.com
+  Access-Control-Allow-Credentials: true
