@@ -143,8 +143,8 @@ function Experience() {
                   />
                 </motion.div>
               )}
-              <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Web Developer and Content Support</h4>
-              <p className="text-blue-100 text-center leading-relaxed">Supporting web development initiatives and content management for the Faculty of Law, enhancing digital presence and user experience for academic resources.</p>
+              <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Fullstack Developer</h4>
+              <p className="text-blue-100 text-center leading-relaxed">Leading PHP 5.x to 8.x migration with modern programming patterns, developing AI-powered tools for Drupal webpage analysis, and maintaining faculty web services using LAMP stack with custom modules and responsive themes.</p>
             </div>
           </VerticalTimelineElement>
 
@@ -186,7 +186,7 @@ function Experience() {
                 </motion.div>
               )}
               <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Software Engineer Intern</h4>
-              <p className="text-blue-100 text-center leading-relaxed">Developing dynamic fullstack applications using Python and Streamlit to streamline data analysis and enhance decision-making processes for health policy initiatives.</p>
+              <p className="text-blue-100 text-center leading-relaxed">Architected case management systems with Python/Streamlit, implemented BM25 algorithm with ArcGIS integration for address verification, and engineered compliance-focused UI with automated workflows and FIPPA-compliant data handling.</p>
             </div>
           </VerticalTimelineElement>
 
@@ -204,7 +204,7 @@ function Experience() {
                 <img src={SESA} alt="uOttawa SESA" className="w-12 h-12 ml-3 rounded-full object-cover shadow-lg hover:scale-110 transition-transform duration-300" />
               </div>
               <h4 className="text-lg text-purple-200 mb-2 text-center font-semibold">Co-Director</h4>
-              <p className="text-purple-100 text-center leading-relaxed">Co-directing the uOttawa SESA team, collaborating on strategic initiatives, and ensuring the smooth operation of all association activities.</p>
+              <p className="text-purple-100 text-center leading-relaxed">Directing operations for a 28-member team, partnering with Amazon, Microsoft, CSE, and major banks for technical workshops, while leading full-stack development of SESA's website serving 3000+ EECS students.</p>
             </div>
           </VerticalTimelineElement>
 
@@ -226,7 +226,7 @@ function Experience() {
                 />
               </div>
               <h4 className="text-lg text-purple-200 mb-2 text-center font-semibold">Development Lead</h4>
-              <p className="text-purple-100 text-center leading-relaxed">Overseeing the Development team at uOttawa SESA, driving innovation and managing project execution to support the association's goals.</p>
+              <p className="text-purple-100 text-center leading-relaxed">Leading the development team at uOttawa SESA, driving technical innovation and managing full-stack project execution to support the association's digital infrastructure and student engagement initiatives.</p>
             </div>
           </VerticalTimelineElement>
 
@@ -248,7 +248,7 @@ function Experience() {
                 />
               </div>
               <h4 className="text-lg text-blue-200 mb-2 text-center font-semibold">Software Engineer Intern</h4>
-              <p className="text-blue-100 text-center leading-relaxed">Completed a CO-OP term at 8x8 as a Software Engineer Intern, focusing on designing and implementing robust APIs to support scalable solutions.</p>
+              <p className="text-blue-100 text-center leading-relaxed">Optimized REST APIs with request batching and asynchronous processing, managed CI/CD pipelines using Jenkins with Docker/Kubernetes, and built scalable Spring Boot microservices integrating with internal API for enterprise VOIP systems.</p>
             </div>
           </VerticalTimelineElement>
 
@@ -270,7 +270,7 @@ function Experience() {
                 />
               </div>
               <h4 className="text-lg text-purple-200 mb-2 text-center font-semibold">Logistics Organizer</h4>
-              <p className="text-purple-100 text-center leading-relaxed">Coordinated logistics for uOttaHack 6, including food arrangements, networking activities, and challenge organization during the 36-hour event.</p>
+              <p className="text-purple-100 text-center leading-relaxed">Coordinated cross-functional logistics for Ottawa's largest hackathon hosting 1000+ students, managing venue setup, scheduling 30+ events, and leading workshop execution with strategic planning achieving 95% satisfaction rates.</p>
             </div>
           </VerticalTimelineElement>
 
