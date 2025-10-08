@@ -117,7 +117,7 @@ function Experience() {
             <div className="mb-3">
               {isMobile ? (
                 <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 transition-opacity duration-500">
-                  <h3 className="text-xl font-bold text-blue-100">University of Ottawa - Faculty of Law</h3>
+                  <h3 className="text-xl font-bold text-blue-100 text-center">University of Ottawa - Faculty of Law</h3>
                   <img 
                     src={uOttawa} 
                     alt="uOttawa" 
@@ -133,7 +133,7 @@ function Experience() {
                     transition: { duration: 0.2 }
                   }}
                 >
-                  <h3 className="text-xl font-bold text-blue-100">University of Ottawa - Faculty of Law</h3>
+                  <h3 className="text-xl font-bold text-blue-100 text-center">University of Ottawa - Faculty of Law</h3>
                   <motion.img 
                     src={uOttawa} 
                     alt="uOttawa" 
@@ -159,7 +159,7 @@ function Experience() {
             <div className="mb-3">
               {isMobile ? (
                 <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 transition-opacity duration-500">
-                  <h3 className="text-xl font-bold text-blue-100">Health Canada</h3>
+                  <h3 className="text-xl font-bold text-blue-100 text-center">Health Canada</h3>
                   <img 
                     src={HealthCanada} 
                     alt="Health Canada" 
@@ -175,7 +175,7 @@ function Experience() {
                     transition: { duration: 0.2 }
                   }}
                 >
-                  <h3 className="text-xl font-bold text-blue-100">Health Canada</h3>
+                  <h3 className="text-xl font-bold text-blue-100 text-center">Health Canada</h3>
                   <motion.img 
                     src={HealthCanada} 
                     alt="Health Canada" 
@@ -200,7 +200,7 @@ function Experience() {
           >
             <div className={`mb-3 ${isMobile ? 'animate-fade-in' : 'animate-fade-in-up animation-delay-600'}`}>
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
-                <h3 className="text-xl font-bold text-purple-100">uOttawa Software Engineering Student Association (SESA)</h3>
+                <h3 className="text-xl font-bold text-purple-100 text-center">uOttawa Software Engineering Student Association (SESA)</h3>
                 <img src={SESA} alt="uOttawa SESA" className="w-12 h-12 ml-3 rounded-full object-cover shadow-lg hover:scale-110 transition-transform duration-300" />
               </div>
               <h4 className="text-lg text-purple-200 mb-2 text-center font-semibold">Co-Director</h4>
@@ -218,7 +218,7 @@ function Experience() {
           >
             <div className={`mb-3 ${isMobile ? 'animate-fade-in' : 'animate-fade-in-up animation-delay-900'}`}>
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
-                <h3 className="text-xl font-bold text-purple-100">uOttawa Software Engineering Student Association (SESA)</h3>
+                <h3 className="text-xl font-bold text-purple-100 text-center">uOttawa Software Engineering Student Association (SESA)</h3>
                 <img 
                   src={SESA} 
                   alt="uOttawa SESA" 
@@ -240,7 +240,7 @@ function Experience() {
           >
             <div className={`mb-3 ${isMobile ? 'animate-fade-in' : 'animate-fade-in-up animation-delay-1200'}`}>
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
-                <h3 className="text-xl font-bold text-blue-100">Fuze: an 8x8 Company</h3>
+                <h3 className="text-xl font-bold text-blue-100 text-center">Fuze: an 8x8 Company</h3>
                 <img 
                   src={eightbyeight} 
                   alt="Fuze: an 8x8 Company" 
@@ -262,7 +262,7 @@ function Experience() {
           >
             <div className={`mb-3 ${isMobile ? 'animate-fade-in' : 'animate-fade-in-up'}`}>
               <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-3 mb-4 hover:bg-opacity-20 transition-all duration-500">
-                <h3 className="text-xl font-bold text-purple-100">uOttaHack: Ottawa's Largest Hackathon</h3>
+                <h3 className="text-xl font-bold text-purple-100 text-center">uOttaHack: Ottawa's Largest Hackathon</h3>
                 <img 
                   src={uOttaHack} 
                   alt="uOttaHack 6" 
