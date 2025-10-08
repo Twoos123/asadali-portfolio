@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/asadali-portfolio/static/css/main.32a0c28f.css",
-    "main.js": "/asadali-portfolio/static/js/main.233ef6d9.js",
-    "static/js/453.024bd79a.chunk.js": "/asadali-portfolio/static/js/453.024bd79a.chunk.js",
-    "index.html": "/asadali-portfolio/index.html",
-    "main.32a0c28f.css.map": "/asadali-portfolio/static/css/main.32a0c28f.css.map",
-    "main.233ef6d9.js.map": "/asadali-portfolio/static/js/main.233ef6d9.js.map",
-    "453.024bd79a.chunk.js.map": "/asadali-portfolio/static/js/453.024bd79a.chunk.js.map"
+    "main.css": "/static/css/main.881b4fd8.css",
+    "main.js": "/static/js/main.e67a9da9.js",
+    "static/js/453.024bd79a.chunk.js": "/static/js/453.024bd79a.chunk.js",
+    "index.html": "/index.html",
+    "main.881b4fd8.css.map": "/static/css/main.881b4fd8.css.map",
+    "main.e67a9da9.js.map": "/static/js/main.e67a9da9.js.map",
+    "453.024bd79a.chunk.js.map": "/static/js/453.024bd79a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.32a0c28f.css",
-    "static/js/main.233ef6d9.js"
+    "static/css/main.881b4fd8.css",
+    "static/js/main.e67a9da9.js"
   ]
 }
