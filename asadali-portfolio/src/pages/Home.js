@@ -161,7 +161,7 @@ function Home({ backgroundColor, setBackgroundColor }) {
       
       // Use specific coral SVGs - change coralTypes array above to choose which ones
       const coralImg = document.createElement('img');
-      coralImg.src = `/asadali-portfolio/assets/corals/coral-${coralTypes[i]}.svg`;
+      coralImg.src = `${process.env.PUBLIC_URL}/assets/corals/coral-${coralTypes[i]}.svg`;
       coralImg.style.width = 'auto';
       // Fixed coral heights for consistency - no more random sizing
       const coralHeight = isMobile ? 25 : 45; // Mobile: 25px, Desktop: 45px
@@ -217,7 +217,7 @@ function Home({ backgroundColor, setBackgroundColor }) {
       
       // Use your 4 seaweed SVGs (cycle through seaweed-1 to seaweed-4)
       const seaweedImg = document.createElement('img');
-      seaweedImg.src = `/asadali-portfolio/assets/seaweed/seaweed-${(i % 4) + 1}.svg`;
+      seaweedImg.src = `${process.env.PUBLIC_URL}/assets/seaweed/seaweed-${(i % 4) + 1}.svg`;
       seaweedImg.style.width = 'auto';
       // Fixed seaweed heights for consistency - no more random sizing
       const seaweedHeight = isMobile ? 140 : 160; // Mobile: 140px, Desktop: 160px
@@ -351,7 +351,7 @@ function Home({ backgroundColor, setBackgroundColor }) {
           el.style.position = 'absolute';
           el.style.pointerEvents = 'none';
 
-          let innerHTML = `<img src="/asadali-portfolio/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
+          let innerHTML = `<img src="${process.env.PUBLIC_URL}/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
           for (const [key, value] of Object.entries(creature.styles)) {
             innerHTML += `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${typeof value === 'function' ? value(i) : value}; `;
           }
@@ -613,7 +613,7 @@ function Home({ backgroundColor, setBackgroundColor }) {
                           }}
                         >
                           <img 
-                            src="/asadali-portfolio/assets/boats/boat-1.svg" 
+                            src={`${process.env.PUBLIC_URL}/assets/boats/boat-1.svg`} 
                             alt="Boat 1" 
                             className="w-16 h-auto"
                           />
@@ -630,7 +630,7 @@ function Home({ backgroundColor, setBackgroundColor }) {
                           }}
                         >
                           <img 
-                            src="/asadali-portfolio/assets/boats/boat-2.svg" 
+                            src={`${process.env.PUBLIC_URL}/assets/boats/boat-2.svg`} 
                             alt="Boat 2" 
                             className="w-20 h-auto"
                           />

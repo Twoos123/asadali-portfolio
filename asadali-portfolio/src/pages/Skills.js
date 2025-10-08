@@ -229,7 +229,7 @@ function Skills() {
         el.style.pointerEvents = 'none';
         el.style.zIndex = creature.zIndex;
 
-        let innerHTML = `<img src="/asadali-portfolio/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
+        let innerHTML = `<img src="${process.env.PUBLIC_URL}/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
         for (const [key, value] of Object.entries(creature.styles)) {
           innerHTML += `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${value}; `;
         }
