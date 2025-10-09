@@ -24,7 +24,7 @@ const limiter = rateLimit({
 // CORS configuration
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://twoos123.github.io', 'https://asadali-portfolio.com'] 
+    ? ['https://twoos123.github.io', 'https://asadbinali.com', 'https://asadali-portfolio.com'] 
     : ['http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST'],
