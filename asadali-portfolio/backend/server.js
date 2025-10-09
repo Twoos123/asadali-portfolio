@@ -22,14 +22,56 @@ const limiter = rateLimit({
 });
 
 // CORS configuration
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://twoos123.github.io', 'https://asadbinali.com', 'https://asadali-portfolio.com'] 
-    : ['http://localhost:3000'],
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = process.env.NODE_ENV === 'production' 
+      ? ['https://twoos123.github.io', 'https://asadbinali.com', 'https://asadali-portfolio.com']
+      : ['http://localhost:3000'];
+    
+    console.log('CORS Origin check:', origin);
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('Allowed origins:', allowedOrigins);
+    
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+
+// Additional CORS headers middleware (fallback)
+app.use((req, res, next) => {
+  const allowedOrigins = process.env.NODE_ENV === 'production' 
+    ? ['https://twoos123.github.io', 'https://asadbinali.com', 'https://asadali-portfolio.com']
+    : ['http://localhost:3000'];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+  
+  next();
+});
 
 // Body parser middleware
 app.use(bodyParser.json());
