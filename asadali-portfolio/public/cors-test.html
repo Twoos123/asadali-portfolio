@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS Test for Contact Form</h1>
+    <button onclick="testCORS()">Test CORS</button>
+    <div id="result"></div>
+
+    <script>
+        async function testCORS() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                const response = await fetch('https://asadali-portfolio.onrender.com/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: 'Test User',
+                        email: 'test@example.com',
+                        subject: 'CORS Test',
+                        message: 'This is a test message to verify CORS is working.'
+                    }),
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = '<span style="color: green;">✅ CORS is working! Response: ' + JSON.stringify(data) + '</span>';
+                } else {
+                    resultDiv.innerHTML = '<span style="color: orange;">⚠️ Request went through but server returned error: ' + JSON.stringify(data) + '</span>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<span style="color: red;">❌ CORS Error: ' + error.message + '</span>';
+            }
+        }
+    </script>
+</body>
+</html>
