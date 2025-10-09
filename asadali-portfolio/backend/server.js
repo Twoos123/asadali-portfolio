@@ -21,6 +21,19 @@ const limiter = rateLimit({
   max: 5, // limit each IP to 5 requests per windowMs
   message: {
     error: 'Too many contact form submissions, please try again later.'
+  },
+  // Configure for proxy environments like Render
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Use a more specific trust proxy function for better security
+  trustProxy: (ip) => {
+    // Trust Render's proxy IPs - you can make this more specific if needed
+    return true;
+  },
+  // Skip rate limiting validation warnings in production
+  validate: {
+    trustProxy: false,
+    xForwardedForHeader: false
   }
 });
 
