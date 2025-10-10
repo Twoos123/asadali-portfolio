@@ -44,7 +44,7 @@ const limiter = rateLimit({
 const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = process.env.NODE_ENV === 'production' 
-      ? ['https://twoos123.github.io', 'https://asadbinali.com', 'https://asadali-portfolio.com']
+      ? ['https://asadbinali.com']
       : ['http://localhost:3000'];
     
     console.log('CORS Origin check:', origin);
@@ -72,7 +72,7 @@ app.use(cors(corsOptions));
 // Additional CORS headers middleware (fallback)
 app.use((req, res, next) => {
   const allowedOrigins = process.env.NODE_ENV === 'production' 
-    ? ['https://twoos123.github.io', 'https://asadbinali.com', 'https://asadali-portfolio.com']
+    ? ['https://asadbinali.com']
     : ['http://localhost:3000'];
   
   const origin = req.headers.origin;
@@ -95,18 +95,6 @@ app.use((req, res, next) => {
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// Email transporter configuration
-const createTransporter = () => {
-  // Gmail configuration (you can change this to other providers)
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS // Use App Password for Gmail
-    }
-  });
-};
 
 // Validate email format
 const isValidEmail = (email) => {
