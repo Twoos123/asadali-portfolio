@@ -1,13 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Initialize Resend with your API key
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Trust proxy for Render deployment
 app.set('trust proxy', true);
@@ -138,14 +141,12 @@ app.post('/api/contact', limiter, async (req, res) => {
       });
     }
 
-    // Create email transporter
-    const transporter = createTransporter();
-
-    // Email to you (the recipient)
-    const mailToYou = {
-      from: process.env.EMAIL_USER,
-      to: process.env.RECIPIENT_EMAIL || process.env.EMAIL_USER,
+    // Send email using Resend
+    const { data, error } = await resend.emails.send({
+      from: 'Contact Form <onboarding@resend.dev>', // Required placeholder for the free tier
+      to: [process.env.RECIPIENT_EMAIL],
       subject: `Portfolio Contact: ${subject}`,
+      reply_to: email,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
           <h2 style="color: #333; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 10px;">New Contact Form Submission</h2>
@@ -170,15 +171,19 @@ app.post('/api/contact', limiter, async (req, res) => {
           </div>
         </div>
       `,
-      replyTo: email
-    };
+    });
+
+    if (error) {
+      console.error('Error sending email with Resend:', error);
+      return res.status(500).json({ message: 'Failed to send message.', error });
+    }
 
     // Auto-reply email to the sender
-    const autoReply = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Thank you for contacting me!',
-      html: `
+    await resend.emails.send({
+        from: 'Asad Ali <onboarding@resend.dev>',
+        to: email,
+        subject: 'Thank you for contacting me!',
+        html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
           <h2 style="color: #333; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 10px;">Thank You for Your Message!</h2>
           
@@ -208,11 +213,7 @@ app.post('/api/contact', limiter, async (req, res) => {
           </div>
         </div>
       `
-    };
-
-    // Send both emails
-    await transporter.sendMail(mailToYou);
-    await transporter.sendMail(autoReply);
+    });
 
     res.status(200).json({
       success: true,
@@ -268,7 +269,7 @@ app.use((error, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Portfolio backend server is running on port ${PORT}`);
-  console.log(`📧 Email service: ${process.env.EMAIL_USER ? 'Configured' : 'Not configured'}`);
+  console.log(`📧 Email service: ${process.env.RESEND_API_KEY ? 'Resend Configured' : 'Not configured'}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
