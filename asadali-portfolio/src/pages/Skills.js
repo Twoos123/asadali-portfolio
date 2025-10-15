@@ -8,8 +8,8 @@ import { SiChakraui, SiSupabase, SiStripe } from 'react-icons/si';
 const SvgIcon = ({ name, size = 50, style, className = "" }) => {
   // Map display names to actual SVG filenames
   const svgFileMap = {
-    'Groq API': 'Groq.svg',
-    'Co:Here NLP': 'Cohere.svg',
+    'Groq': 'Groq.svg',
+    'Co:Here': 'Cohere.svg',
     'Flask': 'Flask.svg',
     'React': 'React.svg',
     'Python': 'Python.svg',
@@ -300,8 +300,8 @@ function Skills() {
     { name: "Jenkins", link: "https://www.jenkins.io" },
     { name: "Stripe", link: "https://stripe.com" },
     { name: "Cloudinary", link: "https://cloudinary.com" },
-    { name: "Groq API", link: "https://groq.com" },
-    { name: "Co:Here NLP", link: "https://cohere.ai" },
+    { name: "Groq", link: "https://groq.com" },
+    { name: "Co:Here", link: "https://cohere.ai" },
     { name: "OpenAI", link: "https://openai.com" },
     { name: "OAuth 2.0", link: "https://oauth.net/2/" },
     { name: "Bash", link: "https://www.gnu.org/software/bash/" }
