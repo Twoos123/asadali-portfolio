@@ -165,7 +165,13 @@ function Home({ backgroundColor, setBackgroundColor }) {
       coralImg.style.width = 'auto';
       // Fixed coral heights for consistency - no more random sizing
       const coralHeight = isMobile ? 25 : 45; // Mobile: 25px, Desktop: 45px
-      coralImg.style.height = `${coralHeight}px`;
+  coralImg.style.height = `${coralHeight}px`;
+  // Explicitly override any global max-width rules (including the universal mobile rule)
+  // so corals positioned near the right edge don't get scaled down to fit the viewport.
+  coralImg.style.setProperty('max-width', 'none', 'important');
+  coralImg.style.setProperty('max-height', 'none', 'important');
+  coralImg.style.setProperty('width', 'auto', 'important');
+  coralImg.style.setProperty('height', `${coralHeight}px`, 'important');
       coralImg.style.opacity = '1.0'; // Fully opaque - no transparency
       
       coralImg.onerror = () => {
@@ -221,7 +227,13 @@ function Home({ backgroundColor, setBackgroundColor }) {
       seaweedImg.style.width = 'auto';
       // Fixed seaweed heights for consistency - no more random sizing
       const seaweedHeight = isMobile ? 140 : 160; // Mobile: 140px, Desktop: 160px
-      seaweedImg.style.height = `${seaweedHeight}px`;
+  seaweedImg.style.height = `${seaweedHeight}px`;
+  // Prevent global rules that set max-width on all elements from shrinking these
+  // right-edge seaweed svgs when the viewport narrows.
+  seaweedImg.style.setProperty('max-width', 'none', 'important');
+  seaweedImg.style.setProperty('max-height', 'none', 'important');
+  seaweedImg.style.setProperty('width', 'auto', 'important');
+  seaweedImg.style.setProperty('height', `${seaweedHeight}px`, 'important');
       seaweedImg.style.filter = 'hue-rotate(10deg) saturate(1.1) brightness(0.9)';
       
       seaweedImg.onerror = () => {
