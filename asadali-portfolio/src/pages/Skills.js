@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FadeInSection, StaggerContainer } from '../components/animations';
 import { oceanLife } from '../helpers/oceanLife';
-import { SiChakraui, SiSupabase, SiStripe } from 'react-icons/si';
+import { SiSupabase, SiStripe } from 'react-icons/si';
 
 // Universal SVG icon component
 const SvgIcon = ({ name, size = 50, style, className = "" }) => {
@@ -26,6 +26,7 @@ const SvgIcon = ({ name, size = 50, style, className = "" }) => {
     'Express': 'Express.svg',
     'Tailwind CSS': 'Tailwind CSS.svg',
     'Chakra UI': 'Chakra UI.svg',
+    'PHP': 'PHP.svg',
     'Vite': 'Vite.js.svg',
     'GraphQL': 'GraphQL.svg',
     'Streamlit': 'Streamlit.svg',
@@ -38,6 +39,9 @@ const SvgIcon = ({ name, size = 50, style, className = "" }) => {
     'Firebase': 'Firebase.svg',
     'Supabase': 'Supabase.svg',
     'MongoDB': 'MongoDB.svg',
+    'Drupal': 'Drupal.svg',
+    'Apache': 'Apache.svg',
+    'Linux': 'Linux.svg',
     'PostgreSQL': 'PostgresSQL.svg',
     'MySQL': 'MySQL.svg',
     'Redis': 'Redis.svg',
@@ -53,13 +57,20 @@ const SvgIcon = ({ name, size = 50, style, className = "" }) => {
   };
 
   const filename = svgFileMap[name] || `${name}.svg`;
-  
+
+  // Allow small visual size overrides for specific brands (Chakra UI should be a bit larger)
+  const sizeMultiplier = {
+    'Chakra UI': 1.4
+  };
+
+  const computedSize = Math.round(size * (sizeMultiplier[name] || 1));
+
   return (
     <img 
       src={`${process.env.PUBLIC_URL}/assets/skills/${filename}`} 
       alt={name} 
-      width={size} 
-      height={size}
+      width={computedSize} 
+      height={computedSize}
       style={style}
       className={`transition-colors duration-300 drop-shadow-lg ${className}`}
     />
@@ -71,7 +82,6 @@ const SkillIcon = ({ name, link }) => {
   
   // Special handling for react-icons with their brand colors
   const reactIconMap = {
-    'Chakra UI': { component: SiChakraui, color: '#319795' },
     'Supabase': { component: SiSupabase, color: '#3ECF8E' },
     'Stripe': { component: SiStripe, color: '#635BFF' }
   };
@@ -260,6 +270,7 @@ function Skills() {
     { name: "Java", link: "https://www.java.com" },
     { name: "Python", link: "https://www.python.org" },
     { name: "JavaScript", link: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+    { name: "PHP", link: "https://www.php.net" },
     { name: "TypeScript", link: "https://www.typescriptlang.org" },
     { name: "Kotlin", link: "https://kotlinlang.org" },
     { name: "HTML5", link: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
@@ -271,6 +282,7 @@ function Skills() {
     { name: "React", link: "https://reactjs.org" },
     { name: "Next.js", link: "https://nextjs.org" },
     { name: "Spring Boot", link: "https://spring.io/projects/spring-boot" },
+    { name: "FastAPI", link: "https://fastapi.tiangolo.com" },
     { name: "Node.js", link: "https://nodejs.org" },
     { name: "Express", link: "https://expressjs.com" },
     { name: "Flask", link: "https://flask.palletsprojects.com" },
@@ -285,6 +297,9 @@ function Skills() {
     { name: "GitHub", link: "https://github.com" },
     { name: "Git", link: "https://git-scm.com" },
     { name: "Docker", link: "https://www.docker.com" },
+    { name: "Drupal", link: "https://www.drupal.org" },
+    { name: "Apache", link: "https://httpd.apache.org" },
+    { name: "Linux", link: "https://www.kernel.org" },
     { name: "Kubernetes", link: "https://kubernetes.io" },
     { name: "Android Studio", link: "https://developer.android.com/studio" },
     { name: "Vercel", link: "https://vercel.com" },

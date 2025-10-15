@@ -3,7 +3,7 @@ import { projectList } from "../helpers/ProjectList";
 import { motion, useInView } from 'framer-motion';
 import { createOceanEffects } from '../helpers/animationHelper';
 import { FaSearch, FaFilter, FaGithub } from 'react-icons/fa';
-import { SiChakraui, SiSupabase, SiStripe } from 'react-icons/si';
+import { SiSupabase, SiStripe } from 'react-icons/si';
 
 // Universal SVG icon component for project skills
 const SvgIcon = ({ name, size = 20, style, className = "" }) => {
@@ -54,13 +54,19 @@ const SvgIcon = ({ name, size = 20, style, className = "" }) => {
   };
 
   const filename = svgFileMap[name] || `${name}.svg`;
-  
+
+  const sizeMultiplier = {
+    'Chakra UI': 1.4
+  };
+
+  const computedSize = Math.round(size * (sizeMultiplier[name] || 1));
+
   return (
     <img 
       src={`${process.env.PUBLIC_URL}/assets/skills/${filename}`} 
       alt={name} 
-      width={size} 
-      height={size}
+      width={computedSize} 
+      height={computedSize}
       style={style}
       className={`transition-colors duration-300 drop-shadow-lg ${className}`}
     />
@@ -73,7 +79,6 @@ const SkillIcon = React.memo(({ skill }) => {
   
   // Special handling for react-icons with their brand colors
   const reactIconMap = {
-    'Chakra UI': { component: SiChakraui, color: '#319795' },
     'Supabase': { component: SiSupabase, color: '#3ECF8E' },
     'Stripe': { component: SiStripe, color: '#635BFF' }
   };
