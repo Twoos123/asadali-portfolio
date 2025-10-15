@@ -1006,3 +1006,17 @@ footer {
     transform: translateX(95vw) !important;
   }
 }
+
+/* Targeted override: prevent the mobile universal max-width rule from shrinking
+   decorative SVGs (seaweed and coral). These are positioned absolutely and
+   should keep their explicit heights set via JS or inline styles. */
+.seaweed-container img,
+.coral-decoration img,
+#home-seaweed img,
+#left-seaweed img,
+#right-seaweed img {
+  max-width: none !important;
+  max-height: none !important;
+  width: auto !important;
+  /* Do not force height here - keep the explicit heights set by scripts */
+}
