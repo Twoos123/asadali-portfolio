@@ -50,7 +50,17 @@ const SvgIcon = ({ name, size = 20, style, className = "" }) => {
     'Cloudinary': 'Cloudinary.svg',
     'OpenAI': 'Openai.svg',
     'OAuth 2.0': 'Oauth.svg',
-    'Bash': 'Bash.svg'
+    'Bash': 'Bash.svg',
+    'FastAPI': 'FastAPI.svg',
+    'Rust': 'Rust.svg',
+    'Recharts': 'Recharts.svg',
+    'Anthropic Claude': 'Anthropic.svg',
+    'Claude': 'Claude.svg',
+    'Drupal': 'Drupal.svg',
+    'Elixir': 'Elixir.svg',
+    'PHP': 'PHP.svg',
+    'Linux': 'Linux.svg',
+    'Apache': 'Apache.svg',
   };
 
   const filename = svgFileMap[name] || `${name}.svg`;
@@ -140,6 +150,7 @@ const SkillIcon = React.memo(({ skill }) => {
 const ProjectCard = React.memo(({ project, index }) => {
   const cardRef = useRef(null);
   const isInView = useInView(cardRef, { threshold: 0.1, once: true });
+  const [skillsExpanded, setSkillsExpanded] = useState(false);
 
   const handleCardClick = useCallback(() => {
     if (project.demo) {
@@ -167,56 +178,71 @@ const ProjectCard = React.memo(({ project, index }) => {
   return (
     <motion.div
       ref={cardRef}
-      className="relative group cursor-pointer"
+      className="relative group cursor-pointer h-full"
       onClick={handleCardClick}
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       whileHover={{ y: -10 }}
     >
-      <div className="relative overflow-hidden rounded-2xl backdrop-blur-md bg-white/10 border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105">
-        {/* Project Image */}
-        <div className="relative h-48 overflow-hidden">
+      <div
+        className="relative h-full flex flex-col overflow-hidden rounded-3xl border border-white/15 bg-ocean-950/40 shadow-glass transition-all duration-500 group-hover:shadow-glass-lg group-hover:border-white/25"
+        style={{
+          backdropFilter: 'blur(18px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(18px) saturate(180%)',
+        }}
+      >
+        <div className="relative h-52 overflow-hidden">
           <img
             src={project.image}
             alt={project.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-          
-          {/* GitHub Icon */}
+          <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/85 via-ocean-950/20 to-transparent" />
+
           <motion.button
             onClick={handleGitHubClick}
-            className="absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm bg-white/20 border border-white/30 hover:bg-white/30 transition-all duration-300 z-10"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            className="absolute top-4 right-4 p-2.5 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition-colors duration-300 z-10"
+            style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            aria-label={`View ${project.name} on GitHub`}
           >
-            <FaGithub size={20} className="text-white" />
+            <FaGithub size={18} className="text-white" />
           </motion.button>
+
+          {project.demo && (
+            <div className="absolute top-4 left-4 px-2.5 py-1 rounded-full bg-emerald-400/20 border border-emerald-300/40 text-emerald-100 text-[10px] font-semibold uppercase tracking-wider backdrop-blur-sm">
+              Live Demo
+            </div>
+          )}
         </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-4">
-          <h3 className="text-xl font-bold text-white">{project.name}</h3>
-          <p className="text-blue-100 text-sm leading-relaxed">{project.description}</p>
-          
-          {/* Tech Stack Icons */}
-          <div className="flex flex-wrap gap-3 items-center">
-            {skillsArray.map((skill, skillIndex) => (
+        <div className="p-6 flex flex-col flex-1 gap-3">
+          <h3 className="font-display text-xl font-semibold text-white tracking-tight">{project.name}</h3>
+          <p className="text-ocean-100/80 text-sm leading-relaxed line-clamp-3 min-h-[3.75rem]">{project.description}</p>
+
+          <div className="flex flex-wrap gap-3 items-center pt-2 mt-auto">
+            {(skillsExpanded ? skillsArray : skillsArray.slice(0, 7)).map((skill, skillIndex) => (
               <SkillIcon key={`${project.id}-${skillIndex}`} skill={skill} />
             ))}
+            {skillsArray.length > 7 && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSkillsExpanded((prev) => !prev);
+                }}
+                className="text-xs text-ocean-100 font-medium px-2.5 py-1 rounded-full bg-white/10 border border-white/15 hover:bg-white/20 hover:border-white/25 transition-colors"
+                aria-label={skillsExpanded ? 'Show fewer skills' : 'Show all skills'}
+              >
+                {skillsExpanded ? 'Show less' : `+${skillsArray.length - 7}`}
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Hover Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
-        
-        {/* Demo indicator for projects with live demos */}
-        {project.demo && (
-          <div className="absolute top-4 left-4 px-2 py-1 bg-green-500/80 text-white text-xs rounded backdrop-blur-sm">
-            Live Demo
-          </div>
-        )}
+        <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-t from-ocean-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
     </motion.div>
   );
@@ -298,15 +324,18 @@ function Projects() {
       backgroundAttachment: 'fixed'
     }}>
       <div id="projects-creatures-container" className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex: 0}}></div>
-      <motion.h1 
+      <motion.div
         ref={titleRef}
-        className="text-4xl font-bold text-center text-blue-100 mb-8 relative z-10"
-        initial={{ opacity: 0, y: 50 }}
-        animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        className="text-center mb-12 relative z-10"
+        initial={{ opacity: 0, y: 30 }}
+        animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        Personal Projects
-      </motion.h1>
+        <span className="eyebrow">Selected work</span>
+        <h1 className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight">
+          Personal Projects
+        </h1>
+      </motion.div>
 
       {/* Search and Filter Section */}
       <div className="max-w-4xl mx-auto px-4 mb-8 relative z-10">
@@ -373,7 +402,7 @@ function Projects() {
       </div>
 
       {/* Projects Grid */}
-      <div className="projectList grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 max-w-7xl mx-auto justify-items-center relative z-10">
+      <div className="projectList grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 max-w-7xl mx-auto items-stretch relative z-10">
         {displayedProjects.map((project, index) => (
           <ProjectCard 
             key={project.id}

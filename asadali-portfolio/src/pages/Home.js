@@ -689,35 +689,6 @@ function Home({ backgroundColor, setBackgroundColor }) {
               </StaggerContainer>
             </motion.div>
 
-            {/* Scroll indicator - Positioned at the bottom of the viewport */}
-            {!isMobile && (
-              <motion.div 
-                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 cursor-pointer"
-                onClick={scrollToSkills}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-              > 
-                <FloatingElement intensity={1.5} duration={2}>
-                  <div className="flex flex-col items-center">
-                    <span className="text-blue-100 text-sm mb-1">Dive Deeper</span>
-                    <motion.svg 
-                      className="w-8 h-8 text-blue-100 cursor-pointer hover:text-cyan-300 transition-colors duration-300 mb-10" 
-                      fill="none" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth="2" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                      whileHover={{ scale: 1.2 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                    </motion.svg>
-                  </div>
-                </FloatingElement>
-              </motion.div>
-            )}
           </div>
         </div>
         

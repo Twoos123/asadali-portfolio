@@ -1,3 +1,4 @@
+const ProjCS2 = process.env.PUBLIC_URL + '/assets/Projects/cs2-meta-engine.png';
 const Proj0 = process.env.PUBLIC_URL + '/assets/Projects/ECommerceApp.png';
 const Proj1 = process.env.PUBLIC_URL + '/assets/Projects/GPT-Clone.png';
 const Proj2 = process.env.PUBLIC_URL + '/assets/Projects/Pokedex.png';
@@ -10,6 +11,16 @@ const Proj8 = process.env.PUBLIC_URL + '/assets/Projects/pawnversation.png';
 const Proj9 = process.env.PUBLIC_URL + '/assets/Projects/SESA-Website.png';
 
 export const projectList = [
+    {
+        id: 10,
+        name: "CS2 Meta Engine",
+        description: "Pro-level CS2 demo analysis — grenade lineups, 2D match replay, economy tracking, heatmaps, and automated opponent scouting.",
+        image: ProjCS2,
+        skills: ["Python", "TypeScript", "Rust", "FastAPI", "React", "Vite", "Tailwind CSS", "Recharts", "Anthropic Claude"],
+        github: "https://github.com/Twoos123/cs2-meta-engine",
+        repoUrl: "https://github.com/Twoos123/cs2-meta-engine",
+        demo: null
+    },
     {
         id: 0,
         name: "SESA Website",
