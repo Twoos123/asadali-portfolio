@@ -166,8 +166,10 @@ app.post('/api/contact', limiter, async (req, res) => {
       return res.status(500).json({ message: 'Failed to send message.', error });
     }
 
-    // Auto-reply email to the sender
-    await resend.emails.send({
+    // Auto-reply email to the sender — fire and forget so the response
+    // isn't blocked by the second round-trip to Resend.
+    resend.emails
+      .send({
         from: 'Asad Ali <onboarding@resend.dev>',
         to: email,
         subject: 'Thank you for contacting me!',
@@ -201,7 +203,8 @@ app.post('/api/contact', limiter, async (req, res) => {
           </div>
         </div>
       `
-    });
+      })
+      .catch((err) => console.error('Auto-reply failed (non-blocking):', err));
 
     res.status(200).json({
       success: true,

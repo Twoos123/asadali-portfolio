@@ -1,7 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { FaEnvelope, FaCopy, FaCheck, FaPaperPlane } from 'react-icons/fa';
 import SuccessAnimation from '../components/animations/SuccessAnimation';
+
+const API_BASE =
+  process.env.NODE_ENV === 'production'
+    ? 'https://asadali-portfolio.onrender.com'
+    : 'http://localhost:5000';
 
 function Contact() {
   const [emailCopied, setEmailCopied] = useState(false);
@@ -17,6 +22,13 @@ function Contact() {
 
   const titleRef = useRef(null);
   const titleInView = useInView(titleRef, { threshold: 0.3, once: true });
+  const warmedRef = useRef(false);
+
+  useEffect(() => {
+    if (!titleInView || warmedRef.current) return;
+    warmedRef.current = true;
+    fetch(`${API_BASE}/api/health`, { method: 'GET', mode: 'cors' }).catch(() => {});
+  }, [titleInView]);
 
     const myEmail = "masadbali190@gmail.com";
 
@@ -43,11 +55,7 @@ function Contact() {
     setSubmissionStatus(null);
     
     try {
-      const apiUrl = process.env.NODE_ENV === 'production' 
-        ? 'https://asadali-portfolio.onrender.com/api/contact'
-        : 'http://localhost:5000/api/contact';
-
-      const response = await fetch(apiUrl, {
+      const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
