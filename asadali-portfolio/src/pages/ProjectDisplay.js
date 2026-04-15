@@ -29,6 +29,13 @@ function ProjectDisplay() {
 
   return (
     <div className="project-display relative py-24 md:py-28 px-4">
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          background: 'linear-gradient(180deg, #0c4a6e 0%, #082f49 50%, #0a1120 100%)',
+        }}
+      />
       <div className="max-w-5xl mx-auto">
         <button
           onClick={goBack}
