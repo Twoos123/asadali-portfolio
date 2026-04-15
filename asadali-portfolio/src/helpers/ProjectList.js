@@ -14,18 +14,19 @@ export const projectList = [
     {
         id: 10,
         name: "CS2 Meta Engine",
-        description: "Pro-level CS2 demo analysis: grenade lineups, 2D match replay, economy tracking, heatmaps, and automated opponent scouting.",
+        description: "A pro-level CS2 demo analysis platform: mines HLTV and FACEIT demos, clusters grenade lineups, renders 2D match replays, tracks economy, generates heatmaps, and produces automated anti-strat scouting reports — features neither Refrag nor SCL offer.",
         image: ProjCS2,
         skills: ["Python", "TypeScript", "Rust", "FastAPI", "React", "Vite", "Tailwind CSS", "Recharts", "Anthropic Claude"],
         github: "https://github.com/Twoos123/cs2-meta-engine",
         repoUrl: "https://github.com/Twoos123/cs2-meta-engine",
         demo: null,
         caseStudy: {
-            tagline: "Turning raw .dem files into pro-level CS2 intel in seconds.",
+            tagline: "Turning raw .dem files into pro-level CS2 intel — grenade lineups, 2D replays, economy tracking, heatmaps, and AI scouting reports, all in one dashboard.",
+            heroImage: "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/landing.png",
             screenshotBase: "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots",
             origin: "This one started with a conversation. I was in an interview and the interviewer brought up OpenClaw and Claude, and how agentic AI workflows are already good enough to handle a real chunk of analyst-style work. It stuck with me, because I'd been sitting on a problem for a while: every time I wanted to dig into a CS2 match properly, I was either scrubbing demos manually or looking at Refrag and SCL, the two main paid platforms, each running around $70/team for roughly 6 slots. That conversation flipped the question for me. Instead of paying for the product, how far could I push things on my own? How much of that paid tool could I actually build with a good pipeline and the right AI in the loop?",
             problem: "I built this for myself. I'm currently top 2,000 in NA on Faceit, and at that level the gap between players is mostly about preparation: util timings, opponent tendencies, map-specific habits. Pro teams have analysts and six-figure tools to surface that stuff; solo ranked players don't. Refrag and SCL sell exactly this kind of intel, but locked behind a $70/team subscription built for orgs, not individuals. CS2 Meta Engine is me rebuilding that pipeline end-to-end so I can run the same analysis on my own demos, with AI doing the scouting work I'd otherwise pay an analyst for.",
-            solution: "A three-layer system that ingests HLTV demos, extracts tick-level events into structured data, and surfaces the result as grenade lineups, 2D replays, economy breakdowns, heatmaps, and auto-generated anti-strat reports, all in a single React dashboard.",
+            solution: "A three-layer system that ingests HLTV and FACEIT demos, extracts tick-level events into structured data, and surfaces the result as grenade lineups, 2D replays, economy breakdowns, heatmaps, Player Profiles, and auto-generated anti-strat reports — all in a single React dashboard. Anti-strat and Player Profile computation is fully client-side from cached timeline JSON, so there are zero extra backend calls after the first parse.",
             architecture: [
                 {
                     title: "Parse Layer",
@@ -36,7 +37,7 @@ export const projectList = [
                 {
                     title: "Service Layer",
                     subtitle: "FastAPI + SQLite",
-                    desc: "A FastAPI server coordinates parsing, caches parsed demos in SQLite, and exposes REST endpoints for the frontend. Uvicorn workers handle concurrent parses; an RCON bridge hooks into live servers for real-time flows.",
+                    desc: "A FastAPI server coordinates parsing, caches parsed demos in SQLite, and exposes REST endpoints for the frontend. Uvicorn workers handle concurrent parses; an RCON bridge hooks into live CS2 servers for practice flows.",
                     tech: ["Python", "FastAPI", "SQLite", "uvicorn"],
                 },
                 {
@@ -47,17 +48,57 @@ export const projectList = [
                 },
                 {
                     title: "Intelligence Layer",
-                    subtitle: "Claude + HLTV scraper",
-                    desc: "An Anthropic Claude integration reads parsed demos alongside a scraped HLTV corpus and generates opponent scouting reports (tendencies, default setups, eco preferences) in natural-language prose paired with structured callouts.",
-                    tech: ["Anthropic Claude", "OpenRouter", "HLTV scraper"],
+                    subtitle: "Claude + HLTV + FACEIT",
+                    desc: "Anthropic Claude reads parsed demos and generates opponent scouting reports in natural-language prose. HLTV and FACEIT scrapers handle demo acquisition, roster data, and team logo extraction automatically.",
+                    tech: ["Anthropic Claude", "OpenRouter", "HLTV scraper", "FACEIT API"],
                 },
             ],
             features: [
-                { name: "Grenade lineup intelligence", file: "lineups.png", desc: "Every smoke/flash/molly across the match, grouped by map and map region, with playback timing and throwing position." },
-                { name: "2D match replay", file: "replay.png", desc: "Scrub through the full round in a top-down view. Player trails, util impact, and contact points all layered on the tactical map." },
-                { name: "Economy tracking", file: "economy.png", desc: "Money flow per round (buys, saves, force-buys, loss bonuses) with outcome overlays to spot econ-driven inflection points." },
-                { name: "Heatmaps", file: "heatmap.png", desc: "Kill, death, and contact heatmaps per-player and per-map. Compares tendencies across matches to surface role patterns." },
-                { name: "Automated scouting", file: "anti-strat.png", desc: "Claude reads parsed events + HLTV context and produces anti-strat reports: default setups, mid-round tells, timing preferences." },
+                {
+                    name: "Grenade lineup intelligence",
+                    file: "lineups.png",
+                    desc: "Every smoke/flash/molly across pro demos, clustered by throw position + angle and ranked by win_rate × log(throws) × avg_damage. Technique detection (stand/walk/run/crouch/jump), callout labels, execute combo detection, and 1024×1024 radar overlay with adjustable sliders.",
+                },
+                {
+                    name: "Demo picker & ingestion",
+                    files: ["demo-picker.png", "landing.png"],
+                    desc: "Browse demos grouped by map, or pull them directly from HLTV (filter by team/event/map) or FACEIT (look up any player by profile URL). The pipeline auto-downloads, extracts, parses, clusters lineups, and updates Player Profiles — with a real-time progress bar for each phase.",
+                },
+                {
+                    name: "2D match replay",
+                    file: "replay.png",
+                    desc: "Full match playback on a 1024×1024 radar. Player positions, yaw direction, health bars, weapon icons, armor indicators. Smoke clouds (20s), molotov patches (7s), flash bursts, HE shockwaves with countdown timers. HUD scrubber with round tick markers, kill feed with headshot/wallbang/noscope icons, and AI match recap.",
+                },
+                {
+                    name: "Insights — round, patterns & heatmap",
+                    files: ["insights.png", "insights-patterns.png", "insights-heatmap.png"],
+                    desc: "Three overlay modes: Round mode shows utility paths, victim entry/exit markers, flash blinds, and AOE radii. Patterns mode detects repeated grenade sequences with flash effectiveness scoring and lets you live-scrub to any throw. Heatmap mode aggregates all grenade landings, filterable by HE / Smoke / Flash / Molotov.",
+                },
+                {
+                    name: "Economy tracker",
+                    file: "economy.png",
+                    desc: "Equipment value bar chart (T vs CT per round), buy-type classification (Eco / Force / Half / Full), loss-bonus tracking ($1400 base + $500/loss), and a round-by-round table with winner, buy types, equipment values, and cash spent for both sides.",
+                },
+                {
+                    name: "Heatmaps",
+                    file: "heatmap.png",
+                    desc: "Gaussian-blur position density, death location, and grenade landing overlays rendered on a canvas layer. Filterable by half (1st/2nd/all), team (T/CT/both), and individual player to surface role patterns and map tendencies across matches.",
+                },
+                {
+                    name: "Per-player stats",
+                    file: "stats.png",
+                    desc: "Full scoreboard with K/D, +/-, HS%, first kills/deaths, 2K–5K rounds, and survival rate. Expandable detail cards break down kill types (headshot, wallbang, noscope, smoke, blind), opening duels won/lost, utility usage, and multi-kill rounds — all computed client-side from timeline data.",
+                },
+                {
+                    name: "Anti-Strat scouting report",
+                    files: ["anti-strat.png", "anti-strat-2.png", "anti-strat-3.png"],
+                    desc: "Select any opponent team: get site hit frequency bars, utility tendency radar heatmap, AWP position heatmap (primary AWPer identified), first-blood timing, round-win pattern SVG donut rings, and per-player breakdowns with weapons and opening duels — computed entirely client-side from cached timelines, no new backend calls.",
+                },
+                {
+                    name: "Player Profiles",
+                    files: ["players.png", "player-detail.png"],
+                    desc: "Cross-demo leaderboard ranked by rating, with role inference (AWP / Entry / Support / Lurker / Rifler) derived from AWP ratio, opening kill rate, utility rate, and survival rate. Detail view shows a role radar chart, per-map/side splits, and recent match history up to 50 matches.",
+                },
             ],
             decisions: [
                 {
@@ -81,6 +122,7 @@ export const projectList = [
                 "Pydantic schemas as the single source of truth between parser and API saved more time than any other decision: changes in the demo shape surface as type errors, not runtime bugs.",
                 "Designing the system around demo caching (parse once, query many) turned what should have been a 30-second wait per interaction into instant reads.",
                 "Claude's scouting quality scales with the *shape* of context, not just the size. Round summaries + structured player stats beat raw event dumps for the same token budget.",
+                "Client-side computation for Anti-Strat and Player Profiles (derived entirely from cached timeline JSON) meant zero new backend endpoints and sub-second report generation — the architecture decision that made those features feel instant.",
             ],
             credits: {
                 blurb: "Huge props to the open-source projects and data sources that made this possible. None of the CS2-specific parts would exist without them.",
@@ -96,7 +138,8 @@ export const projectList = [
                     {
                         label: "Data & services",
                         people: [
-                            { name: "HLTV.org", subtitle: "Match metadata, demos, and team logos", url: "https://www.hltv.org" },
+                            { name: "HLTV.org", subtitle: "Match metadata, demos, team logos, and roster data", url: "https://www.hltv.org" },
+                            { name: "FACEIT", subtitle: "Matchmaking demo source and player profile lookup", url: "https://www.faceit.com" },
                             { name: "OpenRouter", subtitle: "Fallback LLM provider alongside Claude", url: "https://openrouter.ai" },
                         ],
                     },
