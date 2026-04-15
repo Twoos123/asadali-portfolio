@@ -240,18 +240,28 @@ function ProjectDisplay() {
                     <div key={g.label}>
                       <div className="eyebrow mb-3">{g.label}</div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {g.people.map((p) => (
-                          <a
-                            key={p.name}
-                            href={p.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 px-5 py-4 transition-colors"
-                          >
-                            <span className="font-display text-base font-semibold text-white tracking-tight">{p.name}</span>
-                            <FaLinkedin className="h-4 w-4 text-ocean-200/80 group-hover:text-white transition-colors" />
-                          </a>
-                        ))}
+                        {g.people.map((p) => {
+                          const url = p.url || p.linkedin;
+                          const isGithub = url?.includes('github.com');
+                          const Icon = isGithub ? FaGithub : FaLinkedin;
+                          return (
+                            <a
+                              key={p.name}
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="group flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 px-5 py-4 transition-colors"
+                            >
+                              <div className="min-w-0">
+                                <div className="font-display text-base font-semibold text-white tracking-tight truncate">{p.name}</div>
+                                {p.subtitle && (
+                                  <div className="text-xs text-ocean-200/70 mt-0.5 truncate">{p.subtitle}</div>
+                                )}
+                              </div>
+                              {url && <Icon className="h-4 w-4 shrink-0 text-ocean-200/80 group-hover:text-white transition-colors" />}
+                            </a>
+                          );
+                        })}
                       </div>
                     </div>
                   ))}

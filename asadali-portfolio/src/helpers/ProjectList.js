@@ -82,6 +82,26 @@ export const projectList = [
                 "Designing the system around demo caching (parse once, query many) turned what should have been a 30-second wait per interaction into instant reads.",
                 "Claude's scouting quality scales with the *shape* of context, not just the size. Round summaries + structured player stats beat raw event dumps for the same token budget.",
             ],
+            credits: {
+                blurb: "Huge props to the open-source projects and data sources that made this possible. None of the CS2-specific parts would exist without them.",
+                groups: [
+                    {
+                        label: "Libraries",
+                        people: [
+                            { name: "demoparser2", subtitle: "Rust-backed CS2 demo parsing (by LaihoE)", url: "https://github.com/LaihoE/demoparser" },
+                            { name: "awpy", subtitle: "Radar assets and map calibration data", url: "https://github.com/pnxenopoulos/awpy" },
+                            { name: "CS2CalloutExtractor", subtitle: "Callout origin positions for lineup labels (by xobust)", url: "https://github.com/xobust/CS2CalloutExtractor" },
+                        ],
+                    },
+                    {
+                        label: "Data & services",
+                        people: [
+                            { name: "HLTV.org", subtitle: "Match metadata, demos, and team logos", url: "https://www.hltv.org" },
+                            { name: "OpenRouter", subtitle: "Fallback LLM provider alongside Claude", url: "https://openrouter.ai" },
+                        ],
+                    },
+                ],
+            },
         },
     },
     {
