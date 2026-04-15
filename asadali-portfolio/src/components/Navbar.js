@@ -7,6 +7,7 @@ const logo = process.env.PUBLIC_URL + '/assets/AsadLogo.png';
 
 const NAV_LINKS = [
   { label: 'Home', target: '#home' },
+  { label: 'About', target: '#about' },
   { label: 'Skills', target: '#skills' },
   { label: 'Projects', target: '#projects' },
   { label: 'Experience', target: '#experience' },
@@ -41,6 +42,7 @@ function Navbar() {
 
     const trackedTargets = [
       { label: 'Home', target: '#home' },
+      { label: 'About', target: '#about' },
       { label: 'Skills', target: '#skills' },
       { label: 'Projects', target: '#projects' },
       { label: 'Experience', target: '#experience' },

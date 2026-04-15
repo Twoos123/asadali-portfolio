@@ -5,29 +5,9 @@ const PageTransition = ({ children }) => {
   const location = useLocation();
 
   const pageVariants = {
-    initial: {
-      opacity: 0,
-      y: 20,
-      scale: 0.98
-    },
-    in: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.4,
-        ease: "easeOut"
-      }
-    },
-    out: {
-      opacity: 0,
-      y: -20,
-      scale: 1.02,
-      transition: {
-        duration: 0.3,
-        ease: "easeIn"
-      }
-    }
+    initial: { opacity: 0 },
+    in: { opacity: 1, transition: { duration: 0.25, ease: 'easeOut' } },
+    out: { opacity: 0, transition: { duration: 0.18, ease: 'easeIn' } },
   };
 
   return (

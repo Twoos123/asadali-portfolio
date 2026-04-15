@@ -7,6 +7,7 @@ import Projects from './Projects';
 import Experience from './Experience';
 import Resume from './Resume';
 import Contact from './Contact';
+import About from '../components/About';
 import { StaggerContainer, FloatingElement } from '../components/animations';
 import { oceanLife } from '../helpers/oceanLife';
 import DepthIndicator from '../components/DepthIndicator';
@@ -72,10 +73,8 @@ function Home({ backgroundColor, setBackgroundColor }) {
   };
 
 
-  // Ensure page starts at top on load and apply initial body background
+  // Apply initial body background on mount (scroll handled by ScrollToTop globally)
   useEffect(() => {
-    window.scrollTo(0, 0);
-    // Set initial background color immediately and explicitly
     const initialColor = 'hsl(195, 70%, 55%)';
     setBackgroundColor(initialColor);
     
@@ -692,6 +691,8 @@ function Home({ backgroundColor, setBackgroundColor }) {
           </div>
         </div>
         
+        <About />
+
         <div id='skills' ref={skillsRef}>
           <Skills />
         </div>

@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useMemo, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { projectList } from "../helpers/ProjectList";
 import { motion, useInView } from 'framer-motion';
 import { createOceanEffects } from '../helpers/animationHelper';
-import { FaSearch, FaFilter, FaGithub } from 'react-icons/fa';
+import { FaSearch, FaFilter, FaGithub, FaBookOpen } from 'react-icons/fa';
 import { SiSupabase, SiStripe } from 'react-icons/si';
 
 // Universal SVG icon component for project skills
@@ -151,14 +152,18 @@ const ProjectCard = React.memo(({ project, index }) => {
   const cardRef = useRef(null);
   const isInView = useInView(cardRef, { threshold: 0.1, once: true });
   const [skillsExpanded, setSkillsExpanded] = useState(false);
+  const navigate = useNavigate();
+  const hasCaseStudy = Boolean(project.caseStudy);
 
   const handleCardClick = useCallback(() => {
-    if (project.demo) {
+    if (hasCaseStudy) {
+      navigate(`/project/${project.id}`);
+    } else if (project.demo) {
       window.open(project.demo, '_blank');
     } else {
       window.open(project.github || project.repoUrl, '_blank');
     }
-  }, [project.demo, project.github, project.repoUrl]);
+  }, [hasCaseStudy, navigate, project.id, project.demo, project.github, project.repoUrl]);
 
   const handleGitHubClick = useCallback((e) => {
     e.stopPropagation();
@@ -182,8 +187,8 @@ const ProjectCard = React.memo(({ project, index }) => {
       onClick={handleCardClick}
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      whileHover={{ y: -10 }}
+      transition={{ duration: 0.5, delay: Math.min(index, 5) * 0.06 }}
+      whileHover={{ y: -8, transition: { duration: 0.2, ease: 'easeOut', delay: 0 } }}
     >
       <div
         className="relative h-full flex flex-col overflow-hidden rounded-3xl border border-white/15 bg-ocean-950/40 shadow-glass transition-all duration-500 group-hover:shadow-glass-lg group-hover:border-white/25"
@@ -211,7 +216,13 @@ const ProjectCard = React.memo(({ project, index }) => {
             <FaGithub size={18} className="text-white" />
           </motion.button>
 
-          {project.demo && (
+          {hasCaseStudy && (
+            <div className="absolute top-4 left-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ocean-400/25 border border-ocean-300/40 text-ocean-50 text-[10px] font-semibold uppercase tracking-wider backdrop-blur-sm">
+              <FaBookOpen className="h-2.5 w-2.5" />
+              Case Study
+            </div>
+          )}
+          {!hasCaseStudy && project.demo && (
             <div className="absolute top-4 left-4 px-2.5 py-1 rounded-full bg-emerald-400/20 border border-emerald-300/40 text-emerald-100 text-[10px] font-semibold uppercase tracking-wider backdrop-blur-sm">
               Live Demo
             </div>

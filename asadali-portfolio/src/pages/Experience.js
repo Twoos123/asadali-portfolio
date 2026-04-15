@@ -153,17 +153,17 @@ function Experience() {
                 kind="incoming"
                 org="Health Canada"
                 role="Software Engineer Intern · Fullstack (Incoming)"
-                period="MAY 2026 — AUG 2026"
+                period="MAY 2026 - AUG 2026"
                 logo={HealthCanada}
                 logoAlt="Health Canada"
                 logoClass="h-10 w-10 object-contain"
               >
-                Returning to Health Canada for Summer 2026 as a fullstack intern — continuing work on secure, department-wide internal tools that power regulatory workflows.
+                Returning to Health Canada for Summer 2026 as a fullstack intern, continuing work on secure, department-wide internal tools that power regulatory workflows.
               </TimelineCard>
             </VerticalTimelineElement>
 
             <VerticalTimelineElement
-              date={<span className="font-display text-ocean-200 font-semibold tracking-tight">Oct 2025 — Apr 2026</span>}
+              date={<span className="font-display text-ocean-200 font-semibold tracking-tight">Oct 2025 - Apr 2026</span>}
               iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
               icon={<FaBriefcase />}
               contentStyle={CONTENT_STYLE}
@@ -171,19 +171,19 @@ function Experience() {
             >
               <TimelineCard
                 kind="work"
-                org="University of Ottawa — Faculty of Law"
+                org="University of Ottawa, Faculty of Law"
                 role="Software Engineer (Part-Time) · Fullstack"
-                period="OCT 2025 — APR 2026"
+                period="OCT 2025 - APR 2026"
                 logo={uOttawa}
                 logoAlt="uOttawa"
                 logoClass="h-10 w-10 object-contain p-0.5"
               >
-                Modernized the Faculty's Course Management System — refactoring 20,000+ lines of legacy code to cut load times by 55% for 100+ users. Built an internal LLM-based Drupal analysis tool that scans 3,800+ pages to flag dead links, reducing manual audit time by 70%. Established QA workflows and technical documentation to standardize deployment.
+                Modernized the Faculty's Course Management System, refactoring 20,000+ lines of legacy code to cut load times by 55% for 100+ users. Established QA workflows and technical documentation to standardize deployment.
               </TimelineCard>
             </VerticalTimelineElement>
 
             <VerticalTimelineElement
-              date={<span className="font-display text-ocean-200 font-semibold tracking-tight">May 2025 — Aug 2025</span>}
+              date={<span className="font-display text-ocean-200 font-semibold tracking-tight">May 2025 - Aug 2025</span>}
               iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
               icon={<FaBriefcase />}
               contentStyle={CONTENT_STYLE}
@@ -193,7 +193,7 @@ function Experience() {
                 kind="work"
                 org="Health Canada"
                 role="Software Engineer Intern · Fullstack"
-                period="MAY 2025 — AUG 2025"
+                period="MAY 2025 - AUG 2025"
                 logo={HealthCanada}
                 logoAlt="Health Canada"
                 logoClass="h-10 w-10 object-contain"
@@ -203,7 +203,7 @@ function Experience() {
             </VerticalTimelineElement>
 
             <VerticalTimelineElement
-              date={<span className="font-display text-violet-200 font-semibold tracking-tight">Sep 2024 — Present</span>}
+              date={<span className="font-display text-violet-200 font-semibold tracking-tight">Sep 2024 - Present</span>}
               iconStyle={{ ...ICON_STYLES.volunteer, color: '#fff' }}
               icon={<FaHandsHelping />}
               contentStyle={CONTENT_STYLE}
@@ -213,7 +213,7 @@ function Experience() {
                 kind="volunteer"
                 org="uOttawa Software Engineering Students' Association (SESA)"
                 role="Co-Director → Advisor"
-                period="SEP 2024 — PRESENT"
+                period="SEP 2024 - PRESENT"
                 logo={SESA}
                 logoAlt="uOttawa SESA"
                 logoClass="h-10 w-10 rounded-full object-cover"
@@ -223,7 +223,7 @@ function Experience() {
             </VerticalTimelineElement>
 
             <VerticalTimelineElement
-              date={<span className="font-display text-violet-200 font-semibold tracking-tight">Apr 2024 — Sep 2024</span>}
+              date={<span className="font-display text-violet-200 font-semibold tracking-tight">Apr 2024 - Sep 2024</span>}
               iconStyle={{ ...ICON_STYLES.volunteer, color: '#fff' }}
               icon={<FaHandsHelping />}
               contentStyle={CONTENT_STYLE}
@@ -233,7 +233,7 @@ function Experience() {
                 kind="volunteer"
                 org="uOttawa Software Engineering Students' Association (SESA)"
                 role="Development Lead"
-                period="APR 2024 — SEP 2024"
+                period="APR 2024 - SEP 2024"
                 logo={SESA}
                 logoAlt="uOttawa SESA"
                 logoClass="h-10 w-10 rounded-full object-cover"
@@ -243,7 +243,7 @@ function Experience() {
             </VerticalTimelineElement>
 
             <VerticalTimelineElement
-              date={<span className="font-display text-ocean-200 font-semibold tracking-tight">Jan 2024 — May 2024</span>}
+              date={<span className="font-display text-ocean-200 font-semibold tracking-tight">Jan 2024 - May 2024</span>}
               iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
               icon={<FaBriefcase />}
               contentStyle={CONTENT_STYLE}
@@ -253,7 +253,7 @@ function Experience() {
                 kind="work"
                 org="Fuze: an 8x8 Company"
                 role="Software Engineer Intern · Backend"
-                period="JAN 2024 — MAY 2024"
+                period="JAN 2024 - MAY 2024"
                 logo={eightbyeight}
                 logoAlt="Fuze: an 8x8 Company"
                 logoClass="h-10 w-10 object-contain"
@@ -263,7 +263,7 @@ function Experience() {
             </VerticalTimelineElement>
 
             <VerticalTimelineElement
-              date={<span className="font-display text-violet-200 font-semibold tracking-tight">Jun 2023 — Mar 2024</span>}
+              date={<span className="font-display text-violet-200 font-semibold tracking-tight">Jun 2023 - Mar 2024</span>}
               iconStyle={{ ...ICON_STYLES.volunteer, color: '#fff' }}
               icon={<FaHandsHelping />}
               contentStyle={CONTENT_STYLE}
@@ -271,9 +271,9 @@ function Experience() {
             >
               <TimelineCard
                 kind="volunteer"
-                org="uOttaHack — Ottawa's Largest Hackathon"
+                org="uOttaHack (Ottawa's Largest Hackathon)"
                 role="MLH Hackathon Organizer"
-                period="JUN 2023 — MAR 2024"
+                period="JUN 2023 - MAR 2024"
                 logo={uOttaHack}
                 logoAlt="uOttaHack"
                 logoClass="h-10 w-10 object-cover rounded-xl"

@@ -89,9 +89,7 @@ function Contact() {
   };
 
   return (
-    <div className="contact-section py-16 relative bg-transparent" style={{
-      minHeight: '100vh'
-    }}>
+    <div className="contact-section py-16 relative bg-transparent">
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           ref={titleRef}

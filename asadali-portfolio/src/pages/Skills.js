@@ -395,7 +395,7 @@ function Skills() {
             <span className="eyebrow">Toolkit</span>
             <h1 className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight">Skills</h1>
             <p className="text-ocean-100/70 mt-3 max-w-xl mx-auto text-sm md:text-base">
-              The tech I reach for most often — flowing by. Hover to pause, click any chip for the docs.
+              The tech I reach for most often, flowing by. Hover to pause, click any chip for the docs.
             </p>
           </div>
         </FadeInSection>
