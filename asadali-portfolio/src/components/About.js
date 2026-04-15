@@ -65,7 +65,7 @@ function About() {
             />
             <Row label="Learning" value="AI workflows & LLMs in production" />
             <Row label="Based in" value="Ottawa, Ontario" />
-            <Row label="Grinding" value="CS2 at a top-2,000 NA Faceit level" />
+            <Row label="Grinding" value="CS2, Level 10 Faceit (Top 2,000 NA)" />
           </dl>
         </aside>
       </div>
