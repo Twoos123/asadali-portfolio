@@ -15,7 +15,7 @@ export const projectList = [
         id: 10,
         name: "CS2 Meta Engine",
         description: "A pro-level CS2 demo analysis platform: mines HLTV and FACEIT demos, clusters grenade lineups, renders 2D match replays, tracks economy, generates heatmaps, and produces automated anti-strat scouting reports — features neither Refrag nor SCL offer.",
-        image: ProjCS2,
+        image: "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/landing.png",
         skills: ["Python", "TypeScript", "Rust", "FastAPI", "React", "Vite", "Tailwind CSS", "Recharts", "Anthropic Claude"],
         github: "https://github.com/Twoos123/cs2-meta-engine",
         repoUrl: "https://github.com/Twoos123/cs2-meta-engine",
