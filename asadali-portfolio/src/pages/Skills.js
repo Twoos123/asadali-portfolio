@@ -363,42 +363,48 @@ function Skills() {
     { name: "Streamlit", link: "https://streamlit.io" },
   ];
 
-  const developerTools = [
-    { name: "GitHub", link: "https://github.com" },
-    { name: "Git", link: "https://git-scm.com" },
-    { name: "Docker", link: "https://www.docker.com" },
+  const cloudDevops = [
+    { name: "AWS", link: "https://aws.amazon.com" },
     { name: "Kubernetes", link: "https://kubernetes.io" },
+    { name: "Docker", link: "https://www.docker.com" },
+    { name: "Terraform", link: "https://www.terraform.io" },
+    { name: "Ansible", link: "https://www.ansible.com" },
+    { name: "Prometheus", link: "https://prometheus.io" },
+    { name: "Grafana", link: "https://grafana.com" },
     { name: "Jenkins", link: "https://www.jenkins.io" },
     { name: "Linux", link: "https://www.kernel.org" },
     { name: "Bash", link: "https://www.gnu.org/software/bash/" },
+    { name: "Bitbucket", link: "https://bitbucket.org" },
+  ];
+
+  const databases = [
+    { name: "PostgreSQL", link: "https://www.postgresql.org" },
+    { name: "MySQL", link: "https://www.mysql.com" },
+    { name: "MongoDB", link: "https://www.mongodb.com" },
+    { name: "Redis", link: "https://redis.io" },
+    { name: "SQLite", link: "https://www.sqlite.org" },
+    { name: "DuckDB", link: "https://duckdb.org" },
+    { name: "Trino Starburst", link: "https://trino.io" },
+    { name: "Firebase", link: "https://firebase.google.com" },
+    { name: "Supabase", link: "https://supabase.com" },
+  ];
+
+  const toolsPlatforms = [
+    { name: "Git", link: "https://git-scm.com" },
+    { name: "GitHub", link: "https://github.com" },
+    { name: "Postman", link: "https://www.postman.com" },
+    { name: "Playwright", link: "https://playwright.dev" },
+    { name: "JIRA", link: "https://www.atlassian.com/software/jira" },
+    { name: "OAuth 2.0", link: "https://oauth.net/2/" },
+    { name: "Stripe", link: "https://stripe.com" },
+    { name: "Vercel", link: "https://vercel.com" },
+    { name: "Cloudinary", link: "https://cloudinary.com" },
+    { name: "OpenAI", link: "https://openai.com" },
+    { name: "Groq", link: "https://groq.com" },
+    { name: "Co:Here", link: "https://cohere.ai" },
     { name: "Apache", link: "https://httpd.apache.org" },
     { name: "Drupal", link: "https://www.drupal.org" },
     { name: "Android Studio", link: "https://developer.android.com/studio" },
-    { name: "Vercel", link: "https://vercel.com" },
-    { name: "Firebase", link: "https://firebase.google.com" },
-    { name: "Supabase", link: "https://supabase.com" },
-    { name: "MongoDB", link: "https://www.mongodb.com" },
-    { name: "PostgreSQL", link: "https://www.postgresql.org" },
-    { name: "MySQL", link: "https://www.mysql.com" },
-    { name: "Redis", link: "https://redis.io" },
-    { name: "SQLite", link: "https://www.sqlite.org" },
-    { name: "Postman", link: "https://www.postman.com" },
-    { name: "JIRA", link: "https://www.atlassian.com/software/jira" },
-    { name: "Stripe", link: "https://stripe.com" },
-    { name: "Cloudinary", link: "https://cloudinary.com" },
-    { name: "Groq", link: "https://groq.com" },
-    { name: "Co:Here", link: "https://cohere.ai" },
-    { name: "OpenAI", link: "https://openai.com" },
-    { name: "Terraform", link: "https://www.terraform.io" },
-    { name: "Ansible", link: "https://www.ansible.com" },
-    { name: "Playwright", link: "https://playwright.dev" },
-    { name: "Prometheus", link: "https://prometheus.io" },
-    { name: "Grafana", link: "https://grafana.com" },
-    { name: "DuckDB", link: "https://duckdb.org" },
-    { name: "AWS", link: "https://aws.amazon.com" },
-    { name: "Bitbucket", link: "https://bitbucket.org" },
-    { name: "Trino Starburst", link: "https://trino.io" },
-    { name: "OAuth 2.0", link: "https://oauth.net/2/" },
   ];
 
   return (
@@ -438,19 +444,31 @@ function Skills() {
               label="01 · LANGUAGES"
               items={programmingLanguages}
               direction="left"
-              duration={40}
+              duration={38}
             />
             <MarqueeRow
               label="02 · FRAMEWORKS"
               items={frameworks}
               direction="right"
-              duration={50}
+              duration={44}
             />
             <MarqueeRow
-              label="03 · TOOLS & PLATFORMS"
-              items={developerTools}
+              label="03 · CLOUD & DEVOPS"
+              items={cloudDevops}
               direction="left"
-              duration={80}
+              duration={40}
+            />
+            <MarqueeRow
+              label="04 · DATABASES"
+              items={databases}
+              direction="right"
+              duration={36}
+            />
+            <MarqueeRow
+              label="05 · TOOLS & ECOSYSTEM"
+              items={toolsPlatforms}
+              direction="left"
+              duration={46}
             />
           </div>
         </FadeInSection>
@@ -462,7 +480,9 @@ function Skills() {
         categories={[
           { label: '01 · LANGUAGES', title: 'Programming Languages', items: programmingLanguages },
           { label: '02 · FRAMEWORKS', title: 'Frameworks & Libraries', items: frameworks },
-          { label: '03 · TOOLS', title: 'Tools & Platforms', items: developerTools },
+          { label: '03 · CLOUD & DEVOPS', title: 'Cloud, Infrastructure & DevOps', items: cloudDevops },
+          { label: '04 · DATABASES', title: 'Databases & Storage', items: databases },
+          { label: '05 · TOOLS', title: 'Developer Tools & Ecosystem', items: toolsPlatforms },
         ]}
       />
     </div>

@@ -5,13 +5,12 @@ import { FaBriefcase, FaHandsHelping, FaHourglassHalf, FaMapMarkerAlt } from 're
 import { FadeInSection } from '../components/animations';
 import { oceanLife } from '../helpers/oceanLife';
 
-const uOttaHack = process.env.PUBLIC_URL + '/assets/uOttaHack.svg';
-const eightbyeight = process.env.PUBLIC_URL + '/assets/8x8.svg';
-const SESA = process.env.PUBLIC_URL + '/assets/SESA.svg';
-const uOttawa = process.env.PUBLIC_URL + '/assets/uottawa.svg';
-const HealthCanada = process.env.PUBLIC_URL + '/assets/health-canada.svg';
-
-const SunLife = process.env.PUBLIC_URL + '/assets/sunlife.svg';
+const uOttaHack = process.env.PUBLIC_URL + '/assets/uOttaHack.svg?v=3';
+const eightbyeight = process.env.PUBLIC_URL + '/assets/8x8.svg?v=3';
+const SESA = process.env.PUBLIC_URL + '/assets/SESA.svg?v=3';
+const uOttawa = process.env.PUBLIC_URL + '/assets/uottawa.svg?v=3';
+const HealthCanada = process.env.PUBLIC_URL + '/assets/health-canada.svg?v=3';
+const SunLife = process.env.PUBLIC_URL + '/assets/sunlife.svg?v=3';
 
 const ACCENTS = {
   work: 'from-ocean-400 to-ocean-500',
