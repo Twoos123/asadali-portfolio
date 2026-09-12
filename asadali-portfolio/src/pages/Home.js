@@ -10,7 +10,6 @@ import Contact from './Contact';
 import About from '../components/About';
 import { StaggerContainer, FloatingElement } from '../components/animations';
 import { oceanLife } from '../helpers/oceanLife';
-import DepthIndicator from '../components/DepthIndicator';
 import useScrollProgress from '../hooks/useScrollProgress';
 
 function Home({ backgroundColor, setBackgroundColor }) {
@@ -462,9 +461,6 @@ function Home({ backgroundColor, setBackgroundColor }) {
     <div id="home" className="ocean-transition relative" style={{ 
       minHeight: '100vh'
     }}>
-      {/* Depth Indicator - Hidden on mobile */}
-      {!isMobile && <DepthIndicator />}
-      
       <div className="relative">
 
         {/* Side seaweed that appears as you scroll through all sections - hidden on mobile */}

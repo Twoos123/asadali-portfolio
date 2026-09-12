@@ -33,11 +33,6 @@ function Footer() {
 
           </div>
         </div>
-        <div className="text-center text-gray-300">
-          <p className="text-sm mt-2 text-gray-400">
-            Made with ❤️ and lots of ☕
-          </p>
-        </div>
       </div>
     </footer>
   );

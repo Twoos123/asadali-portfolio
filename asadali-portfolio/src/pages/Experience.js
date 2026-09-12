@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import "react-vertical-timeline-component/style.min.css";
-import { FaBriefcase, FaHandsHelping, FaHourglassHalf } from 'react-icons/fa';
+import { FaBriefcase, FaHandsHelping, FaHourglassHalf, FaMapMarkerAlt } from 'react-icons/fa';
 import { FadeInSection } from '../components/animations';
 import { oceanLife } from '../helpers/oceanLife';
 
-const uOttaHack = process.env.PUBLIC_URL + '/assets/uOttaHack.JPG';
+const uOttaHack = process.env.PUBLIC_URL + '/assets/uOttaHack.svg';
 const eightbyeight = process.env.PUBLIC_URL + '/assets/8x8.svg';
 const SESA = process.env.PUBLIC_URL + '/assets/SESA.svg';
 const uOttawa = process.env.PUBLIC_URL + '/assets/uottawa.svg';
-const HealthCanada = process.env.PUBLIC_URL + '/assets/health-canada.png';
+const HealthCanada = process.env.PUBLIC_URL + '/assets/health-canada.svg';
+
+const SunLife = process.env.PUBLIC_URL + '/assets/sunlife.svg';
 
 const ACCENTS = {
   work: 'from-ocean-400 to-ocean-500',
@@ -32,25 +34,71 @@ const CONTENT_STYLE = {
 
 const CONTENT_ARROW_STYLE = { display: 'none' };
 
-function TimelineCard({ kind, org, role, period, logo, logoAlt, logoClass, children }) {
+function TimelineCard({ kind, org, role, period, location, logo, logoAlt, logoClass, isIncoming, skills, children }) {
   return (
     <div
-      className="relative rounded-3xl overflow-hidden border border-white/15 bg-ocean-950/45 shadow-glass"
+      className="group relative rounded-2xl overflow-hidden border border-white/15 bg-ocean-950/50 hover:bg-ocean-950/60 hover:border-white/25 transition-all duration-300 shadow-glass"
       style={{ backdropFilter: 'blur(20px) saturate(180%)', WebkitBackdropFilter: 'blur(20px) saturate(180%)' }}
     >
-      <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${ACCENTS[kind]}`} />
-      <div className="p-6">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="flex-shrink-0 h-14 w-14 rounded-2xl bg-white/95 flex items-center justify-center shadow-lg">
-            <img src={logo} alt={logoAlt} className={logoClass} />
+      <div className={`absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b ${ACCENTS[kind]}`} />
+      <div className="p-5 sm:p-6">
+        {/* Header: Logo + Right Content (Title Row with Date Badge, Role, Location) */}
+        <div className="flex items-start gap-3.5 mb-2.5">
+          {/* Logo Badge */}
+          <div className="flex-shrink-0 h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-white shadow-md flex items-center justify-center p-2 overflow-hidden">
+            {isIncoming ? (
+              <span className="text-3xl font-bold text-amber-500 font-display">?</span>
+            ) : (
+              <img src={logo} alt={logoAlt} className={logoClass || "h-full w-full object-contain"} />
+            )}
           </div>
+
+          {/* Texts & Date Badge */}
           <div className="min-w-0 flex-1">
-            <span className="eyebrow block text-[10px]">{period}</span>
-            <h3 className="font-display text-lg font-semibold text-white leading-snug mt-1 tracking-tight">{org}</h3>
+            {/* Top row: Organization name + Period badge */}
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-white tracking-tight leading-tight m-0">{org}</h3>
+              <span className="shrink-0 hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold tracking-wider uppercase bg-white/10 border border-white/10 text-ocean-100">
+                {period}
+              </span>
+            </div>
+
+            {/* Role */}
+            <div className="text-xs sm:text-sm font-semibold text-ocean-200 tracking-wide mt-0.5 whitespace-nowrap">{role}</div>
+
+            {/* Location */}
+            {location && (
+              <div className="text-[11px] sm:text-xs text-ocean-300/80 flex items-center gap-1.5 mt-0.5 font-medium tracking-wide whitespace-nowrap">
+                <FaMapMarkerAlt className="text-ocean-400 text-[10px] shrink-0" />
+                <span>{location}</span>
+              </div>
+            )}
           </div>
         </div>
-        <p className="text-sm font-semibold text-ocean-200 mb-2 tracking-wide uppercase">{role}</p>
-        <p className="text-ocean-50/85 text-sm leading-relaxed">{children}</p>
+
+        {/* Mobile period display */}
+        <div className="sm:hidden mb-2">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase bg-white/10 border border-white/10 text-ocean-100">
+            {period}
+          </span>
+        </div>
+
+        {children && (
+          <p className="text-ocean-50/85 text-xs sm:text-sm leading-relaxed mb-3">{children}</p>
+        )}
+
+        {skills && skills.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-1.5 mt-1">
+            {skills.map((skill, idx) => (
+              <span
+                key={idx}
+                className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-white/[0.05] border border-white/[0.08] text-ocean-200/90 group-hover:bg-white/[0.08] group-hover:border-white/15 transition-all"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -142,8 +190,8 @@ function Experience() {
         <FadeInSection direction="up" delay={0.3} threshold={0.2}>
           <VerticalTimeline lineColor="rgba(255,255,255,0.18)" animate={!isMobile}>
 
+            {/* Next Chapter / New Grad Availability */}
             <VerticalTimelineElement
-              date={<span className="font-display text-amber-200 font-semibold tracking-tight">Incoming · Summer 2026</span>}
               iconStyle={{ ...ICON_STYLES.incoming, color: '#fff', boxShadow: '0 0 0 4px rgba(251, 191, 36, 0.25), 0 0 20px rgba(251, 191, 36, 0.5)' }}
               icon={<FaHourglassHalf />}
               contentStyle={CONTENT_STYLE}
@@ -151,19 +199,17 @@ function Experience() {
             >
               <TimelineCard
                 kind="incoming"
-                org="Health Canada"
-                role="Software Engineer Intern · Fullstack (Incoming)"
-                period="MAY 2026 - AUG 2026"
-                logo={HealthCanada}
-                logoAlt="Health Canada"
-                logoClass="h-10 w-10 object-contain"
-              >
-                Returning to Health Canada for Summer 2026 as a fullstack intern, continuing work on secure, department-wide internal tools that power regulatory workflows.
-              </TimelineCard>
+                org="Next Chapter"
+                role="Software Engineer · Seeking New Grad Roles"
+                period="Available Dec 2026"
+                location="Ottawa · Toronto · Montreal · Vancouver · Remote"
+                isIncoming={true}
+                skills={['Full-Stack', 'Backend', 'Distributed Systems', 'Cloud & DevOps']}
+              />
             </VerticalTimelineElement>
 
+            {/* Sun Life */}
             <VerticalTimelineElement
-              date={<span className="font-display text-ocean-200 font-semibold tracking-tight">Oct 2025 - Apr 2026</span>}
               iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
               icon={<FaBriefcase />}
               contentStyle={CONTENT_STYLE}
@@ -171,19 +217,19 @@ function Experience() {
             >
               <TimelineCard
                 kind="work"
-                org="University of Ottawa, Faculty of Law"
-                role="Software Engineer (Part-Time) · Fullstack"
-                period="OCT 2025 - APR 2026"
-                logo={uOttawa}
-                logoAlt="uOttawa"
-                logoClass="h-10 w-10 object-contain p-0.5"
-              >
-                Modernized the Faculty's Course Management System, refactoring 20,000+ lines of legacy code to cut load times by 55% for 100+ users. Established QA workflows and technical documentation to standardize deployment.
-              </TimelineCard>
+                org="Sun Life"
+                role="Cloud Infrastructure Analyst Intern · DevOps"
+                period="Sep 2026 - Dec 2026"
+                location="Toronto, ON · Remote"
+                logo={SunLife}
+                logoAlt="Sun Life"
+                logoClass="h-full w-full object-contain"
+                skills={['Kubernetes', 'Docker', 'Terraform', 'Ansible', 'Prometheus', 'AWS']}
+              />
             </VerticalTimelineElement>
 
+            {/* Health Canada 2026 */}
             <VerticalTimelineElement
-              date={<span className="font-display text-ocean-200 font-semibold tracking-tight">May 2025 - Aug 2025</span>}
               iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
               icon={<FaBriefcase />}
               contentStyle={CONTENT_STYLE}
@@ -193,57 +239,17 @@ function Experience() {
                 kind="work"
                 org="Health Canada"
                 role="Software Engineer Intern · Fullstack"
-                period="MAY 2025 - AUG 2025"
+                period="May 2026 - Aug 2026"
+                location="Ottawa, ON · Hybrid"
                 logo={HealthCanada}
                 logoAlt="Health Canada"
-                logoClass="h-10 w-10 object-contain"
-              >
-                Built a department-wide Case Management System in Python/Streamlit with role-based access control, audit logs, and secure data pipelines for regulatory workflows. Developed backend modules for SharePoint migration and integrated BM25 + ArcGIS for reliable address matching. Engineered a secure pipeline handling 500+ daily transactions, cutting document processing time by 80%.
-              </TimelineCard>
+                logoClass="h-full w-full object-contain"
+                skills={['React.js', 'FastAPI', 'Python', 'Vite', 'SQLite', 'CI/CD']}
+              />
             </VerticalTimelineElement>
 
+            {/* uOttawa Faculty of Law */}
             <VerticalTimelineElement
-              date={<span className="font-display text-violet-200 font-semibold tracking-tight">Sep 2024 - Present</span>}
-              iconStyle={{ ...ICON_STYLES.volunteer, color: '#fff' }}
-              icon={<FaHandsHelping />}
-              contentStyle={CONTENT_STYLE}
-              contentArrowStyle={CONTENT_ARROW_STYLE}
-            >
-              <TimelineCard
-                kind="volunteer"
-                org="uOttawa Software Engineering Students' Association (SESA)"
-                role="Co-Director → Advisor"
-                period="SEP 2024 - PRESENT"
-                logo={SESA}
-                logoAlt="uOttawa SESA"
-                logoClass="h-10 w-10 rounded-full object-cover"
-              >
-                Managed operations for a 28-person team and partnered with 20+ companies to run technical workshops, scaling the association's reach to 2,500+ followers and 300k+ impressions. Led full-stack development of SESA's website from design to deployment, improving resource accessibility for 3,000+ EECS students. Now advising the incoming executive team through the transition.
-              </TimelineCard>
-            </VerticalTimelineElement>
-
-            <VerticalTimelineElement
-              date={<span className="font-display text-violet-200 font-semibold tracking-tight">Apr 2024 - Sep 2024</span>}
-              iconStyle={{ ...ICON_STYLES.volunteer, color: '#fff' }}
-              icon={<FaHandsHelping />}
-              contentStyle={CONTENT_STYLE}
-              contentArrowStyle={CONTENT_ARROW_STYLE}
-            >
-              <TimelineCard
-                kind="volunteer"
-                org="uOttawa Software Engineering Students' Association (SESA)"
-                role="Development Lead"
-                period="APR 2024 - SEP 2024"
-                logo={SESA}
-                logoAlt="uOttawa SESA"
-                logoClass="h-10 w-10 rounded-full object-cover"
-              >
-                Led the development team at uOttawa SESA, driving technical initiatives and full-stack project execution that laid the groundwork for the association's digital infrastructure and student-engagement platform.
-              </TimelineCard>
-            </VerticalTimelineElement>
-
-            <VerticalTimelineElement
-              date={<span className="font-display text-ocean-200 font-semibold tracking-tight">Jan 2024 - May 2024</span>}
               iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
               icon={<FaBriefcase />}
               contentStyle={CONTENT_STYLE}
@@ -251,19 +257,39 @@ function Experience() {
             >
               <TimelineCard
                 kind="work"
-                org="Fuze: an 8x8 Company"
-                role="Software Engineer Intern · Backend"
-                period="JAN 2024 - MAY 2024"
-                logo={eightbyeight}
-                logoAlt="Fuze: an 8x8 Company"
-                logoClass="h-10 w-10 object-contain"
-              >
-                Optimized REST API efficiency via request batching and async execution, cutting CI/CD feedback time by 86% through Docker + Kubernetes containerization. Built Spring Boot + React microservices powering VOIP systems (Cisco, Yealink). Migrated pipelines from Jenkins to GitHub Actions and added automated regression testing, reducing API downtime by 60%.
-              </TimelineCard>
+                org="University of Ottawa"
+                role="Software Engineer Intern · Fullstack"
+                period="Oct 2025 - Apr 2026"
+                location="Ottawa, ON · Hybrid"
+                logo={uOttawa}
+                logoAlt="University of Ottawa"
+                logoClass="h-full w-full object-contain"
+                skills={['PHP', 'MySQL', 'Docker', 'Apache', 'Linux', 'Drupal']}
+              />
             </VerticalTimelineElement>
 
+            {/* Health Canada 2025 */}
             <VerticalTimelineElement
-              date={<span className="font-display text-violet-200 font-semibold tracking-tight">Jun 2023 - Mar 2024</span>}
+              iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
+              icon={<FaBriefcase />}
+              contentStyle={CONTENT_STYLE}
+              contentArrowStyle={CONTENT_ARROW_STYLE}
+            >
+              <TimelineCard
+                kind="work"
+                org="Health Canada"
+                role="Software Engineer Intern · Fullstack"
+                period="May 2025 - Aug 2025"
+                location="Ottawa, ON · Hybrid"
+                logo={HealthCanada}
+                logoAlt="Health Canada"
+                logoClass="h-full w-full object-contain"
+                skills={['Python', 'Pandas', 'Streamlit', 'ArcGIS', 'DuckDB', 'Excel']}
+              />
+            </VerticalTimelineElement>
+
+            {/* SESA */}
+            <VerticalTimelineElement
               iconStyle={{ ...ICON_STYLES.volunteer, color: '#fff' }}
               icon={<FaHandsHelping />}
               contentStyle={CONTENT_STYLE}
@@ -271,18 +297,56 @@ function Experience() {
             >
               <TimelineCard
                 kind="volunteer"
-                org="uOttaHack (Ottawa's Largest Hackathon)"
-                role="MLH Hackathon Organizer"
-                period="JUN 2023 - MAR 2024"
-                logo={uOttaHack}
-                logoAlt="uOttaHack"
-                logoClass="h-10 w-10 object-cover rounded-xl"
-              >
-                Helped run Ottawa's largest hackathon alongside a 25-person team, serving 1,000+ participants. Coordinated logistics, scheduling, and venue setup for 30+ events across the 36-hour weekend, and led workshops + hacker-experience activities that earned a 95% post-event satisfaction rate.
-              </TimelineCard>
+                org="uOttawa SESA"
+                role="Co-Director → Advisor"
+                period="Apr 2024 - Present"
+                location="Ottawa, ON"
+                logo={SESA}
+                logoAlt="uOttawa SESA"
+                logoClass="h-full w-full object-contain"
+                skills={['Leadership', 'Full-Stack Web', 'Event Operations', 'Mentorship']}
+              />
             </VerticalTimelineElement>
 
-            <VerticalTimelineElement iconStyle={{ background: 'transparent', border: 'none' }} />
+            {/* 8x8 */}
+            <VerticalTimelineElement
+              iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
+              icon={<FaBriefcase />}
+              contentStyle={CONTENT_STYLE}
+              contentArrowStyle={CONTENT_ARROW_STYLE}
+            >
+              <TimelineCard
+                kind="work"
+                org="8x8"
+                role="Software Engineer Intern · Backend"
+                period="Jan 2024 - May 2024"
+                location="Ottawa, ON · Hybrid"
+                logo={eightbyeight}
+                logoAlt="8x8"
+                logoClass="h-full w-full object-contain"
+                skills={['Java', 'Spring Boot', 'Docker', 'REST APIs', 'OAuth', 'Postman']}
+              />
+            </VerticalTimelineElement>
+
+            {/* uOttaHack */}
+            <VerticalTimelineElement
+              iconStyle={{ ...ICON_STYLES.volunteer, color: '#fff' }}
+              icon={<FaHandsHelping />}
+              contentStyle={CONTENT_STYLE}
+              contentArrowStyle={CONTENT_ARROW_STYLE}
+            >
+              <TimelineCard
+                kind="volunteer"
+                org="uOttaHack"
+                role="MLH Hackathon Organizer"
+                period="Jun 2023 - Mar 2024"
+                location="Ottawa, ON"
+                logo={uOttaHack}
+                logoAlt="uOttaHack"
+                logoClass="h-full w-full object-contain"
+                skills={['Event Logistics', 'Technical Workshops', 'Community']}
+              />
+            </VerticalTimelineElement>
           </VerticalTimeline>
         </FadeInSection>
       </div>

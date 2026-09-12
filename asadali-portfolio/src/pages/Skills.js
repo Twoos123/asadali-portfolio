@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaExpand, FaTimes } from 'react-icons/fa';
+import { FaExpand, FaTimes, FaAws } from 'react-icons/fa';
 import { FadeInSection } from '../components/animations';
 import { oceanLife } from '../helpers/oceanLife';
-import { SiSupabase, SiStripe } from 'react-icons/si';
+import { SiSupabase, SiStripe, SiTerraform, SiAnsible, SiPrometheus, SiGrafana, SiDuckdb, SiBitbucket, SiTrino } from 'react-icons/si';
 
 const SVG_FILE_MAP = {
   'Groq': 'Groq.svg',
@@ -53,12 +53,21 @@ const SVG_FILE_MAP = {
   'OAuth 2.0': 'Oauth.svg',
   'Bash': 'Bash.svg',
   'FastAPI': 'FastAPI.svg',
+  'Playwright': 'Playwright.svg',
   'Elixir': 'Elixir.svg',
 };
 
 const REACT_ICON_MAP = {
   'Supabase': { component: SiSupabase, color: '#3ECF8E' },
   'Stripe': { component: SiStripe, color: '#635BFF' },
+  'Terraform': { component: SiTerraform, color: '#844FBA' },
+  'Ansible': { component: SiAnsible, color: '#EE0000' },
+  'Prometheus': { component: SiPrometheus, color: '#E6522C' },
+  'Grafana': { component: SiGrafana, color: '#F46800' },
+  'DuckDB': { component: SiDuckdb, color: '#FFF000' },
+  'AWS': { component: FaAws, color: '#FF9900' },
+  'Bitbucket': { component: SiBitbucket, color: '#0052CC' },
+  'Trino Starburst': { component: SiTrino, color: '#DD00A1' },
 };
 
 function SkillChip({ name, link }) {
@@ -380,6 +389,15 @@ function Skills() {
     { name: "Groq", link: "https://groq.com" },
     { name: "Co:Here", link: "https://cohere.ai" },
     { name: "OpenAI", link: "https://openai.com" },
+    { name: "Terraform", link: "https://www.terraform.io" },
+    { name: "Ansible", link: "https://www.ansible.com" },
+    { name: "Playwright", link: "https://playwright.dev" },
+    { name: "Prometheus", link: "https://prometheus.io" },
+    { name: "Grafana", link: "https://grafana.com" },
+    { name: "DuckDB", link: "https://duckdb.org" },
+    { name: "AWS", link: "https://aws.amazon.com" },
+    { name: "Bitbucket", link: "https://bitbucket.org" },
+    { name: "Trino Starburst", link: "https://trino.io" },
     { name: "OAuth 2.0", link: "https://oauth.net/2/" },
   ];
 

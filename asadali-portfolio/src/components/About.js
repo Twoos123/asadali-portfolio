@@ -14,10 +14,11 @@ function About() {
           <div className="mt-5 space-y-4 text-ocean-50/85 leading-relaxed text-base md:text-lg">
             <p>
               I'm a final-year software engineering student at uOttawa. Most of my time
-              goes toward real product work, most recently a full-stack rebuild of the
-              Faculty of Law's course platform. On the side, I tend to build the tools I
-              wish were free: I'd rather put in the engineering time than pay a monthly
-              subscription for something I could own. That's where{' '}
+              goes toward real product work, currently interning at <span className="text-ocean-100">Sun Life</span> as
+              a Cloud Infrastructure Analyst and recently leading the enterprise rebuild of
+              an internal Case Management Tool at <span className="text-ocean-100">Health Canada</span>.
+              On the side, I tend to build the tools I wish were free: I'd rather put in the engineering
+              time than pay a monthly subscription for something I could own. That's where{' '}
               <Link to="/project/10" className="text-ocean-200 underline decoration-ocean-400/50 underline-offset-4 hover:text-white hover:decoration-ocean-300 transition-colors">
                 CS2 Meta Engine
               </Link>{' '}
@@ -25,9 +26,9 @@ function About() {
               a high level, so I'm building the analysis pipeline myself.
             </p>
             <p>
-              This summer I'm heading back to <span className="text-ocean-100">Health
-              Canada</span>. That'll be my fourth SWE role, after internships at{' '}
-              <span className="text-ocean-100">8x8</span>, Health Canada, and part-time
+              This fall at Sun Life marks my fifth internship role, after previous internships at{' '}
+              <span className="text-ocean-100">Health Canada</span>,{' '}
+              <span className="text-ocean-100">8x8</span>, and part-time
               fullstack work at <span className="text-ocean-100">uOttawa's Faculty of
               Law</span>. In between I advise the uOttawa Software Engineering Students'
               Association and spend a lot of time going deep on AI: how modern agentic
@@ -54,7 +55,7 @@ function About() {
           </div>
 
           <dl className="space-y-4 text-sm">
-            <Row label="Role" value="Incoming SWE Intern @ Health Canada (Summer 2026)" />
+            <Row label="Role" value="Cloud Infrastructure Analyst Intern - DevOps @ Sun Life" />
             <Row
               label="Building"
               value={
