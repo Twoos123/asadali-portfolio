@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://asadali-portfolio.onrender.com https://drive.google.com https://docs.google.com; frame-src https://drive.google.com https://docs.google.com https://*.google.com https://*.googleusercontent.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,24 +21,12 @@
       rel="stylesheet"
     />
     <title>Asad Ali | Portfolio</title>
-    <script>
-      // Decode SPA path set by 404.html redirect (see public/404.html).
-      (function (l) {
-        if (l.search[1] === '/') {
-          var decoded = l.search
-            .slice(1)
-            .split('&')
-            .map(function (s) { return s.replace(/~and~/g, '&'); })
-            .join('?');
-          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
-        }
-      })(window.location);
-    </script>
-    <script type="module" crossorigin src="/assets/index-DLpPl90B.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Dj2ZUsFv.css">
+    <script src="/spa-redirect.js"></script>
+    <script type="module" crossorigin src="/assets/index-DNxDBYyJ.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CakZfc1G.css">
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>
