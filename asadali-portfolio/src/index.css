@@ -48,7 +48,8 @@
   animation: marquee-right linear infinite;
 }
 
-.marquee-viewport:hover .marquee-track {
+.marquee-viewport:hover .marquee-track,
+.marquee-track.is-offscreen {
   animation-play-state: paused;
 }
 
@@ -57,52 +58,322 @@
           mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
 }
 
-/* Seaweed Animations */
-@keyframes seaweed-sway {
+/* The ocean's depth colour, on its own fixed layer behind the whole page. */
+.ocean-water {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Ocean life layers (src/components/ocean). Creatures, bubbles and particles are placed
+   and moved entirely through inline transforms written by the simulation. */
+.ocean-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint;
+}
+
+.ocean-creature,
+.ocean-bubble {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+
+.ocean-creature svg {
+  display: block;
+}
+
+/* Page-wide drifting particles (src/components/ocean/MarineSnow.js): page-tall layers of
+   dots that scroll natively, with the drift and parallax run by the compositor. */
+.marine-snow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  --snow-range: 0px;
+}
+
+.snow-depth,
+.snow-parallax {
+  position: absolute;
+  inset: 0;
+}
+
+/* Pale specks thin out with depth while glowing plankton take over. */
+.snow-near {
+  -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent 70%);
+  mask-image: linear-gradient(to bottom, #000 35%, transparent 70%);
+}
+
+.snow-glow {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 35%, #000 70%);
+  mask-image: linear-gradient(to bottom, transparent 35%, #000 70%);
+}
+
+/* Taller than its layer by one tile, so sinking by exactly a tile loops seamlessly. */
+.snow-drift {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -900px;
+  bottom: 0;
+  background-repeat: repeat;
+  animation: snow-sink 110s linear infinite;
+  will-change: transform;
+}
+
+.snow-near .snow-drift {
+  animation-duration: 70s;
+}
+
+.snow-glow .snow-drift {
+  animation-duration: 90s;
+}
+
+@keyframes snow-sink {
+  to {
+    transform: translateY(900px);
+  }
+}
+
+/* Distant layers lag behind the page as it scrolls (where scroll-driven animations exist). */
+@supports (animation-timeline: scroll()) {
+  .snow-far .snow-parallax,
+  .snow-glow .snow-parallax {
+    animation: snow-parallax linear both;
+    animation-timeline: scroll(root);
+    will-change: transform;
+  }
+
+  .snow-far .snow-parallax {
+    --lag: 0.45;
+    top: calc(var(--snow-range) * -0.45);
+  }
+
+  .snow-glow .snow-parallax {
+    --lag: 0.2;
+    top: calc(var(--snow-range) * -0.2);
+  }
+
+  @keyframes snow-parallax {
+    to {
+      transform: translateY(calc(var(--snow-range) * var(--lag)));
+    }
+  }
+}
+
+.ocean-food {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 40% 60% 45% 55%;
+  background: #d97706;
+  box-shadow: inset -1px -1px 0 rgba(120, 53, 15, 0.45);
+  will-change: transform, opacity;
+}
+
+/* Page-wide darkness of the deep end (src/components/ocean/DeepLight.js). Its opacity
+   follows scroll depth; the light circle fades from clear to dark at its edge and its huge
+   box-shadow darkens everything else, so following the cursor never repaints. */
+.deep-dark {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* Where supported, the darkness follows scroll on the compositor (no lag on fast scrolls);
+   elsewhere DeepLight.js sets the opacity from its scroll handler. */
+@supports (animation-timeline: scroll()) {
+  .deep-dark {
+    animation: deep-fade ease-in-out both;
+    animation-timeline: scroll(root);
+    animation-range: 45% 92%;
+  }
+
+  @keyframes deep-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+.deep-light {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side, rgba(186, 230, 253, 0.08), rgba(2, 6, 23, 0) 40%, rgba(2, 6, 23, 0.55) 100%);
+  box-shadow: 0 0 0 4000px rgba(2, 6, 23, 0.55);
+  will-change: transform;
+}
+
+.ocean-kraken-glow {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(closest-side, rgba(147, 51, 234, 0.32), rgba(147, 51, 234, 0.1) 60%, transparent);
+}
+
+/* Hero seabed (src/components/ocean/Seafloor.js) */
+.seafloor {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.seafloor-back {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+}
+
+.seafloor-terrain {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  display: block;
+}
+
+.seafloor-item {
+  position: absolute;
+  width: max-content;
+  translate: -50% 0;
+  transform-origin: 50% 100%;
+}
+
+.seafloor-item img,
+.seafloor-item svg {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.seafloor-kelp {
+  color: #0b4f4a;
+  opacity: 0.92;
+}
+
+/* Plants bend from the base (skew) rather than rocking rigidly. */
+.seafloor-sway {
+  transform-origin: 50% 100%;
+  animation: seafloor-sway var(--sway-duration, 6s) ease-in-out var(--sway-delay, 0s) infinite;
+}
+
+@keyframes seafloor-sway {
   0%, 100% {
-    transform: rotate(-2deg);
+    transform: skewX(var(--sway, 3deg));
   }
   50% {
-    transform: rotate(2deg);
+    transform: skewX(calc(var(--sway, 3deg) * -0.6));
   }
 }
 
-.animate-seaweed-sway {
-  animation: seaweed-sway ease-in-out infinite;
+/* Sunlight dappling the sand, clipped to the sand's shape. */
+.seafloor-light {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
 }
 
-/* Jellyfish Floating */
-@keyframes jellyfish-float {
-  0% {
-    transform: translateY(0px) translateX(-100px) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-30px) translateX(25vw) rotate(2deg);
-  }
-  50% {
-    transform: translateY(-50px) translateX(50vw) rotate(0deg);
-  }
-  75% {
-    transform: translateY(-30px) translateX(75vw) rotate(-2deg);
-  }
-  100% {
-    transform: translateY(0px) translateX(calc(100vw + 100px)) rotate(0deg);
-  }
+.seafloor-light span {
+  position: absolute;
+  translate: -50% 50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 251, 225, 0.6), rgba(255, 251, 225, 0));
+  animation: sand-light var(--light-duration, 7s) ease-in-out var(--light-delay, 0s) infinite;
+  will-change: transform, opacity;
 }
 
-/* Jellyfish Gentle Float - Stays in place with subtle movement */
-@keyframes jellyfish-gentle-float {
+@keyframes sand-light {
   0%, 100% {
-    transform: translateY(0px) translateX(0px) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-15px) translateX(10px) rotate(1deg);
+    transform: translateX(-24px) scale(0.85, 0.8);
+    opacity: 0.35;
   }
   50% {
-    transform: translateY(-25px) translateX(0px) rotate(0deg);
+    transform: translateX(24px) scale(1.15, 1.1);
+    opacity: 0.9;
   }
-  75% {
-    transform: translateY(-15px) translateX(-10px) rotate(-1deg);
+}
+
+/* Hero water surface (src/components/ocean/WaterSurface.js) */
+.water-surface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  transform: translateY(-100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.water-surface svg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.water-boat {
+  position: absolute;
+  top: 0;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+.water-ring {
+  position: absolute;
+  left: -70px;
+  top: -11px;
+  width: 140px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Kelp framing the page edges; Home's scroll handler sets each frond's lean and opacity. */
+.side-seaweed {
+  position: absolute;
+  bottom: 0;
+  color: #0f766e;
+  transform-origin: 50% 100%;
+}
+
+/* Footer "Pause animations" toggle (see hooks/useReducedMotion.js). Loading spinners keep
+   turning so a pending action never looks frozen. */
+html[data-motion-paused] *:not(.animate-spin),
+html[data-motion-paused] *::before,
+html[data-motion-paused] *::after {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seafloor-sway,
+  .seafloor-light span,
+  .snow-drift,
+  .snow-parallax,
+  .god-rays,
+  .god-rays::before,
+  .god-rays-target {
+    animation: none;
   }
 }
 
@@ -285,192 +556,6 @@ html {
   }
 }
 
-/* Enhanced Particle Systems */
-@keyframes bubble-stream-interactive {
-  0% {
-    transform: translateY(100vh) translateX(0px) scale(0.3) rotate(0deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 0.8;
-    transform: translateY(50vh) translateX(10px) scale(0.7) rotate(180deg);
-  }
-  90% {
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateY(40vh) translateX(25px) scale(1.0) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-@keyframes bubble-float-up {
-  0% {
-    transform: translateY(20px) scale(0.5);
-    opacity: 0;
-  }
-  20% {
-    opacity: 0.6;
-  }
-  50% {
-    transform: translateY(-30px) scale(0.8);
-    opacity: 0.8;
-  }
-  100% {
-    transform: translateY(-80px) scale(1.2);
-    opacity: 0;
-  }
-}
-
-@keyframes bubble-drift {
-  0%, 100% {
-    transform: translateX(0px) rotate(0deg);
-  }
-  25% {
-    transform: translateX(15px) rotate(90deg);
-  }
-  50% {
-    transform: translateX(-10px) rotate(180deg);
-  }
-  75% {
-    transform: translateX(20px) rotate(270deg);
-  }
-}
-
-.bubble-interactive {
-  position: absolute;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(173, 216, 230, 0.5), rgba(135, 206, 235, 0.2));
-  border-radius: 50%;
-  pointer-events: none;
-  box-shadow: 
-    inset 0 0 8px rgba(255, 255, 255, 0.6),
-    0 0 10px rgba(173, 216, 230, 0.3);
-  animation: bubble-float-up 6s ease-out infinite;
-  z-index: 6;
-}
-
-.bubble-interactive:hover {
-  animation-duration: 3s;
-  transform: scale(1.5);
-}
-
-.bubble-stream-enhanced {
-  animation: bubble-stream-interactive 15s infinite linear;
-}
-
-.bubble-drift-enhanced {
-  animation: bubble-drift 8s ease-in-out infinite;
-}
-
-/* Bubble Stream - 3D ascending bubbles */
-@keyframes bubble-stream {
-  0% {
-    transform: translateY(100vh) translateX(0px) scale(0.3);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.6;
-  }
-  90% {
-    opacity: 0.3;
-  }
-  100% {
-    transform: translateY(40vh) translateX(20px) scale(0.8); /* Stop at wave level (40% of viewport) */
-    opacity: 0;
-  }
-}
-
-/* Fish Swimming - Different depths */
-@keyframes fish-swim-surface {
-  0% {
-    transform: translateX(-100px) translateY(0px) scaleX(-1);
-  }
-  100% {
-    transform: translateX(calc(100vw + 100px)) translateY(-20px) scaleX(-1);
-  }
-}
-
-@keyframes fish-swim-deep {
-  0% {
-    transform: translateX(calc(100vw + 100px)) translateY(0px) scaleX(1);
-  }
-  100% {
-    transform: translateX(-100px) translateY(15px) scaleX(1);
-  }
-}
-
-/* Jellyfish Floating */
-@keyframes jellyfish-float {
-  0%, 100% {
-    transform: translateY(0px) translateX(0px) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-15px) translateX(10px) rotate(2deg);
-  }
-  50% {
-    transform: translateY(-30px) translateX(0px) rotate(0deg);
-  }
-  75% {
-    transform: translateY(-15px) translateX(-10px) rotate(-2deg);
-  }
-}
-
-/* Sea Turtle - Slow majestic movement */
-@keyframes turtle-swim {
-  0% {
-    transform: translateX(-100px) translateY(0px) scaleX(1) rotate(5deg);
-  }
-  25% {
-    transform: translateX(calc(25vw)) translateY(-40px) scaleX(1) rotate(0deg);
-  }
-  50% {
-    transform: translateX(calc(50vw)) translateY(-60px) scaleX(1) rotate(-3deg);
-  }
-  75% {
-    transform: translateX(calc(75vw)) translateY(-30px) scaleX(1) rotate(2deg);
-  }
-  100% {
-    transform: translateX(calc(100vw + 100px)) translateY(0px) scaleX(1) rotate(0deg);
-  }
-}
-
-/* Deep Sea Creatures - Bioluminescent effect */
-@keyframes deep-creature {
-  0% {
-    transform: translateX(calc(100vw + 150px)) translateY(0px);
-    filter: brightness(0.8) drop-shadow(0 0 20px rgba(0, 255, 255, 0.3));
-  }
-  100% {
-    transform: translateX(-150px) translateY(20px);
-    filter: brightness(1.2) drop-shadow(0 0 30px rgba(0, 255, 255, 0.5));
-  }
-}
-@keyframes bubble {
-  0% {
-    transform: translateY(0) scale(0.8);
-    opacity: 0.7;
-  }
-  25% {
-    transform: translateY(-30px) scale(1.2);
-    opacity: 0.9;
-  }
-  50% {
-    transform: translateY(-60px) scale(1);
-    opacity: 0.7;
-  }
-  75% {
-    transform: translateY(-90px) scale(1.3);
-    opacity: 0.5;
-  }
-  100% {
-    transform: translateY(-120px) scale(0.6);
-    opacity: 0;
-  }
-}
-
 @keyframes gentle-float {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);
@@ -551,25 +636,6 @@ html {
   }
 }
 
-@keyframes bubble-gentle {
-  0% {
-    transform: translateY(0) scale(0.8);
-    opacity: 0.05;
-  }
-  50% {
-    transform: translateY(-50px) scale(1.1);
-    opacity: 0.15;
-  }
-  100% {
-    transform: translateY(-100px) scale(0.7);
-    opacity: 0;
-  }
-}
-
-.animate-bubble {
-  animation: bubble 8s infinite ease-in-out;
-}
-
 .animate-gentle-float {
   animation: gentle-float 6s ease-in-out infinite;
 }
@@ -608,155 +674,6 @@ html {
   animation: underwater-sway 12s ease-in-out infinite;
 }
 
-.animate-bubble-gentle {
-  animation: bubble-gentle 20s infinite ease-in-out;
-}
-
-/* 3D Ocean Animation Classes */
-.animate-bubble-stream {
-  animation: bubble-stream 12s infinite linear;
-}
-
-.animate-fish-surface {
-  animation: fish-swim-surface 15s infinite linear;
-}
-
-.animate-fish-deep {
-  animation: fish-swim-deep 20s infinite linear;
-}
-
-.animate-jellyfish {
-  animation: jellyfish-float 10s infinite linear;
-}
-
-.animate-jellyfish-float {
-  animation: jellyfish-gentle-float 8s infinite ease-in-out;
-}
-
-.animate-turtle {
-  animation: turtle-swim 25s infinite linear;
-}
-
-.animate-deep-creature {
-  animation: deep-creature 18s infinite linear;
-}
-
-/* Kraken Animation - Curved Semi-Circular Movement (Bottom-Right to Top-Left) */
-@keyframes kraken-swim {
-  0% {
-    transform: translateX(calc(100vw + 200px)) translateY(min(60vh, calc(100vh - 200px))) scaleX(-1) rotate(-15deg);
-    filter: brightness(0.9) drop-shadow(0 0 25px rgba(138, 43, 226, 0.4));
-  }
-  12% {
-    transform: translateX(calc(80vw)) translateY(min(45vh, calc(100vh - 250px))) scaleX(-1) rotate(-10deg);
-    filter: brightness(0.92) drop-shadow(0 0 27px rgba(138, 43, 226, 0.42));
-  }
-  24% {
-    transform: translateX(calc(60vw)) translateY(min(35vh, calc(100vh - 300px))) scaleX(-1) rotate(-5deg);
-    filter: brightness(0.95) drop-shadow(0 0 29px rgba(138, 43, 226, 0.45));
-  }
-  36% {
-    transform: translateX(calc(40vw)) translateY(min(25vh, calc(100vh - 350px))) scaleX(-1) rotate(0deg);
-    filter: brightness(1.0) drop-shadow(0 0 31px rgba(138, 43, 226, 0.5));
-  }
-  48% {
-    transform: translateX(calc(20vw)) translateY(min(15vh, calc(100vh - 400px))) scaleX(-1) rotate(3deg);
-    filter: brightness(1.03) drop-shadow(0 0 32px rgba(138, 43, 226, 0.53));
-  }
-  60% {
-    transform: translateX(calc(0vw)) translateY(min(10vh, calc(100vh - 450px))) scaleX(-1) rotate(5deg);
-    filter: brightness(1.05) drop-shadow(0 0 33px rgba(138, 43, 226, 0.55));
-  }
-  72% {
-    transform: translateX(calc(-20vw)) translateY(min(8vh, calc(100vh - 480px))) scaleX(-1) rotate(7deg);
-    filter: brightness(1.07) drop-shadow(0 0 34px rgba(138, 43, 226, 0.57));
-  }
-  84% {
-    transform: translateX(calc(-40vw)) translateY(min(6vh, calc(100vh - 500px))) scaleX(-1) rotate(8deg);
-    filter: brightness(1.08) drop-shadow(0 0 34px rgba(138, 43, 226, 0.58));
-  }
-  100% {
-    transform: translateX(-1200px) translateY(min(5vh, calc(100vh - 520px))) scaleX(-1) rotate(10deg);
-    filter: brightness(1.1) drop-shadow(0 0 35px rgba(138, 43, 226, 0.6));
-  }
-}
-
-.animate-kraken {
-  animation: kraken-swim 50s infinite linear;
-}
-
-/* Skills Section Specific Animations - Contained within section */
-@keyframes skills-fish-swim {
-  0% {
-    transform: translateX(-80px) translateY(0px) scaleX(1);
-  }
-  100% {
-    transform: translateX(calc(100% + 80px)) translateY(15px) scaleX(1);
-  }
-}
-
-@keyframes skills-turtle-swim {
-  0% {
-    transform: translateX(-80px) translateY(0px) scaleX(1) rotate(5deg);
-  }
-  25% {
-    transform: translateX(25%) translateY(-40px) scaleX(1) rotate(0deg);
-  }
-  50% {
-    transform: translateX(50%) translateY(-60px) scaleX(1) rotate(-3deg);
-  }
-  75% {
-    transform: translateX(75%) translateY(-30px) scaleX(1) rotate(2deg);
-  }
-  100% {
-    transform: translateX(calc(100% + 80px)) translateY(0px) scaleX(1) rotate(0deg);
-  }
-}
-
-/* Enhanced SVG Creature Animations */
-@keyframes fish-fin-wave {
-  0%, 100% { transform: skewX(0deg); }
-  50% { transform: skewX(3deg); }
-}
-
-@keyframes fish-tail-wave {
-  0%, 100% { transform: rotateZ(0deg); }
-  25% { transform: rotateZ(-2deg); }
-  75% { transform: rotateZ(2deg); }
-}
-
-@keyframes jellyfish-pulse {
-  0%, 100% { transform: scale(1) rotateZ(0deg); }
-  50% { transform: scale(1.05) rotateZ(1deg); }
-}
-
-@keyframes octopus-tentacle-wave {
-  0%, 100% { transform: skewY(0deg) rotateZ(0deg); }
-  25% { transform: skewY(2deg) rotateZ(-1deg); }
-  75% { transform: skewY(-2deg) rotateZ(1deg); }
-}
-
-@keyframes shark-intimidate {
-  0%, 100% { transform: scale(1); filter: brightness(1); }
-  50% { transform: scale(1.02); filter: brightness(1.1); }
-}
-
-@keyframes anglerfish-lure {
-  0%, 100% { filter: brightness(1.2) drop-shadow(0 0 15px rgba(0, 255, 255, 0.4)) invert(1); }
-  50% { filter: brightness(1.5) drop-shadow(0 0 25px rgba(0, 255, 255, 0.8)) invert(1); }
-}
-
-@keyframes squid-undulate {
-  0%, 100% { transform: skewY(0deg); filter: brightness(0.8) drop-shadow(0 0 20px rgba(100, 149, 237, 0.3)) invert(1); }
-  33% { transform: skewY(1deg); filter: brightness(1.0) drop-shadow(0 0 30px rgba(100, 149, 237, 0.5)) invert(1); }
-  66% { transform: skewY(-1deg); filter: brightness(0.9) drop-shadow(0 0 25px rgba(100, 149, 237, 0.4)) invert(1); }
-}
-
-@keyframes turtle-paddle {
-  0%, 100% { transform: rotateZ(0deg); }
-  50% { transform: rotateZ(1deg); }
-}
-
 /* Ocean Creature Styles */
 .bubble-3d {
   position: absolute;
@@ -764,38 +681,6 @@ html {
   border-radius: 50%;
   pointer-events: none;
   box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-.fish-silhouette {
-  position: absolute;
-  opacity: 0.4;
-  pointer-events: none;
-  filter: blur(0.5px);
-  z-index: 1;
-}
-
-.jellyfish-silhouette {
-  position: absolute;
-  opacity: 0.3;
-  pointer-events: none;
-  filter: blur(0.5px);
-  z-index: 1;
-}
-
-.turtle-silhouette {
-  position: absolute;
-  opacity: 0.35;
-  pointer-events: none;
-  filter: blur(0.5px);
-  z-index: 1;
-}
-
-.deep-creature-silhouette {
-  position: absolute;
-  opacity: 0.3;
-  pointer-events: none;
-  filter: blur(0.5px);
-  z-index: 1;
 }
 
 .animation-delay-300 {
@@ -919,41 +804,6 @@ footer {
   background: linear-gradient(to bottom, transparent 0%, hsl(230, 95%, 5%) 50%, hsl(240, 100%, 3%) 100%) !important;
 }
 
-/* Boat bobbing animation to match wave motion */
-@keyframes boat-bob {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-8px) rotate(-1deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(0deg);
-  }
-  75% {
-    transform: translateY(-8px) rotate(1deg);
-  }
-}
-
-.animate-boat-bob {
-  animation: boat-bob ease-in-out infinite;
-  transform-origin: center bottom;
-}
-
-/* Gentle drift animation for boats */
-@keyframes boat-drift {
-  0%, 100% {
-    transform: translateX(0px);
-  }
-  50% {
-    transform: translateX(15px);
-  }
-}
-
-.animate-boat-drift {
-  animation: boat-drift 12s ease-in-out infinite alternate;
-}
-
 /* Accessibility contrast */
 .wave-container * {
   color: var(--text-contrast);
@@ -1030,13 +880,6 @@ footer {
 
 /* Mobile-specific optimizations to prevent horizontal overflow */
 @media (max-width: 768px) {
-  /* Disable fish animations on mobile to prevent overflow and improve performance */
-  .animate-fish-surface,
-  .animate-fish-deep {
-    animation: none !important;
-    display: none !important;
-  }
-  
   /* Ensure no horizontal overflow */
   body, html {
     overflow-x: hidden !important;
@@ -1060,18 +903,4 @@ footer {
   [style*="translateX(100vw)"] {
     transform: translateX(95vw) !important;
   }
-}
-
-/* Targeted override: prevent the mobile universal max-width rule from shrinking
-   decorative SVGs (seaweed and coral). These are positioned absolutely and
-   should keep their explicit heights set via JS or inline styles. */
-.seaweed-container img,
-.coral-decoration img,
-#home-seaweed img,
-#left-seaweed img,
-#right-seaweed img {
-  max-width: none !important;
-  max-height: none !important;
-  width: auto !important;
-  /* Do not force height here - keep the explicit heights set by scripts */
 }

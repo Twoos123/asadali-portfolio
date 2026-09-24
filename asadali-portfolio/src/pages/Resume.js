@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { FaExpand, FaCompress, FaExternalLinkAlt, FaExclamationTriangle, FaRedo } from 'react-icons/fa';
-import { oceanLife } from '../helpers/oceanLife';
+import OceanLife from '../components/ocean/OceanLife';
 
 function Resume() {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [isResumeLoaded, setIsResumeLoaded] = useState(false);
   const [shouldLoadResume, setShouldLoadResume] = useState(false);
   const [resumeError, setResumeError] = useState(false);
@@ -77,20 +76,6 @@ function Resume() {
     };
   }, [isFullscreen]);
 
-  // Mobile detection effect
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
-
   // Lazy load resume when section comes into view
   useEffect(() => {
     if (resumeInView && !shouldLoadResume) {
@@ -117,98 +102,11 @@ function Resume() {
     }
   }, [resumeInView, shouldLoadResume]);
 
-  // Ocean life effects
-  useEffect(() => {
-    const createOceanEffects = () => {
-      const resumeSection = document.querySelector('.resume-section');
-      if (!resumeSection) return;
-
-      let creaturesContainer = resumeSection.querySelector('.creatures-container');
-      if (!creaturesContainer) {
-        creaturesContainer = document.createElement('div');
-        creaturesContainer.className = 'creatures-container';
-        creaturesContainer.style.position = 'absolute';
-        creaturesContainer.style.top = '0';
-        creaturesContainer.style.left = '0';
-        creaturesContainer.style.width = '100%';
-        creaturesContainer.style.height = '100%';
-        creaturesContainer.style.pointerEvents = 'none';
-        creaturesContainer.style.zIndex = '1';
-        resumeSection.appendChild(creaturesContainer);
-      }
-      creaturesContainer.innerHTML = '';
-
-      const sectionLife = oceanLife.resume;
-
-      // Bubbles
-      for (let i = 0; i < sectionLife.bubbles; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble-3d animate-bubble-stream';
-        bubble.style.position = 'absolute';
-        bubble.style.left = `${Math.random() * 100}%`;
-        bubble.style.bottom = '0px';
-        const size = Math.random() * 6 + 3;
-        bubble.style.width = `${size}px`;
-        bubble.style.height = `${size}px`;
-        bubble.style.animationDuration = `${10 + Math.random() * 8}s`;
-        bubble.style.animationDelay = `${Math.random() * 5}s`;
-        creaturesContainer.appendChild(bubble);
-      }
-
-      // Creatures - filter out kraken and jellyfish on mobile
-      sectionLife.creatures.forEach((creature, creatureIndex) => {
-        // Skip fish, kraken and jellyfish on mobile to prevent viewport issues and horizontal overflow
-        if (isMobile && (creature.type === 'kraken' || creature.type === 'jellyfish' || creature.type === 'small-fish' || creature.type === 'tropical-fish')) {
-          return; // Skip this creature on mobile
-        }
-        for (let i = 0; i < creature.count; i++) {
-          const el = document.createElement('div');
-          el.style.position = 'absolute';
-          el.style.pointerEvents = 'none';
-          el.style.zIndex = creature.zIndex;
-
-          let innerHTML = `<img src="${process.env.PUBLIC_URL}/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
-          
-          for (const [key, value] of Object.entries(creature.styles)) {
-            const finalValue = typeof value === 'function' ? value(i) : value;
-            innerHTML += `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${finalValue}; `;
-          }
-          innerHTML += `"/>`;
-          el.innerHTML = innerHTML;
-
-          // Set position
-          for (const [key, value] of Object.entries(creature.position)) {
-            const finalValue = typeof value === 'function' ? value(i) : value;
-            el.style[key] = finalValue;
-          }
-
-          // Set animation
-          if (creature.animation.className) {
-            el.classList.add(creature.animation.className);
-            if (creature.animation.duration) {
-              const duration = typeof creature.animation.duration === 'function' ? 
-                creature.animation.duration(i) : creature.animation.duration;
-              el.style.animationDuration = `${duration}s`;
-            }
-            if (creature.animation.delay) {
-              const delay = typeof creature.animation.delay === 'function' ? 
-                creature.animation.delay(i) : creature.animation.delay;
-              el.style.animationDelay = `${delay}s`;
-            }
-          }
-          
-          creaturesContainer.appendChild(el);
-        }
-      });
-    };
-
-    createOceanEffects();
-  }, [isMobile]); // Recreate ocean effects when mobile state changes
-
   return (
     <div className="resume-section py-16 relative bg-transparent" style={{
       minHeight: '100vh'
     }}>
+      <OceanLife section="resume" />
       <div className="container mx-auto px-4 relative z-10" ref={resumeRef}>
         <motion.h1 
           ref={titleRef}

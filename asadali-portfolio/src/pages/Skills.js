@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaExpand, FaTimes, FaAws } from 'react-icons/fa';
 import { FadeInSection } from '../components/animations';
-import { oceanLife } from '../helpers/oceanLife';
+import OceanLife from '../components/ocean/OceanLife';
 import { SiSupabase, SiStripe, SiTerraform, SiAnsible, SiPrometheus, SiGrafana, SiDuckdb, SiBitbucket, SiTrino } from 'react-icons/si';
 
 const SVG_FILE_MAP = {
@@ -79,8 +79,7 @@ function SkillChip({ name, link }) {
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      className="group shrink-0 flex items-center gap-3 sm:gap-4 px-5 py-3 sm:px-7 sm:py-4 mx-1.5 sm:mx-2 rounded-2xl bg-white/[0.06] border border-white/10 hover:bg-white/[0.14] hover:border-white/30 hover:-translate-y-1 transition-all duration-300"
-      style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
+      className="group shrink-0 flex items-center gap-3 sm:gap-4 px-5 py-3 sm:px-7 sm:py-4 mx-1.5 sm:mx-2 rounded-2xl bg-white/[0.08] border border-white/10 hover:bg-white/[0.14] hover:border-white/30 hover:-translate-y-1 transition-[background-color,border-color,transform] duration-300"
       aria-label={name}
     >
       {reactIcon ? (
@@ -113,6 +112,16 @@ function MarqueeRow({ label, items, direction, duration }) {
   const trackStyle = { animationDuration: `${duration}s` };
   const doubled = [...items, ...items];
 
+  // The marquee can't run on the compositor, so it costs main-thread work every frame;
+  // pause it while it's off screen so the rest of the page doesn't pay for it.
+  const viewportRef = useRef(null);
+  const [onScreen, setOnScreen] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => setOnScreen(entries[entries.length - 1].isIntersecting));
+    observer.observe(viewportRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 px-2">
@@ -122,8 +131,8 @@ function MarqueeRow({ label, items, direction, duration }) {
           {items.length}
         </span>
       </div>
-      <div className="marquee-viewport marquee-mask overflow-hidden py-1">
-        <div className={`marquee-track ${direction}`} style={trackStyle}>
+      <div ref={viewportRef} className="marquee-viewport marquee-mask overflow-hidden py-1">
+        <div className={`marquee-track ${direction}${onScreen ? '' : ' is-offscreen'}`} style={trackStyle}>
           {doubled.map((skill, i) => (
             <SkillChip key={`${skill.name}-${i}`} name={skill.name} link={skill.link} />
           ))}
@@ -251,90 +260,7 @@ function ExpandedSkillsModal({ open, onClose, categories }) {
 }
 
 function Skills() {
-  const [isMobile, setIsMobile] = useState(false);
   const [expanded, setExpanded] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
-    const createOceanEffects = () => {
-      const skillsSection = document.getElementById('skills');
-      if (!skillsSection) return;
-
-      skillsSection.style.position = 'relative';
-      skillsSection.style.overflow = 'hidden';
-
-      let creaturesContainer = skillsSection.querySelector('.skills-creatures-container');
-      if (!creaturesContainer) {
-        creaturesContainer = document.createElement('div');
-        creaturesContainer.className = 'skills-creatures-container';
-        creaturesContainer.style.position = 'absolute';
-        creaturesContainer.style.top = '0';
-        creaturesContainer.style.left = '0';
-        creaturesContainer.style.right = '0';
-        creaturesContainer.style.bottom = '0';
-        creaturesContainer.style.pointerEvents = 'none';
-        creaturesContainer.style.overflow = 'hidden';
-        creaturesContainer.style.zIndex = '1';
-        skillsSection.appendChild(creaturesContainer);
-      }
-      creaturesContainer.innerHTML = '';
-
-      const sectionLife = oceanLife.skills;
-
-      for (let i = 0; i < sectionLife.bubbles; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble-3d animate-bubble-stream';
-        bubble.style.position = 'absolute';
-        bubble.style.left = `${Math.random() * 100}%`;
-        bubble.style.bottom = '0px';
-        const size = Math.random() * 6 + 3;
-        bubble.style.width = `${size}px`;
-        bubble.style.height = `${size}px`;
-        bubble.style.animationDuration = `${10 + Math.random() * 8}s`;
-        creaturesContainer.appendChild(bubble);
-      }
-
-      sectionLife.creatures.forEach(creature => {
-        if (isMobile && (creature.type === 'tropical-fish' || creature.type === 'small-fish')) {
-          return;
-        }
-        const el = document.createElement('div');
-        el.style.position = 'absolute';
-        el.style.pointerEvents = 'none';
-        el.style.zIndex = creature.zIndex;
-
-        let innerHTML = `<img src="${process.env.PUBLIC_URL}/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
-        for (const [key, value] of Object.entries(creature.styles)) {
-          innerHTML += `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${value}; `;
-        }
-        innerHTML += `"/>`;
-        el.innerHTML = innerHTML;
-
-        for (const [key, value] of Object.entries(creature.position)) {
-          el.style[key] = value;
-        }
-
-        if (creature.animation.type === 'transition') {
-          el.style.transition = `transform ${creature.animation.duration}s linear`;
-          el.style.transform = 'translateX(0px)';
-          setTimeout(() => {
-            const direction = el.style.left.includes('-') ? 1 : -1;
-            el.style.transform = `translateX(${direction * (skillsSection.offsetWidth + 160)}px)`;
-          }, creature.animation.delay * 1000);
-        }
-
-        creaturesContainer.appendChild(el);
-      });
-    };
-
-    createOceanEffects();
-  }, [isMobile]);
 
   const programmingLanguages = [
     { name: "Java", link: "https://www.java.com" },
@@ -408,11 +334,12 @@ function Skills() {
   ];
 
   return (
-    <div id="skills" className="py-12 md:py-16 relative" style={{
+    <div id="skills" className="py-12 md:py-16 relative overflow-hidden" style={{
       backgroundSize: '120vw 120vh',
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
     }}>
+      <OceanLife section="skills" />
       <div className="container mx-auto px-4 relative z-10">
         <FadeInSection direction="up" delay={0.2} threshold={0.3}>
           <div className="text-center mb-10">

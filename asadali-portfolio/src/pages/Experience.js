@@ -3,7 +3,7 @@ import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeli
 import "react-vertical-timeline-component/style.min.css";
 import { FaBriefcase, FaHandsHelping, FaHourglassHalf, FaMapMarkerAlt } from 'react-icons/fa';
 import { FadeInSection } from '../components/animations';
-import { oceanLife } from '../helpers/oceanLife';
+import OceanLife from '../components/ocean/OceanLife';
 
 const uOttaHack = process.env.PUBLIC_URL + '/assets/uOttaHack.svg?v=3';
 const eightbyeight = process.env.PUBLIC_URL + '/assets/8x8.svg?v=3';
@@ -63,11 +63,11 @@ function TimelineCard({ kind, org, role, period, location, logo, logoAlt, logoCl
             </div>
 
             {/* Role */}
-            <div className="text-xs sm:text-sm font-semibold text-ocean-200 tracking-wide mt-0.5 whitespace-nowrap">{role}</div>
+            <div className="text-xs sm:text-sm font-semibold text-ocean-200 tracking-wide mt-0.5 sm:whitespace-nowrap">{role}</div>
 
             {/* Location */}
             {location && (
-              <div className="text-[11px] sm:text-xs text-ocean-300/80 flex items-center gap-1.5 mt-0.5 font-medium tracking-wide whitespace-nowrap">
+              <div className="text-[11px] sm:text-xs text-ocean-300/80 flex items-center gap-1.5 mt-0.5 font-medium tracking-wide sm:whitespace-nowrap">
                 <FaMapMarkerAlt className="text-ocean-400 text-[10px] shrink-0" />
                 <span>{location}</span>
               </div>
@@ -113,70 +113,13 @@ function Experience() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  useEffect(() => {
-    const createOceanEffects = (containerId, section) => {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      container.innerHTML = '';
-
-      const sectionLife = oceanLife[section];
-      if (!sectionLife) return;
-
-      for (let i = 0; i < sectionLife.bubbles; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble-3d animate-bubble-stream';
-        bubble.style.left = `${Math.random() * 100}%`;
-        const size = Math.random() * 8 + 4;
-        bubble.style.width = `${size}px`;
-        bubble.style.height = `${size}px`;
-        bubble.style.animationDuration = `${8 + Math.random() * 8}s`;
-        container.appendChild(bubble);
-      }
-
-      sectionLife.creatures.forEach(creature => {
-        for (let i = 0; i < creature.count; i++) {
-          const el = document.createElement('div');
-          el.style.position = 'absolute';
-          el.style.pointerEvents = 'none';
-
-          let innerHTML = `<img src="${process.env.PUBLIC_URL}/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
-          for (const [key, value] of Object.entries(creature.styles)) {
-            innerHTML += `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${typeof value === 'function' ? value(i) : value}; `;
-          }
-          innerHTML += `"/>`;
-          el.innerHTML = innerHTML;
-
-          for (const [key, value] of Object.entries(creature.position)) {
-            el.style[key] = typeof value === 'function' ? value(i) : value;
-          }
-
-          if (creature.animation.className) {
-            el.className = creature.animation.className;
-          }
-
-          if (creature.animation.duration) {
-            el.style.animationDuration = `${typeof creature.animation.duration === 'function' ? creature.animation.duration(i) : creature.animation.duration}s`;
-          }
-
-          if (creature.zIndex) {
-            el.style.zIndex = creature.zIndex;
-          }
-
-          container.appendChild(el);
-        }
-      });
-    };
-
-    createOceanEffects('experience-creatures-container', 'experience');
-  }, []);
-
   return (
     <div className="experience-section relative min-h-screen bg-transparent" style={{
       backgroundSize: '120vw 120vh',
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
     }}>
-      <div id="experience-creatures-container" className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex: 0}}></div>
+      <OceanLife section="experience" />
 
       <FadeInSection direction="up" delay={0.2} threshold={0.3}>
         <div className='py-16 text-center relative z-10'>

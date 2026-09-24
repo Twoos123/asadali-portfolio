@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
+import OceanLife from './ocean/OceanLife';
 
 function About() {
   return (
     <section id="about" className="relative py-20 md:py-24 px-4">
+      <OceanLife section="about" />
       <div className="max-w-6xl mx-auto relative z-10 grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
         <div className="md:col-span-3">
           <span className="eyebrow">About</span>

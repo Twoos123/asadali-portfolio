@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useMemo, useCallback, useState } from 'react';
+import React, { useRef, useMemo, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { projectList } from "../helpers/ProjectList";
 import { motion, useInView } from 'framer-motion';
-import { createOceanEffects } from '../helpers/animationHelper';
+import OceanLife from '../components/ocean/OceanLife';
 import { FaSearch, FaFilter, FaGithub, FaBookOpen } from 'react-icons/fa';
 import { SiSupabase, SiStripe } from 'react-icons/si';
 
@@ -313,28 +313,13 @@ function Projects() {
     setVisibleProjects(6); // Reset to initial count when filtering
   };
 
-  useEffect(() => {
-    const container = document.getElementById('projects-creatures-container');
-    // Only run if the container is empty
-    if (container && container.innerHTML === '') {
-      createOceanEffects('projects-creatures-container', 'projects');
-    }
-    
-    // Return a cleanup function to clear the effects when the component unmounts
-    return () => {
-      if (container) {
-        container.innerHTML = '';
-      }
-    };
-  }, []);
-
   return (
     <div className="projects py-16 ocean-transition relative" style={{
       backgroundSize: '120vw 120vh',
       backgroundPosition: 'center center',
       backgroundAttachment: 'fixed'
     }}>
-      <div id="projects-creatures-container" className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex: 0}}></div>
+      <OceanLife section="projects" />
       <motion.div
         ref={titleRef}
         className="text-center mb-12 relative z-10"

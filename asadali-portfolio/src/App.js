@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { MotionConfig } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
@@ -9,19 +10,35 @@ import './index.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import { useMotionPaused } from './hooks/useReducedMotion';
+import { SURFACE_COLOR, onWaterColor } from './components/ocean/waterColor';
 
 function App() {
-  const [backgroundColor, setBackgroundColor] = useState('hsl(195, 70%, 55%)');
+  const waterRef = useRef(null);
+  const motionPaused = useMotionPaused();
+
+  // The ocean's depth colour is painted on its own fixed layer behind the page, so changing
+  // it on scroll only repaints that one solid layer (see components/ocean/waterColor.js).
+  useEffect(
+    () =>
+      onWaterColor((color) => {
+        waterRef.current.style.backgroundColor = color;
+      }),
+    []
+  );
 
   return (
-    <div className="App" style={{ backgroundColor: backgroundColor, transition: 'background-color 0.3s ease', overflow: 'hidden', minHeight: '100vh', position: 'relative' }}>
+    // Transparent (App.css gives .App a grey background) so the water layer shows through.
+    <div className="App" style={{ backgroundColor: 'transparent', overflow: 'hidden', minHeight: '100vh', position: 'relative' }}>
+      <div ref={waterRef} className="ocean-water" style={{ backgroundColor: SURFACE_COLOR }} aria-hidden="true" />
+      <MotionConfig reducedMotion={motionPaused ? 'always' : 'user'}>
       <Router>
         <ScrollToTop />
         <div className="flex flex-col min-h-screen bg-transparent" style={{ overflow: 'hidden', position: 'relative' }}>
         <Navbar />
         <main className='flex-grow bg-transparent' style={{ overflow: 'hidden', position: 'relative' }}>
         <Routes>
-          <Route path="/" element={<Home backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />
+          <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/project/:id" element={<ProjectDisplay/>} />
           <Route path="/experience" element={<Experience />} />
@@ -30,6 +47,7 @@ function App() {
         <Footer />
         </div>
       </Router>
+      </MotionConfig>
     </div>
   );
 }

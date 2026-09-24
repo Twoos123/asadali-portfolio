@@ -1,81 +1,55 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { FaLinkedin, FaGithub, FaEnvelope, FaFileAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import Wave from 'react-wavify';
 import Skills from './Skills';
 import Projects from './Projects';
 import Experience from './Experience';
 import Resume from './Resume';
 import Contact from './Contact';
 import About from '../components/About';
-import { StaggerContainer, FloatingElement } from '../components/animations';
-import { oceanLife } from '../helpers/oceanLife';
-import useScrollProgress from '../hooks/useScrollProgress';
+import { StaggerContainer } from '../components/animations';
+import OceanLife from '../components/ocean/OceanLife';
+import Seafloor from '../components/ocean/Seafloor';
+import Kelp from '../components/ocean/Kelp';
+import WaterSurface from '../components/ocean/WaterSurface';
+import DeepLight from '../components/ocean/DeepLight';
+import MarineSnow from '../components/ocean/MarineSnow';
+import { SURFACE_COLOR, setWaterColor } from '../components/ocean/waterColor';
 
-function Home({ backgroundColor, setBackgroundColor }) {
-  const [scrollPosition, setScrollPosition] = useState(0);
+// Slim kelp fronds framing the page edges (desktop only).
+const SIDE_KELP = {
+  left: [
+    { seed: 3, height: 230, offset: -14 },
+    { seed: 5, height: 300, offset: 8 },
+  ],
+  right: [
+    { seed: 9, height: 280, offset: -10 },
+    { seed: 4, height: 210, offset: 12 },
+  ],
+};
+
+function SideKelp({ side }) {
+  return SIDE_KELP[side].map((frond, i) => (
+    <div key={frond.seed} className="side-seaweed" style={{ [side]: frond.offset, opacity: 0.5 }}>
+      <Kelp
+        seed={frond.seed}
+        height={frond.height}
+        blades={0.6}
+        className="seafloor-sway"
+        style={{ '--sway': '3deg', '--sway-duration': `${7 + i * 1.3}s`, '--sway-delay': `${-i * 2.1}s` }}
+      />
+    </div>
+  ));
+}
+
+function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [clouds, setClouds] = useState([]);
-  const [ripples, setRipples] = useState([]);
-  const [bubbles, setBubbles] = useState([]);
   const skillsRef = useRef(null);
-  const mouseTrailRef = useRef(null);
-  
-  // Water ripple functionality
-  const createWaterRipple = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    
-    const newRipple = {
-      id: Date.now() + Math.random(),
-      x: x,
-      y: y
-    };
-    
-    setRipples(prev => [...prev, newRipple]);
-    
-    // Remove ripple after animation completes
-    setTimeout(() => {
-      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
-    }, 3000);
-  };
-
-  // Interactive bubble creation on mouse movement
-  const createBubbleTrail = (event) => {
-    if (mouseTrailRef.current) {
-      clearTimeout(mouseTrailRef.current);
-    }
-    
-    mouseTrailRef.current = setTimeout(() => {
-      const rect = event.currentTarget.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      
-      // Only create bubbles in the lower half (ocean area)
-      if (y > rect.height * 0.5) {
-        const newBubble = {
-          id: Date.now() + Math.random(),
-          x: x,
-          y: y,
-          size: Math.random() * 15 + 5
-        };
-        
-        setBubbles(prev => [...prev, newBubble]);
-        
-        // Remove bubble after animation
-        setTimeout(() => {
-          setBubbles(prev => prev.filter(bubble => bubble.id !== newBubble.id));
-        }, 4000);
-      }
-    }, 100); // Throttle bubble creation
-  };
-
 
   // Apply initial body background on mount (scroll handled by ScrollToTop globally)
   useEffect(() => {
-    const initialColor = 'hsl(195, 70%, 55%)';
-    setBackgroundColor(initialColor);
+    setWaterColor(SURFACE_COLOR);
     
     // Generate fixed cloud positions once
     const cloudData = Array.from({ length: 6 }, (_, i) => ({
@@ -100,302 +74,16 @@ function Home({ backgroundColor, setBackgroundColor }) {
     return () => {
       window.removeEventListener('resize', checkMobile);
     };
-  }, [setBackgroundColor]);
-
-  useEffect(() => {
-    // Home section seaweed
-    createHomeSeaweed();
-    // Side seaweed that responds to scroll
-    createSideSeaweed();
-  }, [isMobile]); // Add isMobile dependency to recreate seaweed when mobile state changes
-
-  const createHomeSeaweed = () => {
-    const homeSeaweedContainer = document.getElementById('home-seaweed');
-    if (!homeSeaweedContainer) return;
-
-    // Clear existing seaweed
-    homeSeaweedContainer.innerHTML = '';
-
-    // Add seafloor/sand base - positioned at bottom of underwater container
-    const seafloor = document.createElement('div');
-    seafloor.style.position = 'absolute';
-    seafloor.style.bottom = '0';
-    seafloor.style.left = '0';
-    seafloor.style.right = '0';
-    seafloor.style.height = '40px';
-    seafloor.style.background = 'linear-gradient(to top, #a16207, #ca8a04, #eab308)';
-    seafloor.style.borderRadius = '0';
-    seafloor.style.zIndex = '2';
-    homeSeaweedContainer.appendChild(seafloor);
-
-    // Add some sand texture with small bumps - fixed positions and sizes for consistency
-    const sandBumpPositions = [5, 15, 25, 35, 45, 55, 65, 75, 85, 95]; // Fixed positions
-    for (let i = 0; i < 10; i++) {
-      const sandBump = document.createElement('div');
-      sandBump.style.position = 'absolute';
-      sandBump.style.bottom = '20px';
-      sandBump.style.left = `${sandBumpPositions[i]}%`; // Use fixed positions
-      sandBump.style.width = `${6 + (i % 3) * 2}px`; // Sizes: 6px, 8px, 10px pattern
-      sandBump.style.height = `${4 + (i % 2) * 3}px`; // Heights: 4px, 7px pattern
-      sandBump.style.background = '#d4a574';
-      sandBump.style.borderRadius = '50%';
-      sandBump.style.opacity = '0.6';
-      homeSeaweedContainer.appendChild(sandBump);
-    }
-
-    // Add coral decorations to the seafloor - use 5 coral types (removing the one near dive deeper)
-    // Seaweed positions are at: 8%, 22%, 36%, 70%, 85%
-    // Position corals to avoid seaweed conflicts and dive deeper area
-    const coralPositions = [3, 15, 28, 42, 95]; // Removed 58% (near dive deeper), kept far right
-    const coralTypes = [1, 2, 3, 4, 8]; // You can change these numbers (1-8) to choose which corals to display
-    const coralCount = isMobile ? 2 : 5; // Reduce corals on mobile for performance
-    for (let i = 0; i < coralCount; i++) {
-      const coralContainer = document.createElement('div');
-      coralContainer.style.position = 'absolute';
-      coralContainer.style.bottom = '35px'; // Slightly above seafloor
-      coralContainer.style.left = `${coralPositions[i]}%`; // Use specific positions to avoid seaweed
-      coralContainer.style.zIndex = '4'; // Higher than seaweed (3) to appear in front
-      coralContainer.className = 'coral-decoration';
-      
-      // Use specific coral SVGs - change coralTypes array above to choose which ones
-      const coralImg = document.createElement('img');
-      coralImg.src = `${process.env.PUBLIC_URL}/assets/corals/coral-${coralTypes[i]}.svg`;
-      coralImg.style.width = 'auto';
-      // Fixed coral heights for consistency - no more random sizing
-      const coralHeight = isMobile ? 25 : 45; // Mobile: 25px, Desktop: 45px
-  coralImg.style.height = `${coralHeight}px`;
-  // Explicitly override any global max-width rules (including the universal mobile rule)
-  // so corals positioned near the right edge don't get scaled down to fit the viewport.
-  coralImg.style.setProperty('max-width', 'none', 'important');
-  coralImg.style.setProperty('max-height', 'none', 'important');
-  coralImg.style.setProperty('width', 'auto', 'important');
-  coralImg.style.setProperty('height', `${coralHeight}px`, 'important');
-      coralImg.style.opacity = '1.0'; // Fully opaque - no transparency
-      
-      coralImg.onerror = () => {
-        // Fallback to colored circles if SVG not found
-        coralContainer.innerHTML = '';
-        coralContainer.style.width = `${15 + Math.random() * 10}px`;
-        coralContainer.style.height = `${15 + Math.random() * 10}px`;
-        coralContainer.style.background = '#ff6b6b';
-        coralContainer.style.borderRadius = '50%';
-        coralContainer.style.opacity = '0.7';
-      };
-      
-      coralContainer.appendChild(coralImg);
-      homeSeaweedContainer.appendChild(coralContainer);
-    }
-
-    // Add seaweed stalks in the home section using your 4 SVGs (reduced to 2 on mobile)
-    const seaweedCount = isMobile ? 2 : 5; // Reduce seaweed on mobile for cleaner look
-    for (let i = 0; i < seaweedCount; i++) {
-      const seaweedContainer = document.createElement('div');
-      seaweedContainer.style.position = 'absolute';
-      
-      // Adjust positioning to avoid center area (45-55% for dive animation) but balance sides
-      let leftPosition;
-      let bottomOffset = '40px'; // Default fixed position on top of 40px high seafloor
-      
-      if (isMobile) {
-        // Mobile: only 2 seaweed - one left, one right
-        if (i === 0) leftPosition = 20;      // Left side
-        else leftPosition = 60;              // Right side
-      } else {
-        // Desktop: 5 seaweed positioned to avoid center and spread out more evenly
-        if (i === 0) leftPosition = 8;   // Far left
-        else if (i === 1) leftPosition = 22; // Left
-        else if (i === 2) leftPosition = 36; // Left-center
-        else if (i === 3) {
-          leftPosition = 70; // Right (moved back from 75%)
-          bottomOffset = '20px'; // Move this seaweed down a bit
-        }
-        else leftPosition = 85; // Far right (moved back from 90%)
-      }
-      
-      seaweedContainer.style.left = `${leftPosition}%`;
-      seaweedContainer.style.bottom = bottomOffset;
-      seaweedContainer.style.zIndex = '3';
-      seaweedContainer.className = 'seaweed-container animate-seaweed-sway';
-      seaweedContainer.style.transformOrigin = 'bottom center';
-      seaweedContainer.style.animationDuration = `${3 + (i * 0.5)}s`; // Fixed animation durations: 3s, 3.5s, 4s, etc.
-      
-      // Use your 4 seaweed SVGs (cycle through seaweed-1 to seaweed-4)
-      const seaweedImg = document.createElement('img');
-      seaweedImg.src = `${process.env.PUBLIC_URL}/assets/seaweed/seaweed-${(i % 4) + 1}.svg`;
-      seaweedImg.style.width = 'auto';
-      // Fixed seaweed heights for consistency - no more random sizing
-      const seaweedHeight = isMobile ? 140 : 160; // Mobile: 140px, Desktop: 160px
-  seaweedImg.style.height = `${seaweedHeight}px`;
-  // Prevent global rules that set max-width on all elements from shrinking these
-  // right-edge seaweed svgs when the viewport narrows.
-  seaweedImg.style.setProperty('max-width', 'none', 'important');
-  seaweedImg.style.setProperty('max-height', 'none', 'important');
-  seaweedImg.style.setProperty('width', 'auto', 'important');
-  seaweedImg.style.setProperty('height', `${seaweedHeight}px`, 'important');
-      seaweedImg.style.filter = 'hue-rotate(10deg) saturate(1.1) brightness(0.9)';
-      
-      seaweedImg.onerror = () => {
-        // Fallback to CSS seaweed if SVG not found
-        seaweedContainer.innerHTML = '';
-        seaweedContainer.style.width = '20px';
-        seaweedContainer.style.height = `${seaweedHeight}px`;
-        seaweedContainer.style.background = 'linear-gradient(to top, #065f46, #047857, #059669)';
-        seaweedContainer.style.borderRadius = '10px 10px 0 0';
-      };
-      
-      seaweedContainer.appendChild(seaweedImg);
-      homeSeaweedContainer.appendChild(seaweedContainer);
-    }
-  };
-
-  const createSideSeaweed = () => {
-    const leftContainer = document.getElementById('left-seaweed');
-    const rightContainer = document.getElementById('right-seaweed');
-    
-    if (!leftContainer || !rightContainer) return;
-
-    // Clear existing
-    leftContainer.innerHTML = '';
-    rightContainer.innerHTML = '';
-
-
-
-    // Create seaweed for left side
-    for (let i = 0; i < 3; i++) {
-      const seaweed = document.createElement('div');
-      seaweed.className = 'side-seaweed animate-seaweed-sway';
-      seaweed.style.position = 'absolute';
-      seaweed.style.bottom = '0';
-      seaweed.style.left = `${i * 30 + 5}%`; // 5%, 35%, 65% to fit all 3
-      seaweed.style.width = '12px';
-      seaweed.style.height = `${150 + Math.random() * 100}px`;
-      seaweed.style.background = 'linear-gradient(to top, #064e3b, #065f46, #047857)';
-      seaweed.style.borderRadius = '6px 6px 0 0';
-      seaweed.style.transformOrigin = 'bottom center';
-      seaweed.style.animationDuration = `${4 + Math.random() * 2}s`;
-      seaweed.style.opacity = '0.5';
-      
-      leftContainer.appendChild(seaweed);
-    }
-
-    // Create seaweed for right side (mirrored and spaced to avoid center)
-    for (let i = 0; i < 3; i++) {
-      const seaweed = document.createElement('div');
-      seaweed.className = 'side-seaweed animate-seaweed-sway';
-      seaweed.style.position = 'absolute';
-      seaweed.style.bottom = '0';
-      seaweed.style.right = `${i * 30 + 5}%`; // 5%, 35%, 65% to fit all 3
-      seaweed.style.width = '12px';
-      seaweed.style.height = `${150 + Math.random() * 100}px`;
-      seaweed.style.background = 'linear-gradient(to top, #064e3b, #065f46, #047857)';
-      seaweed.style.borderRadius = '6px 6px 0 0';
-      seaweed.style.transformOrigin = 'bottom center';
-      seaweed.style.animationDuration = `${4 + Math.random() * 2}s`;
-      seaweed.style.opacity = '0.5';
-      
-      rightContainer.appendChild(seaweed);
-    }
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const position = window.scrollY;
-      setScrollPosition(position);
-      
-      // Update seaweed animation based on scroll
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = position / maxScroll;
-      
-      // Update god rays opacity based on scroll - fade out as we scroll down
-      const godRaysOpacity = Math.max(0, 1 - scrollPercent * 1.25); // Disappears around 80% scroll
-      document.documentElement.style.setProperty('--god-rays-opacity', godRaysOpacity);
-      
-      const sideSeaweed = document.querySelectorAll('.side-seaweed');
-      sideSeaweed.forEach((seaweed, index) => {
-        const sway = Math.sin(scrollPercent * 10 + index) * 3;
-        seaweed.style.transform = `rotate(${sway}deg)`;
-        
-        // Fade based on scroll position
-        const opacity = Math.max(0.3, 0.8 - scrollPercent * 0.4);
-        seaweed.style.opacity = opacity;
-      });
-
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
   }, []);
 
-  useEffect(() => {
-    const createOceanEffects = (containerId, section) => {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      container.innerHTML = '';
-
-      const sectionLife = oceanLife[section];
-      if (!sectionLife) return;
-
-      // Create bubbles
-      for (let i = 0; i < sectionLife.bubbles; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble-3d animate-bubble-stream';
-        bubble.style.left = `${Math.random() * 100}%`;
-        const size = Math.random() * 8 + 4;
-        bubble.style.width = `${size}px`;
-        bubble.style.height = `${size}px`;
-        bubble.style.animationDuration = `${8 + Math.random() * 8}s`;
-        container.appendChild(bubble);
-      }
-
-      // Create creatures - filter out fish and jellyfish on mobile
-      sectionLife.creatures.forEach(creature => {
-        // Skip fish and jellyfish on mobile to prevent viewport issues and horizontal overflow
-        if (isMobile && (creature.type === 'jellyfish' || creature.type === 'small-fish' || creature.type === 'tropical-fish')) {
-          return; // Skip these creatures on mobile
-        }
-        for (let i = 0; i < creature.count; i++) {
-          const el = document.createElement('div');
-          el.style.position = 'absolute';
-          el.style.pointerEvents = 'none';
-
-          let innerHTML = `<img src="${process.env.PUBLIC_URL}/assets/fish/${creature.type}.svg" alt="${creature.type}" style="`;
-          for (const [key, value] of Object.entries(creature.styles)) {
-            innerHTML += `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${typeof value === 'function' ? value(i) : value}; `;
-          }
-          innerHTML += `"/>`;
-          el.innerHTML = innerHTML;
-
-          for (const [key, value] of Object.entries(creature.position)) {
-            el.style[key] = typeof value === 'function' ? value(i) : value;
-          }
-          
-          if (creature.animation.className) {
-            el.className = creature.animation.className;
-          }
-          
-          if (creature.animation.duration) {
-            el.style.animationDuration = `${typeof creature.animation.duration === 'function' ? creature.animation.duration(i) : creature.animation.duration}s`;
-          }
-
-          if (creature.zIndex) {
-            el.style.zIndex = creature.zIndex;
-          }
-          
-          container.appendChild(el);
-        }
-      });
-    };
-
-    createOceanEffects('particles', 'home');
-  }, [isMobile]); // Add isMobile dependency to recreate effects when mobile state changes
-
-  useEffect(() => {
+  // Ocean depth colour for the current scroll position.
+  const paintDepth = useCallback(() => {
     // Ocean depth effect: darker blue at surface, deeper as you scroll
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPercentage = Math.min(scrollPosition / maxScroll, 1);
+    // With no scroll range yet (e.g. the page loads in a hidden tab or webview, so both
+    // heights read 0) the division is 0/0 = NaN, which matches no colour stop and used to
+    // paint the abyssal fallback at the very top of the page. Treat that as the surface.
+    const scrollPercentage = maxScroll > 0 ? Math.min(Math.max(window.scrollY / maxScroll, 0), 1) : 0;
     
     // Extended ocean depth colors to cover entire page flow
     const colorStops = [
@@ -420,7 +108,7 @@ function Home({ backgroundColor, setBackgroundColor }) {
     
     if (!startStop || !endStop) {
       // Fallback if something goes wrong
-      setBackgroundColor(colorStops[colorStops.length - 1].color);
+      setWaterColor(colorStops[colorStops.length - 1].color);
       return;
     }
     
@@ -446,9 +134,47 @@ function Home({ backgroundColor, setBackgroundColor }) {
       const currentL = startL + (endL - startL) * localProgress;
       
       const newColor = `hsl(${currentH}, ${currentS}%, ${currentL}%)`;
-      setBackgroundColor(newColor);
+      setWaterColor(newColor);
     }
-  }, [scrollPosition, setBackgroundColor]);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const position = window.scrollY;
+      paintDepth();
+      
+      // Update seaweed animation based on scroll
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = position / maxScroll;
+      
+      // Update god rays opacity based on scroll - fade out as we scroll down. Set on the rays
+      // themselves: a custom property on <html> restyles the entire page on every scroll.
+      const godRaysOpacity = Math.max(0, 1 - scrollPercent * 1.25).toFixed(3); // Disappears around 80% scroll
+      const godRays = document.querySelector('.god-rays');
+      if (godRays && godRays.style.getPropertyValue('--god-rays-opacity') !== godRaysOpacity) {
+        godRays.style.setProperty('--god-rays-opacity', godRaysOpacity);
+      }
+      
+      const sideSeaweed = document.querySelectorAll('.side-seaweed');
+      sideSeaweed.forEach((seaweed, index) => {
+        const sway = Math.sin(scrollPercent * 10 + index) * 3;
+        seaweed.style.transform = `rotate(${sway}deg)`;
+        
+        // Fade based on scroll position
+        const opacity = Math.max(0.3, 0.8 - scrollPercent * 0.4);
+        seaweed.style.opacity = opacity;
+      });
+
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [paintDepth]);
+
 
   // Smooth scroll function
   const scrollToSkills = () => {
@@ -462,15 +188,18 @@ function Home({ backgroundColor, setBackgroundColor }) {
       minHeight: '100vh'
     }}>
       <div className="relative">
+        {/* Darkens the water as the page gets deeper, with a pool of light at the cursor, and
+            plankton drifting over it. Both sit behind every section's sea life and content. */}
+        <DeepLight />
+        <MarineSnow />
 
         {/* Side seaweed that appears as you scroll through all sections - hidden on mobile */}
-        <div id="left-seaweed" className="fixed left-0 top-0 bottom-0 w-16 pointer-events-none overflow-hidden hidden md:block" style={{zIndex: 10}}></div>
-        <div id="right-seaweed" className="fixed right-0 top-0 bottom-0 w-16 pointer-events-none overflow-hidden hidden md:block" style={{zIndex: 10}}></div>
-
-        <div id="particles" className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex: 5, height: '200vh'}}></div>
-        
-        {/* Seaweed animations for Home section */}
-        <div id="home-seaweed" className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex: 1, height: '100vh'}}></div>
+        <div id="left-seaweed" className="fixed left-0 top-0 bottom-0 w-16 pointer-events-none overflow-hidden hidden md:block" style={{zIndex: 10}}>
+          <SideKelp side="left" />
+        </div>
+        <div id="right-seaweed" className="fixed right-0 top-0 bottom-0 w-16 pointer-events-none overflow-hidden hidden md:block" style={{zIndex: 10}}>
+          <SideKelp side="right" />
+        </div>
 
         {/* Hero Section - Sky to Ocean */}
         <div className="h-screen relative flex flex-col">
@@ -526,126 +255,21 @@ function Home({ backgroundColor, setBackgroundColor }) {
             </div>
 
             {/* Ocean Section - This will grow to fill the remaining space */}
-            <div className="flex-grow relative" style={{ backgroundColor: backgroundColor, marginTop: '-10px' }}>
-                {/* Interactive Water Surface */}
-                <div 
-                  className="water-surface" 
-                  onClick={createWaterRipple}
-                  onTouchStart={createWaterRipple}
-                  onMouseMove={createBubbleTrail}
-                >
-                  {/* Render ripples */}
-                  {ripples.map(ripple => (
-                    <React.Fragment key={ripple.id}>
-                      <div
-                        className="water-ripple"
-                        style={{
-                          left: ripple.x - 25,
-                          top: ripple.y - 25,
-                          width: '50px',
-                          height: '50px'
-                        }}
-                      />
-                      <div
-                        className="water-ripple-large"
-                        style={{
-                          left: ripple.x - 40,
-                          top: ripple.y - 40,
-                          width: '80px',
-                          height: '80px'
-                        }}
-                      />
-                    </React.Fragment>
-                  ))}
-                  
-                  {/* Render interactive bubbles */}
-                  {bubbles.map(bubble => (
-                    <div
-                      key={bubble.id}
-                      className="bubble-trail"
-                      style={{
-                        left: bubble.x - bubble.size / 2,
-                        top: bubble.y - bubble.size / 2,
-                        width: `${bubble.size}px`,
-                        height: `${bubble.size}px`
-                      }}
-                    />
-                  ))}
-                </div>
-                
-                {/* Custom Wave Animation using Framer Motion - Slower and more subtle */}
-                {!isMobile && (
-                  <>
-                    <div className="absolute top-0 left-0 w-full" style={{ zIndex: 3, transform: 'translateY(-100%)', height: '100px' }}>
-                      <motion.svg
-                        width="100%"
-                        height="100px"
-                        viewBox="0 0 1200 100"
-                        preserveAspectRatio="none"
-                        style={{ position: 'absolute', bottom: 0, width: '100%' }}
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 2, ease: "easeInOut" }}
-                      >
-                        <motion.path
-                          d="M0,60 C120,20 240,80 360,50 C480,20 600,70 720,45 C840,20 960,75 1080,55 C1140,45 1180,50 1200,55 L1200,100 L0,100 Z"
-                          fill={backgroundColor || '#1e40af'}
-                          animate={{
-                            d: [
-                              "M0,60 C120,20 240,80 360,50 C480,20 600,70 720,45 C840,20 960,75 1080,55 C1140,45 1180,50 1200,55 L1200,100 L0,100 Z",
-                              "M0,55 C120,75 240,25 360,60 C480,80 600,30 720,55 C840,75 960,25 1080,45 C1140,55 1180,60 1200,50 L1200,100 L0,100 Z",
-                              "M0,50 C120,30 240,70 360,40 C480,75 600,25 720,60 C840,30 960,80 1080,50 C1140,40 1180,45 1200,60 L1200,100 L0,100 Z",
-                              "M0,60 C120,20 240,80 360,50 C480,20 600,70 720,45 C840,20 960,75 1080,55 C1140,45 1180,50 1200,55 L1200,100 L0,100 Z"
-                            ]
-                          }}
-                          transition={{
-                            duration: 8,
-                            ease: [0.25, 0.46, 0.45, 0.94], // Bezier curve for natural water movement
-                            repeat: Infinity,
-                            repeatType: "loop"
-                          }}
-                        />
-                      </motion.svg>
-                    </div>
-
-                    <div className="absolute top-0 left-0 w-full" style={{ zIndex: 4, transform: 'translateY(-100%)', height: '100px', pointerEvents: 'none' }}>
-                        {/* Boat 1 - Left side */}
-                        <div 
-                          className="absolute animate-boat-bob"
-                          style={{ 
-                            left: '20%', 
-                            bottom: '31px', // Position relative to the wave
-                            animationDelay: '0s',
-                            animationDuration: '6s'
-                          }}
-                        >
-                          <img 
-                            src={`${process.env.PUBLIC_URL}/assets/boats/boat-1.svg`} 
-                            alt="Boat 1" 
-                            className="w-16 h-auto"
-                          />
-                        </div>
-                        
-                        {/* Boat 2 - Right side */}
-                        <div 
-                          className="absolute animate-boat-bob"
-                          style={{ 
-                            left: '90%', 
-                            bottom: '32px', // Position relative to the wave
-                            animationDelay: '0s',
-                            animationDuration: '3s'
-                          }}
-                        >
-                          <img 
-                            src={`${process.env.PUBLIC_URL}/assets/boats/boat-2.svg`} 
-                            alt="Boat 2" 
-                            className="w-20 h-auto"
-                          />
-                        </div>
-                    </div>
-                  </>
-                )}
+            {/* Transparent: the water layer behind the page is already this colour, and the
+                plankton should show through. No overlap with the sky, or its pale bottom edge
+                would show as a line under the waves. */}
+            <div className="flex-grow relative">
+                {/* Waves, boats riding them, and ripples from clicks at the waterline */}
+                <WaterSurface />
             </div>
+          </div>
+
+          {/* Underwater scene from the waterline down: seabed and reef, with sea life
+              swimming between the back row and the main reef */}
+          <div className="absolute inset-x-0 bottom-0 top-[calc(25%_-_10px)] md:top-[calc(50%_-_10px)] pointer-events-none" style={{ zIndex: 1 }}>
+            <Seafloor>
+              <OceanLife section="home" />
+            </Seafloor>
           </div>
 
           {/* Foreground Content Layer */}

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { FaEnvelope, FaCopy, FaCheck, FaPaperPlane } from 'react-icons/fa';
 import SuccessAnimation from '../components/animations/SuccessAnimation';
+import OceanLife from '../components/ocean/OceanLife';
 
 const API_BASE =
   process.env.NODE_ENV === 'production'
@@ -68,6 +69,8 @@ function Contact() {
       if (response.ok && data.success) {
         setFeedbackMessage(data.message || 'Your message has been sent successfully!');
         setSubmissionStatus('success');
+        // Cue the ocean layer's celebration (a golden school and a burst of bubbles).
+        window.dispatchEvent(new Event('ocean:celebrate'));
         setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
         throw new Error(data.error || 'Failed to send message');
@@ -90,6 +93,7 @@ function Contact() {
 
   return (
     <div className="contact-section py-16 relative bg-transparent">
+      <OceanLife section="contact" />
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           ref={titleRef}
