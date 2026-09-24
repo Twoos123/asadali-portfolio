@@ -13,6 +13,7 @@ import Kelp from '../components/ocean/Kelp';
 import WaterSurface from '../components/ocean/WaterSurface';
 import DeepLight from '../components/ocean/DeepLight';
 import MarineSnow from '../components/ocean/MarineSnow';
+import AbyssFloor from '../components/ocean/AbyssFloor';
 import { SURFACE_COLOR, setWaterColor } from '../components/ocean/waterColor';
 import Editable from '../editor/Editable';
 import { useContent, useEditing } from '../editor/store';
@@ -304,9 +305,14 @@ function Home() {
           <Experience />
         </div>
 
-        <Resume />
-        
+        <div id="resume">
+          <Resume />
+        </div>
+
         <Contact />
+
+        {/* The bottom of the dive: the abyssal seabed the footer rests on */}
+        <AbyssFloor />
       </div>
     </div>
   );

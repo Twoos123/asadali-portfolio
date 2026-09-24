@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { FaPause, FaPlay } from 'react-icons/fa';
 import { setMotionPaused, useMotionPaused } from '../hooks/useReducedMotion';
 import Editable from '../editor/Editable';
@@ -11,9 +12,12 @@ function Footer() {
   const motionPaused = useMotionPaused();
   const { social } = useContent('footer');
   const editing = useEditing();
+  // On the home page the footer rests on the abyssal seabed (ocean/AbyssFloor.js) and
+  // carries on in the colour of its rock.
+  const onSeabed = useLocation().pathname === '/';
 
   return (
-    <footer className="bg-transparent text-white py-8 relative" style={{
+    <footer className={`bg-transparent text-white py-8 relative${onSeabed ? ' footer-seabed' : ''}`} style={{
       background: 'linear-gradient(to bottom, transparent 0%, hsl(230, 95%, 5%) 50%, hsl(240, 100%, 3%) 100%)'
     }}>
       <div className="container mx-auto px-4 relative z-10">

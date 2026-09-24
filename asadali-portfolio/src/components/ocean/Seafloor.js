@@ -125,7 +125,8 @@ function layoutReef(width) {
   };
 }
 
-function useWidth(ref) {
+// The element's width, rounded to 8px so tiny resizes don't rebuild a scene.
+export function useWidth(ref) {
   const [width, setWidth] = useState(0);
   useLayoutEffect(() => {
     const el = ref.current;

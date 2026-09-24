@@ -232,4 +232,10 @@ export const oceanLife = {
       },
     ],
   },
+  // The abyssal seabed under the contact section (components/ocean/AbyssFloor.js). Its life
+  // (tube worms, a crab) is part of the seabed itself; this layer only carries the bubbles
+  // that clicks send up into the sections above.
+  abyss: {
+    creatures: [],
+  },
 };

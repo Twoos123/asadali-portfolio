@@ -560,6 +560,40 @@
             }
           }
         }
+      },
+      "abyss": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "chests": {
+            "types": [
+              "array"
+            ],
+            "item": {
+              "types": [
+                "object"
+              ],
+              "keys": {
+                "label": {
+                  "types": [
+                    "string"
+                  ]
+                },
+                "text": {
+                  "types": [
+                    "string"
+                  ]
+                },
+                "link": {
+                  "types": [
+                    "string"
+                  ]
+                }
+              }
+            }
+          }
+        }
       }
     }
   },

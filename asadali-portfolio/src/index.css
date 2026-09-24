@@ -312,6 +312,542 @@
   }
 }
 
+/* Abyssal seabed at the bottom of the home page (src/components/ocean/AbyssFloor.js). Its
+   height matches layoutAbyss(): 400px at 1440px wide, scaled between 0.62x and 1.15x. */
+.abyss {
+  position: relative;
+  height: clamp(248px, 27.78vw, 460px);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* The rock, ridges, chimneys and smoke go *under* the page-wide darkness (.deep-dark), so
+   they're dimmed like the water around them and the cursor's light reveals them. That needs
+   z-index -1 in the page's root stacking context: nothing between here and <html> may form
+   a stacking context (a z-index, transform, filter, opacity or contain on main etc.). */
+.abyss-back {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* The smoke too, but unclipped: it rises on behind the section above and fades out there. */
+.abyss-smoke {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.abyss-back svg,
+.abyss-ledge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* What glows, the chests and the near ledge sit above the darkness, in their own colours. */
+.abyss-front,
+.abyss-life {
+  position: absolute;
+  inset: 0;
+}
+
+.abyss-front {
+  z-index: 2;
+}
+
+.abyss-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* Smoke from the chimneys: soft puffs rising, spreading and fading well below the top edge. */
+.abyss-puff {
+  position: absolute;
+  translate: -50% 50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(176, 180, 196, 0.55), rgba(126, 132, 150, 0.26) 55%, rgba(96, 102, 120, 0));
+  animation: abyss-puff var(--dur, 11s) linear var(--delay, 0s) infinite;
+}
+
+/* The dense column just above a chimney's mouth, which the puffs rise out of. */
+.abyss-plume-stem {
+  position: absolute;
+  translate: -50% 0;
+  transform-origin: 50% 100%;
+  background: radial-gradient(50% 100% at 50% 100%, rgba(170, 176, 196, 0.5), rgba(136, 142, 162, 0.2) 55%, rgba(110, 116, 136, 0));
+  animation: abyss-stem 5.5s ease-in-out var(--delay, 0s) infinite;
+}
+
+@keyframes abyss-stem {
+  0%, 100% {
+    transform: skewX(-4deg) scaleY(0.92);
+  }
+  50% {
+    transform: skewX(5deg) scaleY(1.06);
+  }
+}
+
+@keyframes abyss-puff {
+  0% {
+    transform: translate(0, 0) scale(0.45);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  55% {
+    transform: translate(calc(var(--drift) * 0.4), calc(var(--rise) * -0.55)) scale(calc(var(--grow) * 0.62));
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(var(--drift), calc(var(--rise) * -1)) scale(var(--grow));
+    opacity: 0;
+  }
+}
+
+.abyss-vent-glow {
+  position: absolute;
+  translate: -50% 50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 200, 130, 0.7), rgba(249, 115, 22, 0.26) 48%, rgba(249, 115, 22, 0));
+  animation: abyss-vent 3.8s ease-in-out var(--delay, 0s) infinite;
+}
+
+@keyframes abyss-vent {
+  0%, 100% {
+    opacity: 0.72;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  55% {
+    opacity: 0.8;
+  }
+  78% {
+    opacity: 0.95;
+    transform: scale(1.03);
+  }
+}
+
+.abyss-ember {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  translate: -50% 50%;
+  border-radius: 50%;
+  background: #fed7aa;
+  box-shadow: 0 0 4px 1px rgba(251, 146, 60, 0.75);
+  opacity: 0;
+  animation: abyss-ember var(--dur, 3s) ease-out var(--delay, 0s) infinite;
+}
+
+@keyframes abyss-ember {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--drift), calc(var(--rise) * -1));
+    opacity: 0;
+  }
+}
+
+.abyss-speck {
+  position: absolute;
+  translate: -50% 50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(236, 254, 255, 0.95) 0 18%, rgba(103, 232, 249, 0.4) 42%, rgba(103, 232, 249, 0));
+  opacity: 0.6;
+  animation: abyss-speck var(--dur, 11s) ease-in-out var(--delay, 0s) infinite;
+}
+
+.abyss-speck--violet {
+  background: radial-gradient(closest-side, rgba(250, 245, 255, 0.95) 0 18%, rgba(192, 132, 252, 0.4) 42%, rgba(192, 132, 252, 0));
+}
+
+@keyframes abyss-speck {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(var(--dx), calc(var(--dy) * -0.6));
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(calc(var(--dx) * 0.4), calc(var(--dy) * -1));
+    opacity: 0.45;
+  }
+  75% {
+    transform: translate(calc(var(--dx) * -0.5), calc(var(--dy) * -0.4));
+    opacity: 1;
+  }
+}
+
+/* Tube worms: AbyssFloor.js pulls them down into their tubes (transform); the sway is a
+   separate property so the two combine. The tubes are drawn in front of them. */
+.abyss-worm {
+  position: absolute;
+  translate: -50% 0;
+  transform-origin: 50% 100%;
+  background: radial-gradient(closest-side at 50% 34%, rgba(251, 113, 133, 0.5), rgba(251, 113, 133, 0));
+  animation: abyss-worm-sway var(--dur, 4.5s) ease-in-out var(--delay, 0s) infinite;
+}
+
+.abyss-worm svg,
+.abyss-crab svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+@keyframes abyss-worm-sway {
+  0%, 100% {
+    rotate: -5deg;
+  }
+  50% {
+    rotate: 5deg;
+  }
+}
+
+.abyss-tubes {
+  position: absolute;
+  display: block;
+  overflow: visible;
+}
+
+/* The crab: AbyssFloor.js walks it along the rock and sets data-walking while it moves. */
+.abyss-crab {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform-origin: 50% 100%;
+  background: radial-gradient(closest-side, rgba(45, 212, 191, 0.34), rgba(45, 212, 191, 0));
+}
+
+.abyss-crab-legs {
+  transform-box: fill-box;
+}
+
+.abyss-crab-legs--l {
+  transform-origin: 100% 0%;
+}
+
+.abyss-crab-legs--r {
+  transform-origin: 0% 0%;
+}
+
+.abyss-crab[data-walking] .abyss-crab-legs {
+  animation: abyss-crab-legs 0.32s ease-in-out infinite alternate;
+}
+
+.abyss-crab[data-walking] .abyss-crab-legs--r {
+  animation-delay: -0.16s;
+}
+
+.abyss-crab[data-walking='fast'] .abyss-crab-legs {
+  animation-duration: 0.12s;
+}
+
+@keyframes abyss-crab-legs {
+  from {
+    transform: rotate(-10deg);
+  }
+  to {
+    transform: rotate(10deg);
+  }
+}
+
+/* Treasure chests, half-buried in the near ledge. Each is a button; opening one lifts the
+   lid, lights it up, throws out coins and bubbles and shows its card above. */
+.abyss-chest {
+  position: absolute;
+  translate: -50% 0;
+}
+
+.abyss-chest-btn {
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* A bigger target than the chest itself, for fingers. */
+.abyss-chest-btn::before {
+  content: '';
+  position: absolute;
+  inset: -12px -10px -6px;
+}
+
+.abyss-chest-btn:focus-visible {
+  outline: 2px solid #fcd34d;
+  outline-offset: 5px;
+}
+
+.abyss-chest-art {
+  position: absolute;
+  left: 0;
+  display: block;
+  max-width: none !important;
+  overflow: visible;
+  transition: transform 0.25s ease;
+}
+
+.abyss-chest-btn:hover .abyss-chest-art {
+  transform: translateY(-2px);
+}
+
+.abyss-chest-lid {
+  transform-box: fill-box;
+  transform-origin: 0% 100%;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.abyss-chest.is-open .abyss-chest-lid {
+  transform: rotate(-24deg) translate(-1px, -1px);
+}
+
+.abyss-chest-inside {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.abyss-chest.is-open .abyss-chest-inside {
+  opacity: 1;
+}
+
+.abyss-chest-glow {
+  position: absolute;
+  left: 55%;
+  top: 45%;
+  width: 340%;
+  aspect-ratio: 1.3;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(253, 224, 71, 0.5), rgba(251, 191, 36, 0.18) 45%, rgba(251, 191, 36, 0));
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.abyss-chest.is-open .abyss-chest-glow {
+  opacity: 1;
+  animation: abyss-chest-glow 3.2s ease-in-out infinite;
+}
+
+@keyframes abyss-chest-glow {
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* A glint now and then on a closed chest, so they can be found in the dark. */
+.abyss-chest-sparkle {
+  position: absolute;
+  right: 16%;
+  top: -4%;
+  width: 13px;
+  height: 13px;
+  background: #fff3c4;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+  opacity: 0;
+  animation: abyss-sparkle 5.5s ease-in-out var(--sparkle-delay, 0s) infinite;
+}
+
+.abyss-chest.is-open .abyss-chest-sparkle {
+  animation: none;
+}
+
+@keyframes abyss-sparkle {
+  0%, 76%, 100% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  85% {
+    transform: scale(1) rotate(45deg);
+    opacity: 1;
+  }
+  94% {
+    transform: scale(0) rotate(90deg);
+    opacity: 0;
+  }
+}
+
+.abyss-chest-burst {
+  position: absolute;
+  left: 60%;
+  top: 45%;
+  width: 0;
+  height: 0;
+}
+
+.abyss-coin {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fef3c7, #fbbf24 45%, #b45309);
+  box-shadow: 0 0 6px rgba(253, 224, 71, 0.6);
+  opacity: 0;
+}
+
+.abyss-pop {
+  left: -4px;
+  top: -4px;
+  opacity: 0;
+}
+
+.abyss-chest.is-open .abyss-coin {
+  animation: abyss-coin 1.15s cubic-bezier(0.2, 0.7, 0.4, 1) var(--d, 0s) both;
+}
+
+.abyss-chest.is-open .abyss-pop {
+  animation: abyss-pop 1.8s ease-out var(--d, 0s) both;
+}
+
+@keyframes abyss-coin {
+  0% {
+    transform: translate(0, 6px) scale(0.5);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  45% {
+    transform: translate(var(--dx), var(--dy)) scale(1) rotate(var(--r));
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(var(--dx) * 1.35), 14px) scale(0.8) rotate(calc(var(--r) * 2));
+    opacity: 0;
+  }
+}
+
+@keyframes abyss-pop {
+  0% {
+    transform: translate(0, 0) scale(0.4);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(var(--dx), var(--rise)) scale(1);
+    opacity: 0;
+  }
+}
+
+.abyss-chest-card {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 24px);
+  width: var(--card-w, 250px);
+  translate: calc(-50% + var(--card-shift, 0px)) 0;
+  padding: 10px 14px 12px;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 14px;
+  background: rgba(10, 14, 28, 0.94);
+  box-shadow: 0 0 28px rgba(251, 191, 36, 0.16), 0 10px 30px rgba(0, 0, 0, 0.45);
+  color: #f1f5f9;
+  font-size: 13.5px;
+  line-height: 1.45;
+  text-align: left;
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px) scale(0.96);
+  transform-origin: 50% 100%;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s linear 0.3s;
+}
+
+.abyss-chest.is-open .abyss-chest-card {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0.22s, 0.22s, 0s;
+}
+
+/* The card's pointer, kept over the chest when the card is nudged to stay on screen. */
+.abyss-chest-card::after {
+  content: '';
+  position: absolute;
+  left: clamp(20px, calc(50% - var(--card-shift, 0px)), calc(100% - 20px));
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  translate: -50% 0;
+  rotate: 45deg;
+  border-right: 1px solid rgba(251, 191, 36, 0.35);
+  border-bottom: 1px solid rgba(251, 191, 36, 0.35);
+  background: rgb(10, 14, 28);
+}
+
+.abyss-chest-label {
+  display: block;
+  margin-bottom: 3px;
+  color: #fcd34d;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.abyss-chest-text {
+  margin: 0;
+}
+
+.abyss-chest-link {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgba(252, 211, 77, 0.5);
+  text-underline-offset: 3px;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+.abyss-chest-link:hover {
+  color: #fde68a;
+  text-decoration-color: #fde68a;
+}
+
+.abyss-chest-link::after {
+  content: ' \2192';
+}
+
+/* Off screen, the seabed's CSS animations stop (AbyssFloor.js sets data-idle). */
+.abyss[data-idle] *,
+.abyss[data-idle] *::before,
+.abyss[data-idle] *::after {
+  animation-play-state: paused !important;
+}
+
+/* Paused or reduced motion: chests snap open and shut instead of animating. */
+html[data-motion-paused] .abyss-chest *,
+html[data-motion-paused] .abyss-chest-card {
+  transition: none !important;
+}
+
 /* Hero water surface (src/components/ocean/WaterSurface.js) */
 .water-surface {
   position: absolute;
@@ -628,6 +1164,14 @@ html[data-motion-paused] *::after {
   .god-rays::before,
   .god-rays-target {
     animation: none;
+  }
+
+  /* The seabed holds still: smoke is drawn spread up its column, chests just open. */
+  .abyss *,
+  .abyss *::before,
+  .abyss *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }
 
@@ -1056,6 +1600,12 @@ body {
 /* Footer blend with ocean depth */
 footer {
   background: linear-gradient(to bottom, transparent 0%, hsl(230, 95%, 5%) 50%, hsl(240, 100%, 3%) 100%) !important;
+}
+
+/* On the home page the footer rests on the abyssal seabed, continuing its near ledge
+   (#0a0f1c in components/ocean/AbyssFloor.js). */
+footer.footer-seabed {
+  background: linear-gradient(to bottom, #0a0f1c 0%, #070b15 55%, #04060d 100%) !important;
 }
 
 /* Accessibility contrast */

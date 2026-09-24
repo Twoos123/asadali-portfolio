@@ -11,5 +11,24 @@
       "label": "GitHub",
       "url": "https://github.com/Twoos123"
     }
-  ]
+  ],
+  "abyss": {
+    "chests": [
+      {
+        "label": "Resume",
+        "text": "You found the resume! All my experience, on one page.",
+        "link": "/#resume"
+      },
+      {
+        "label": "Side project",
+        "text": "cs2-meta-engine: the CS2 demo analysis pipeline I'm building instead of paying $70 a month for one.",
+        "link": "/project/10"
+      },
+      {
+        "label": "Fun fact",
+        "text": "Vents like these pour out water hotter than 350 °C, and whole ecosystems live off them without any sunlight.",
+        "link": ""
+      }
+    ]
+  }
 }
