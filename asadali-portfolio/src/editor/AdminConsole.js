@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowRight, FaExternalLinkAlt, FaGithub, FaGlobeAmericas, FaLayerGroup, FaPen, FaRocket, FaSignOutAlt } from 'react-icons/fa';
 import { editorStore } from './store';
 import { getSession, login, logout, recentActivity, serverHealth } from './api';
+import { codeDigits } from './EditorBar';
 import { setWaterColor } from '../components/ocean/waterColor';
 import OceanLife from '../components/ocean/OceanLife';
 
@@ -106,8 +107,8 @@ export default function AdminConsole() {
     setActivity(null);
   };
 
-  const setupMissing = server.state === 'online' ? ['password', 'session', 'github'].filter((key) => !server[key]) : [];
-  const setupNames = { password: 'password hash', session: 'session secret', github: 'GitHub token' };
+  const setupMissing = server.state === 'online' ? ['password', 'twoFactor', 'session', 'github'].filter((key) => !server[key]) : [];
+  const setupNames = { password: 'password hash', twoFactor: 'authenticator secret', session: 'session secret', github: 'GitHub token' };
 
   return (
     <div className="relative min-h-screen px-4 pb-24 pt-28 md:pt-32">
@@ -241,6 +242,7 @@ function StatusRow({ label, value, tone }) {
 
 function LoginCard({ onDone }) {
   const [password, setPassword] = useState('');
+  const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const inputRef = useRef(null);
@@ -251,10 +253,11 @@ function LoginCard({ onDone }) {
     setBusy(true);
     setError('');
     try {
-      await login(password);
+      await login(password, code);
       onDone();
     } catch (err) {
       setError(err.message);
+      setCode('');
       setBusy(false);
     }
   };
@@ -263,7 +266,7 @@ function LoginCard({ onDone }) {
     <GlassCard className="p-8 md:p-10">
       <span className="eyebrow">Owner access</span>
       <h2 className="mt-3 font-display text-2xl font-bold tracking-tight text-white md:text-3xl">Log in to edit</h2>
-      <p className="mt-2 text-ocean-50/80">Only the site owner can publish changes. Sessions last two hours.</p>
+      <p className="mt-2 text-ocean-50/80">Only the site owner can publish changes. You need your password and the code from your authenticator app; sessions last an hour.</p>
       <form onSubmit={submit} className="mt-6 space-y-4">
         <input
           ref={inputRef}
@@ -275,10 +278,19 @@ function LoginCard({ onDone }) {
           aria-label="Editor password"
           className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-ocean-200/50 transition focus:border-ocean-300/60 focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-ocean-300/20"
         />
+        <input
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          value={code}
+          onChange={(e) => setCode(codeDigits(e.target.value))}
+          placeholder="6-digit code from your authenticator app"
+          aria-label="Authenticator code"
+          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 tracking-widest text-white placeholder-ocean-200/50 placeholder:tracking-normal transition focus:border-ocean-300/60 focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-ocean-300/20"
+        />
         {error && <p className="text-sm text-rose-300">{error}</p>}
         <button
           type="submit"
-          disabled={busy || !password}
+          disabled={busy || !password || code.length !== 6}
           className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-ocean-500 to-ocean-400 px-6 py-3.5 font-semibold text-white shadow-glow transition-all duration-300 hover:from-ocean-400 hover:to-ocean-300 hover:shadow-glow-strong disabled:cursor-not-allowed disabled:opacity-60"
         >
           {busy ? 'Checking…' : 'Log in'}

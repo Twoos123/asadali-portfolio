@@ -147,8 +147,12 @@ function watchDeploy(sha, commitUrl, setStatus) {
   setTimeout(poll, POLL_MS);
 }
 
+// Keeps only the digits of an authenticator code as it's typed or pasted.
+export const codeDigits = (value) => value.replace(/\D/g, '').slice(0, 6);
+
 export function PasswordForm({ onDone, onCancel, submitLabel = 'Log in' }) {
   const [password, setPassword] = useState('');
+  const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const inputRef = useRef(null);
@@ -159,10 +163,11 @@ export function PasswordForm({ onDone, onCancel, submitLabel = 'Log in' }) {
     setBusy(true);
     setError('');
     try {
-      await login(password);
+      await login(password, code);
       onDone();
     } catch (err) {
       setError(err.message);
+      setCode('');
       setBusy(false);
     }
   };
@@ -176,7 +181,17 @@ export function PasswordForm({ onDone, onCancel, submitLabel = 'Log in' }) {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Editor password"
+        aria-label="Editor password"
         className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-white placeholder-ocean-200/50 outline-none focus:border-ocean-400"
+      />
+      <input
+        inputMode="numeric"
+        autoComplete="one-time-code"
+        value={code}
+        onChange={(e) => setCode(codeDigits(e.target.value))}
+        placeholder="6-digit code from your authenticator app"
+        aria-label="Authenticator code"
+        className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 tracking-widest text-white placeholder-ocean-200/50 placeholder:tracking-normal outline-none focus:border-ocean-400"
       />
       {error && <p className="text-sm text-rose-300">{error}</p>}
       <div className="flex justify-end gap-2 pt-1">
@@ -185,7 +200,7 @@ export function PasswordForm({ onDone, onCancel, submitLabel = 'Log in' }) {
             Cancel
           </button>
         )}
-        <button type="submit" disabled={busy || !password} className="rounded-full bg-ocean-500 px-5 py-2 font-semibold hover:bg-ocean-400 disabled:opacity-50">
+        <button type="submit" disabled={busy || !password || code.length !== 6} className="rounded-full bg-ocean-500 px-5 py-2 font-semibold hover:bg-ocean-400 disabled:opacity-50">
           {busy ? 'Checking…' : submitLabel}
         </button>
       </div>

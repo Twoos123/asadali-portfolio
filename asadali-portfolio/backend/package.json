@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "hash-password": "node scripts/hash-editor-password.js",
-    "content-shape": "node scripts/build-content-shape.js"
+    "content-shape": "node scripts/build-content-shape.js",
+    "setup-editor": "node scripts/setup-editor.js"
   },
   "dependencies": {
     "body-parser": "^1.20.4",

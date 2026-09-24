@@ -15,11 +15,20 @@ export function getSession() {
   return null;
 }
 
-export function logout() {
+function forgetSession() {
   try {
     window.sessionStorage.removeItem(SESSION_KEY);
   } catch {
     // Nothing stored.
+  }
+}
+
+// Forgets the session here and revokes it on the server (best effort: it expires anyway).
+export function logout() {
+  const session = getSession();
+  forgetSession();
+  if (session) {
+    fetch(`${API_BASE}/api/editor/logout`, { method: 'POST', headers: { Authorization: `Bearer ${session.token}` } }).catch(() => {});
   }
 }
 
@@ -38,7 +47,7 @@ async function request(path, options = {}, token) {
   }
   const data = await res.json().catch(() => ({}));
   if (res.status === 401 && token) {
-    logout();
+    forgetSession();
     const error = new Error(data.error || 'Your session expired. Log in again.');
     error.needsLogin = true;
     throw error;
@@ -47,8 +56,9 @@ async function request(path, options = {}, token) {
   return data;
 }
 
-export async function login(password) {
-  const session = await request('/api/editor/login', { method: 'POST', body: JSON.stringify({ password }) });
+// Password plus the 6-digit code from the owner's authenticator app.
+export async function login(password, code) {
+  const session = await request('/api/editor/login', { method: 'POST', body: JSON.stringify({ password, code }) });
   window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
   return session;
 }
