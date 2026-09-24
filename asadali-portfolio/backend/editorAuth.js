@@ -101,15 +101,7 @@ const clientFailures = new Map(); // client -> [timestamps]
 let globalFailures = []; // timestamps
 let lockAlertSent = 0;
 
-// The visitor's address as Render's proxy saw it: the last X-Forwarded-For entry is the one
-// the proxy appended itself, so unlike the first entry it can't be made up by the client.
-function clientOf(req) {
-  const forwarded = String(req.headers['x-forwarded-for'] || '')
-    .split(',')
-    .map((part) => part.trim())
-    .filter(Boolean);
-  return forwarded[forwarded.length - 1] || req.socket.remoteAddress || 'unknown';
-}
+const clientOf = require('./clientAddress');
 
 const recent = (times, windowMs, now) => times.filter((t) => now - t < windowMs);
 

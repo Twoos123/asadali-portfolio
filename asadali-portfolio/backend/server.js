@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 const editorRouter = require('./editor');
+const clientAddress = require('./clientAddress');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,14 +27,11 @@ const limiter = rateLimit({
   message: {
     error: 'Too many contact form submissions, please try again later.'
   },
-  // Configure for proxy environments like Render
   standardHeaders: true,
   legacyHeaders: false,
-  // Use a more specific trust proxy function for better security
-  trustProxy: (ip) => {
-    // Trust Render's proxy IPs - you can make this more specific if needed
-    return true;
-  },
+  // Count per visitor by the address Render's proxy saw, which can't be faked (req.ip can,
+  // through X-Forwarded-For, which would give every request a fresh limit).
+  keyGenerator: clientAddress,
   // Skip rate limiting validation warnings in production
   validate: {
     trustProxy: false,
