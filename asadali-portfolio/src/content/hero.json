@@ -1,8 +1,16 @@
 {
   "name": "Asad Ali",
   "subtitle": "4th Year Software Engineering Student | Full-Stack Developer",
-  "social": {
-    "linkedin": "LinkedIn",
-    "github": "GitHub"
-  }
+  "social": [
+    {
+      "icon": "linkedin",
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/asadbinali/"
+    },
+    {
+      "icon": "github",
+      "label": "GitHub",
+      "url": "https://github.com/Twoos123"
+    }
+  ]
 }

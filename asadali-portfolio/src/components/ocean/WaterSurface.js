@@ -4,7 +4,7 @@ import { smoothLine } from './geometry';
 import useReducedMotion from '../../hooks/useReducedMotion';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { onWaterColor } from './waterColor';
-import { subscribe } from './ticker';
+import { runWhileVisible } from './ticker';
 
 // The hero's water surface: rolling waves drawn every frame, boats that ride them, and
 // ripples that spread along the surface from clicks near the waterline. It sits in a 100px
@@ -62,7 +62,6 @@ export default function WaterSurface() {
     const ripples = [];
     const rings = ringRefs.current.map((el) => ({ el, age: Infinity, x: 0 }));
     let t = 0;
-    let unsubscribe = null;
     let last = 0;
     let lastTap = performance.now();
     let rect = null;
@@ -124,21 +123,19 @@ export default function WaterSurface() {
       draw(rect.width);
     };
 
-    const start = () => {
-      if (unsubscribe) return;
-      last = performance.now();
-      unsubscribe = subscribe({ read, write });
-    };
-    const stop = () => {
-      if (unsubscribe) unsubscribe();
-      unsubscribe = null;
-    };
-    const observer = new IntersectionObserver((entries) => (entries[entries.length - 1].isIntersecting ? start() : stop()));
-    observer.observe(band);
+    const stop = runWhileVisible(
+      band,
+      { read, write },
+      {
+        onStart: () => {
+          last = performance.now();
+          lastTap = last;
+        },
+      }
+    );
     retainPointer();
     return () => {
       stop();
-      observer.disconnect();
       releasePointer();
     };
   }, [still, isPhone]);

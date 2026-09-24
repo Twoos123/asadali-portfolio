@@ -1,115 +1,111 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaExpand, FaTimes, FaAws } from 'react-icons/fa';
+import { FaExpand, FaTimes, FaAws, FaCode } from 'react-icons/fa';
 import { FadeInSection } from '../components/animations';
 import OceanLife from '../components/ocean/OceanLife';
 import Editable from '../editor/Editable';
+import { AddItem, EditableImage, EditSelect, ItemControls, LinkEdit } from '../editor/controls';
+import { safeUrl } from '../editor/markup';
+import { editorStore, useContent, useEditing, useField } from '../editor/store';
 import { SiSupabase, SiStripe, SiTerraform, SiAnsible, SiPrometheus, SiGrafana, SiDuckdb, SiBitbucket, SiTrino } from 'react-icons/si';
 
-const SVG_FILE_MAP = {
-  'Groq': 'Groq.svg',
-  'Co:Here': 'Cohere.svg',
-  'Flask': 'Flask.svg',
-  'React': 'React.svg',
-  'Python': 'Python.svg',
-  'Java': 'Java.svg',
-  'JavaScript': 'JavaScript.svg',
-  'TypeScript': 'TypeScript.svg',
-  'Kotlin': 'Kotlin.svg',
-  'C++': 'C++ (CPlusPlus).svg',
-  'HTML5': 'HTML5.svg',
-  'CSS3': 'CSS3.svg',
-  'Next.js': 'Next.js.svg',
-  'Spring Boot': 'Spring.svg',
-  'Node.js': 'Node.js.svg',
-  'Express': 'Express.svg',
-  'Tailwind CSS': 'Tailwind CSS.svg',
-  'Chakra UI': 'Chakra UI.svg',
-  'PHP': 'PHP.svg',
-  'Vite': 'Vite.js.svg',
-  'GraphQL': 'GraphQL.svg',
-  'Streamlit': 'Streamlit.svg',
-  'GitHub': 'GitHub.svg',
-  'Git': 'Git.svg',
-  'Docker': 'Docker.svg',
-  'Kubernetes': 'Kubernetes.svg',
-  'Android Studio': 'Android Studio.svg',
-  'Vercel': 'Vercel.svg',
-  'Firebase': 'Firebase.svg',
-  'Supabase': 'Supabase.svg',
-  'MongoDB': 'MongoDB.svg',
-  'Drupal': 'Drupal.svg',
-  'Apache': 'Apache.svg',
-  'Linux': 'Linux.svg',
-  'PostgreSQL': 'PostgresSQL.svg',
-  'MySQL': 'MySQL.svg',
-  'Redis': 'Redis.svg',
-  'SQLite': 'SQLite.svg',
-  'Postman': 'Postman.svg',
-  'JIRA': 'Jira.svg',
-  'Jenkins': 'Jenkins.svg',
-  'Stripe': 'Stripe.svg',
-  'Cloudinary': 'Cloudinary.svg',
-  'OpenAI': 'Openai.svg',
-  'OAuth 2.0': 'Oauth.svg',
-  'Bash': 'Bash.svg',
-  'FastAPI': 'FastAPI.svg',
-  'Playwright': 'Playwright.svg',
-  'Elixir': 'Elixir.svg',
+// Skills live in src/content/skills.json. A skill's `icon` is an image path (or URL), or
+// "react:<Name>" for one of these react-icons components. Anything else (e.g. "") shows the
+// fallback icon.
+const REACT_ICON_PREFIX = 'react:';
+const REACT_ICONS = {
+  SiSupabase: { component: SiSupabase, color: '#3ECF8E' },
+  SiStripe: { component: SiStripe, color: '#635BFF' },
+  SiTerraform: { component: SiTerraform, color: '#844FBA' },
+  SiAnsible: { component: SiAnsible, color: '#EE0000' },
+  SiPrometheus: { component: SiPrometheus, color: '#E6522C' },
+  SiGrafana: { component: SiGrafana, color: '#F46800' },
+  SiDuckdb: { component: SiDuckdb, color: '#FFF000' },
+  FaAws: { component: FaAws, color: '#FF9900' },
+  SiBitbucket: { component: SiBitbucket, color: '#0052CC' },
+  SiTrino: { component: SiTrino, color: '#DD00A1' },
+};
+const FALLBACK_ICON = { component: FaCode, color: '#bae6fd' };
+
+const ICON_SHADOW = { filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.35))' };
+
+const DIRECTIONS = [
+  { value: 'left', label: '← Left' },
+  { value: 'right', label: 'Right →' },
+];
+
+const NEW_SKILL = { name: 'New skill', link: '', icon: '' };
+
+const newCategory = (list) => {
+  const label = `${String(list.length + 1).padStart(2, '0')} · NEW CATEGORY`;
+  return {
+    rowLabel: label,
+    modalLabel: label,
+    title: 'New category',
+    direction: list.length % 2 ? 'right' : 'left',
+    duration: 40,
+    items: [NEW_SKILL],
+  };
 };
 
-const REACT_ICON_MAP = {
-  'Supabase': { component: SiSupabase, color: '#3ECF8E' },
-  'Stripe': { component: SiStripe, color: '#635BFF' },
-  'Terraform': { component: SiTerraform, color: '#844FBA' },
-  'Ansible': { component: SiAnsible, color: '#EE0000' },
-  'Prometheus': { component: SiPrometheus, color: '#E6522C' },
-  'Grafana': { component: SiGrafana, color: '#F46800' },
-  'DuckDB': { component: SiDuckdb, color: '#FFF000' },
-  'AWS': { component: FaAws, color: '#FF9900' },
-  'Bitbucket': { component: SiBitbucket, color: '#0052CC' },
-  'Trino Starburst': { component: SiTrino, color: '#DD00A1' },
-};
+function SkillIcon({ path, icon, name, size, className, style }) {
+  const editing = useEditing();
+  const isImage = typeof icon === 'string' && icon !== '' && !icon.startsWith(REACT_ICON_PREFIX);
+  if (isImage) {
+    return <EditableImage path={path} alt={name} width={size} height={size} className={className} style={style} />;
+  }
 
-function SkillChip({ name, link }) {
-  const reactIcon = REACT_ICON_MAP[name];
-  const filename = SVG_FILE_MAP[name] || `${name}.svg`;
+  const reactIcon = (typeof icon === 'string' && REACT_ICONS[icon.slice(REACT_ICON_PREFIX.length)]) || FALLBACK_ICON;
+  const glyph = <reactIcon.component size={size} style={{ color: reactIcon.color, ...style }} className={className} />;
+  if (!editing) return glyph;
+  // While editing, a see-through image over the icon lets it be replaced by an uploaded one.
+  return (
+    <span className="relative inline-flex shrink-0">
+      {glyph}
+      <EditableImage path={path} alt="" className="absolute inset-0 h-full w-full" />
+    </span>
+  );
+}
 
+function SkillChip({ skill, path }) {
   return (
     <a
-      href={link}
+      href={safeUrl(skill.link)}
       target="_blank"
       rel="noopener noreferrer"
       className="group shrink-0 flex items-center gap-3 sm:gap-4 px-5 py-3 sm:px-7 sm:py-4 mx-1.5 sm:mx-2 rounded-2xl bg-white/[0.08] border border-white/10 hover:bg-white/[0.14] hover:border-white/30 hover:-translate-y-1 transition-[background-color,border-color,transform] duration-300"
-      aria-label={name}
+      aria-label={skill.name}
     >
-      {reactIcon ? (
-        <reactIcon.component
-          size={36}
-          style={{
-            color: reactIcon.color,
-            filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.35))',
-          }}
-          className="shrink-0 transition-transform duration-300 group-hover:scale-110"
-        />
-      ) : (
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/skills/${filename}`}
-          alt={name}
-          width={36}
-          height={36}
-          className="shrink-0 transition-transform duration-300 group-hover:scale-110"
-          style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.35))' }}
-        />
-      )}
+      <SkillIcon
+        path={`${path}.icon`}
+        icon={skill.icon}
+        name={skill.name}
+        size={36}
+        className="shrink-0 transition-transform duration-300 group-hover:scale-110"
+        style={ICON_SHADOW}
+      />
       <span className="whitespace-nowrap text-base font-semibold text-ocean-50 group-hover:text-white transition-colors tracking-tight">
-        {name}
+        {skill.name}
       </span>
     </a>
   );
 }
 
-function MarqueeRow({ labelPath, items, direction, duration }) {
+function RowHeader({ path, count, children }) {
+  return (
+    <div className="flex items-center gap-3 px-2">
+      <Editable path={`${path}.rowLabel`} className="eyebrow" />
+      <span className="flex-1 h-px bg-gradient-to-r from-white/15 via-white/5 to-transparent" />
+      <span className="text-xs font-semibold text-ocean-100/70 tabular-nums px-2 py-0.5 rounded-full bg-white/5 border border-white/10">
+        {count}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+function MarqueeRow({ path, category }) {
+  const { items, direction, duration } = category;
   const trackStyle = { animationDuration: `${duration}s` };
   const doubled = [...items, ...items];
 
@@ -125,17 +121,11 @@ function MarqueeRow({ labelPath, items, direction, duration }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3 px-2">
-        <Editable path={labelPath} className="eyebrow" />
-        <span className="flex-1 h-px bg-gradient-to-r from-white/15 via-white/5 to-transparent" />
-        <span className="text-xs font-semibold text-ocean-100/70 tabular-nums px-2 py-0.5 rounded-full bg-white/5 border border-white/10">
-          {items.length}
-        </span>
-      </div>
+      <RowHeader path={path} count={items.length} />
       <div ref={viewportRef} className="marquee-viewport marquee-mask overflow-hidden py-1">
         <div className={`marquee-track ${direction}${onScreen ? '' : ' is-offscreen'}`} style={trackStyle}>
           {doubled.map((skill, i) => (
-            <SkillChip key={`${skill.name}-${i}`} name={skill.name} link={skill.link} />
+            <SkillChip key={i} skill={skill} path={`${path}.items.${i % items.length}`} />
           ))}
         </div>
       </div>
@@ -143,29 +133,92 @@ function MarqueeRow({ labelPath, items, direction, duration }) {
   );
 }
 
-function SkillGridItem({ name, link }) {
-  const reactIcon = REACT_ICON_MAP[name];
-  const filename = SVG_FILE_MAP[name] || `${name}.svg`;
+// Seconds for one full loop of a row (lower is faster). Kept as a number in the content.
+function DurationControl({ path }) {
+  const value = useField(path);
+  const [text, setText] = useState(String(value ?? ''));
+  const [focused, setFocused] = useState(false);
+  useEffect(() => {
+    if (!focused) setText(String(value ?? ''));
+  }, [value, focused]);
+
+  const changed = value !== editorStore.original(path);
   return (
-    <a
-      href={link}
-      target="_blank"
-      rel="noopener noreferrer"
+    <label
+      className={`site-edit-control inline-flex items-center gap-1.5${changed ? ' site-edit-control--changed' : ''}`}
+      title="Seconds for one full loop of this row (lower is faster)"
+    >
+      <span>Loop</span>
+      <input
+        type="number"
+        min={5}
+        max={600}
+        step={1}
+        value={text}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        onChange={(e) => {
+          setText(e.target.value);
+          const seconds = Number(e.target.value);
+          if (e.target.value !== '' && Number.isFinite(seconds) && seconds >= 5 && seconds <= 600) editorStore.set(path, seconds);
+        }}
+        className="w-12 bg-transparent outline-none tabular-nums"
+      />
+      <span>s</span>
+    </label>
+  );
+}
+
+// Edit mode: the row as a static wrapped list (no animation, no duplicates), so every chip
+// can be clicked and edited.
+function SkillRowEditor({ path, category, index, count }) {
+  const { items } = category;
+  return (
+    <div className="relative space-y-4 rounded-2xl border border-dashed border-white/15 p-3 sm:p-4">
+      <RowHeader path={path} count={items.length} />
+      <div className="flex flex-wrap items-center gap-2 px-2">
+        <EditSelect path={`${path}.direction`} options={DIRECTIONS} label="Scrolls" />
+        <DurationControl path={`${path}.duration`} />
+        <ItemControls listPath="skills.categories" index={index} count={count} label="category" className="!static ml-auto" />
+      </div>
+      <div className="flex flex-wrap items-start gap-3">
+        {items.map((skill, i) => {
+          const skillPath = `${path}.items.${i}`;
+          return (
+            <div
+              key={i}
+              className="relative flex flex-col items-start gap-2 px-4 pt-9 pb-3 rounded-2xl bg-white/[0.08] border border-white/10"
+            >
+              <ItemControls listPath={`${path}.items`} index={i} count={items.length} label="skill" />
+              <div className="flex items-center gap-3">
+                <SkillIcon path={`${skillPath}.icon`} icon={skill.icon} name={skill.name} size={36} className="shrink-0" style={ICON_SHADOW} />
+                <Editable path={`${skillPath}.name`} className="whitespace-nowrap text-base font-semibold text-ocean-50 tracking-tight" />
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <LinkEdit path={`${skillPath}.link`} label="Link" />
+                <LinkEdit path={`${skillPath}.icon`} label="Icon URL" />
+              </div>
+            </div>
+          );
+        })}
+        <AddItem listPath={`${path}.items`} template={NEW_SKILL} label="skill" className="self-center" />
+      </div>
+    </div>
+  );
+}
+
+function SkillGridItem({ skill, path }) {
+  const editing = useEditing();
+  const Tag = editing ? 'div' : 'a';
+  const linkProps = editing ? {} : { href: safeUrl(skill.link), target: '_blank', rel: 'noopener noreferrer' };
+  return (
+    <Tag
+      {...linkProps}
       className="group flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/15 hover:border-white/30 hover:-translate-y-0.5 transition-all duration-200"
     >
-      {reactIcon ? (
-        <reactIcon.component size={28} style={{ color: reactIcon.color }} className="shrink-0" />
-      ) : (
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/skills/${filename}`}
-          alt={name}
-          width={28}
-          height={28}
-          className="shrink-0"
-        />
-      )}
-      <span className="text-sm font-medium text-ocean-50 group-hover:text-white truncate">{name}</span>
-    </a>
+      <SkillIcon path={`${path}.icon`} icon={skill.icon} name={skill.name} size={28} className="shrink-0" />
+      <Editable path={`${path}.name`} className="text-sm font-medium text-ocean-50 group-hover:text-white truncate" />
+    </Tag>
   );
 }
 
@@ -229,33 +282,36 @@ function ExpandedSkillsModal({ open, onClose, categories }) {
             </div>
 
             <div className="overflow-y-auto max-h-[calc(90vh-5.5rem)] px-6 md:px-10 py-8 space-y-10">
-              {categories.map((cat, ci) => (
-                <motion.section
-                  key={cat.key}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.08 + ci * 0.08, duration: 0.4 }}
-                >
-                  <div className="flex items-end justify-between mb-5">
-                    <div>
-                      <Editable path={`skills.categories.${cat.key}.modalLabel`} className="eyebrow" />
-                      <Editable
-                        path={`skills.categories.${cat.key}.title`}
-                        as="h3"
-                        className="font-display text-xl md:text-2xl font-semibold text-white mt-1 tracking-tight"
-                      />
+              {categories.map((cat, ci) => {
+                const path = `skills.categories.${ci}`;
+                return (
+                  <motion.section
+                    key={ci}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.08 + ci * 0.08, duration: 0.4 }}
+                  >
+                    <div className="flex items-end justify-between mb-5">
+                      <div>
+                        <Editable path={`${path}.modalLabel`} className="eyebrow" />
+                        <Editable
+                          path={`${path}.title`}
+                          as="h3"
+                          className="font-display text-xl md:text-2xl font-semibold text-white mt-1 tracking-tight"
+                        />
+                      </div>
+                      <span className="text-xs font-semibold text-ocean-100/70 tabular-nums px-2.5 py-1 rounded-full bg-white/5 border border-white/10">
+                        {cat.items.length}
+                      </span>
                     </div>
-                    <span className="text-xs font-semibold text-ocean-100/70 tabular-nums px-2.5 py-1 rounded-full bg-white/5 border border-white/10">
-                      {cat.items.length}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {cat.items.map((skill) => (
-                      <SkillGridItem key={skill.name} name={skill.name} link={skill.link} />
-                    ))}
-                  </div>
-                </motion.section>
-              ))}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                      {cat.items.map((skill, i) => (
+                        <SkillGridItem key={i} skill={skill} path={`${path}.items.${i}`} />
+                      ))}
+                    </div>
+                  </motion.section>
+                );
+              })}
             </div>
           </motion.div>
         </motion.div>
@@ -266,77 +322,9 @@ function ExpandedSkillsModal({ open, onClose, categories }) {
 
 function Skills() {
   const [expanded, setExpanded] = useState(false);
-
-  const programmingLanguages = [
-    { name: "Java", link: "https://www.java.com" },
-    { name: "Python", link: "https://www.python.org" },
-    { name: "JavaScript", link: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
-    { name: "TypeScript", link: "https://www.typescriptlang.org" },
-    { name: "PHP", link: "https://www.php.net" },
-    { name: "Kotlin", link: "https://kotlinlang.org" },
-    { name: "HTML5", link: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
-    { name: "CSS3", link: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
-    { name: "C++", link: "https://www.cplusplus.com" },
-  ];
-
-  const frameworks = [
-    { name: "React", link: "https://reactjs.org" },
-    { name: "Next.js", link: "https://nextjs.org" },
-    { name: "Spring Boot", link: "https://spring.io/projects/spring-boot" },
-    { name: "FastAPI", link: "https://fastapi.tiangolo.com" },
-    { name: "Node.js", link: "https://nodejs.org" },
-    { name: "Express", link: "https://expressjs.com" },
-    { name: "Flask", link: "https://flask.palletsprojects.com" },
-    { name: "Tailwind CSS", link: "https://tailwindcss.com" },
-    { name: "Chakra UI", link: "https://chakra-ui.com" },
-    { name: "Vite", link: "https://vitejs.dev" },
-    { name: "GraphQL", link: "https://graphql.org" },
-    { name: "Streamlit", link: "https://streamlit.io" },
-  ];
-
-  const cloudDevops = [
-    { name: "AWS", link: "https://aws.amazon.com" },
-    { name: "Kubernetes", link: "https://kubernetes.io" },
-    { name: "Docker", link: "https://www.docker.com" },
-    { name: "Terraform", link: "https://www.terraform.io" },
-    { name: "Ansible", link: "https://www.ansible.com" },
-    { name: "Prometheus", link: "https://prometheus.io" },
-    { name: "Grafana", link: "https://grafana.com" },
-    { name: "Jenkins", link: "https://www.jenkins.io" },
-    { name: "Linux", link: "https://www.kernel.org" },
-    { name: "Bash", link: "https://www.gnu.org/software/bash/" },
-    { name: "Bitbucket", link: "https://bitbucket.org" },
-  ];
-
-  const databases = [
-    { name: "PostgreSQL", link: "https://www.postgresql.org" },
-    { name: "MySQL", link: "https://www.mysql.com" },
-    { name: "MongoDB", link: "https://www.mongodb.com" },
-    { name: "Redis", link: "https://redis.io" },
-    { name: "SQLite", link: "https://www.sqlite.org" },
-    { name: "DuckDB", link: "https://duckdb.org" },
-    { name: "Trino Starburst", link: "https://trino.io" },
-    { name: "Firebase", link: "https://firebase.google.com" },
-    { name: "Supabase", link: "https://supabase.com" },
-  ];
-
-  const toolsPlatforms = [
-    { name: "Git", link: "https://git-scm.com" },
-    { name: "GitHub", link: "https://github.com" },
-    { name: "Postman", link: "https://www.postman.com" },
-    { name: "Playwright", link: "https://playwright.dev" },
-    { name: "JIRA", link: "https://www.atlassian.com/software/jira" },
-    { name: "OAuth 2.0", link: "https://oauth.net/2/" },
-    { name: "Stripe", link: "https://stripe.com" },
-    { name: "Vercel", link: "https://vercel.com" },
-    { name: "Cloudinary", link: "https://cloudinary.com" },
-    { name: "OpenAI", link: "https://openai.com" },
-    { name: "Groq", link: "https://groq.com" },
-    { name: "Co:Here", link: "https://cohere.ai" },
-    { name: "Apache", link: "https://httpd.apache.org" },
-    { name: "Drupal", link: "https://www.drupal.org" },
-    { name: "Android Studio", link: "https://developer.android.com/studio" },
-  ];
+  const content = useContent('skills');
+  const editing = useEditing();
+  const { categories } = content;
 
   return (
     <div id="skills" className="py-12 md:py-16 relative overflow-hidden" style={{
@@ -370,51 +358,25 @@ function Skills() {
               <Editable path="skills.viewAll" className="hidden sm:inline text-xs font-medium tracking-tight" />
             </motion.button>
 
-            <MarqueeRow
-              labelPath="skills.categories.languages.rowLabel"
-              items={programmingLanguages}
-              direction="left"
-              duration={38}
-            />
-            <MarqueeRow
-              labelPath="skills.categories.frameworks.rowLabel"
-              items={frameworks}
-              direction="right"
-              duration={44}
-            />
-            <MarqueeRow
-              labelPath="skills.categories.cloudDevops.rowLabel"
-              items={cloudDevops}
-              direction="left"
-              duration={40}
-            />
-            <MarqueeRow
-              labelPath="skills.categories.databases.rowLabel"
-              items={databases}
-              direction="right"
-              duration={36}
-            />
-            <MarqueeRow
-              labelPath="skills.categories.tools.rowLabel"
-              items={toolsPlatforms}
-              direction="left"
-              duration={46}
-            />
+            {categories.map((category, i) => {
+              const path = `skills.categories.${i}`;
+              return editing ? (
+                <SkillRowEditor key={i} path={path} category={category} index={i} count={categories.length} />
+              ) : (
+                <MarqueeRow key={i} path={path} category={category} />
+              );
+            })}
+
+            {editing && (
+              <div className="flex justify-center">
+                <AddItem listPath="skills.categories" template={newCategory} label="category" />
+              </div>
+            )}
           </div>
         </FadeInSection>
       </div>
 
-      <ExpandedSkillsModal
-        open={expanded}
-        onClose={() => setExpanded(false)}
-        categories={[
-          { key: 'languages', items: programmingLanguages },
-          { key: 'frameworks', items: frameworks },
-          { key: 'cloudDevops', items: cloudDevops },
-          { key: 'databases', items: databases },
-          { key: 'tools', items: toolsPlatforms },
-        ]}
-      />
+      <ExpandedSkillsModal open={expanded} onClose={() => setExpanded(false)} categories={categories} />
     </div>
   );
 }

@@ -1,10 +1,16 @@
 import React from 'react';
-import { FaLinkedin, FaGithub, FaEnvelope, FaFileAlt, FaPause, FaPlay } from 'react-icons/fa';
+import { FaPause, FaPlay } from 'react-icons/fa';
 import { setMotionPaused, useMotionPaused } from '../hooks/useReducedMotion';
 import Editable from '../editor/Editable';
+import { useContent, useEditing } from '../editor/store';
+import { AddItem, ItemControls } from '../editor/controls';
+import { safeUrl } from '../editor/markup';
+import { NEW_SOCIAL_LINK, SocialLinkFields, linkTargetProps, socialIcon } from './socialLinks';
 
 function Footer() {
   const motionPaused = useMotionPaused();
+  const { social } = useContent('footer');
+  const editing = useEditing();
 
   return (
     <footer className="bg-transparent text-white py-8 relative" style={{
@@ -24,30 +30,41 @@ function Footer() {
               {motionPaused ? 'Play animations' : 'Pause animations'}
             </button>
           </div>
-          <div className="flex space-x-8">
-            <a
-              href="https://www.linkedin.com/in/asadbinali/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group hover:text-blue-300 transition-all duration-300 transform hover:scale-105 subtle-hover"
-            >
-              <FaLinkedin size={30} className="text-blue-200 group-hover:text-blue-300" />
-              <span className="sr-only">LinkedIn</span>
-            </a>
-            <a
-              href="https://github.com/Twoos123"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group hover:text-gray-300 transition-all duration-300 transform hover:scale-105 subtle-hover"
-            >
-              <FaGithub size={30} className="text-blue-200 group-hover:text-gray-300" />
-              <span className="sr-only">GitHub</span>
-            </a>
-
+          <div className={`flex space-x-8${editing ? ' items-center' : ''}`}>
+            {social.map((link, i) => (
+              <FooterLink key={i} link={link} index={i} count={social.length} editing={editing} />
+            ))}
+            <AddItem listPath="footer.social" template={NEW_SOCIAL_LINK} label="social link" />
           </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+// One footer social link: footer.social in src/content/footer.json ({ icon, label, url }).
+function FooterLink({ link, index, count, editing }) {
+  const path = `footer.social.${index}`;
+  const { Icon, hover, groupHover } = socialIcon(link.icon);
+  const href = safeUrl(link.url);
+  const anchor = (
+    <a
+      href={href}
+      {...linkTargetProps(href)}
+      className={`group ${hover} transition-all duration-300 transform hover:scale-105 subtle-hover`}
+    >
+      <Icon size={30} className={`text-blue-200 ${groupHover}`} />
+      <span className="sr-only">{link.label}</span>
+    </a>
+  );
+  if (!editing) return anchor;
+
+  return (
+    <div className="relative flex flex-col items-center gap-1.5 pt-8">
+      <ItemControls listPath="footer.social" index={index} count={count} label="social link" />
+      {anchor}
+      <SocialLinkFields path={path} labelClassName="text-xs text-blue-200" />
+    </div>
   );
 }
 

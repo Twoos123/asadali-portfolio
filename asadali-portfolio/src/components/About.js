@@ -4,9 +4,15 @@ import { FaArrowRight } from 'react-icons/fa';
 import OceanLife from './ocean/OceanLife';
 import Editable from '../editor/Editable';
 import { useContent } from '../editor/store';
+import { AddItem, ItemControls, LinkEdit } from '../editor/controls';
+import { safeUrl } from '../editor/markup';
+
+const NEW_PARAGRAPH = 'New paragraph.';
+const NEW_ROW = { label: 'New', value: 'New row', link: '' };
 
 function About() {
   const about = useContent('about');
+  const rows = about.currently.rows;
 
   return (
     <section id="about" className="relative py-20 md:py-24 px-4">
@@ -21,8 +27,12 @@ function About() {
           />
           <div className="mt-5 space-y-4 text-ocean-50/85 leading-relaxed text-base md:text-lg">
             {about.paragraphs.map((_, i) => (
-              <Editable key={i} path={`about.paragraphs.${i}`} as="p" rich />
+              <div key={i} className="relative site-item">
+                <Editable path={`about.paragraphs.${i}`} as="p" rich />
+                <ItemControls listPath="about.paragraphs" index={i} count={about.paragraphs.length} label="paragraph" />
+              </div>
             ))}
+            <AddItem listPath="about.paragraphs" template={NEW_PARAGRAPH} label="paragraph" />
           </div>
         </div>
 
@@ -39,31 +49,50 @@ function About() {
           </div>
 
           <dl className="space-y-4 text-sm">
-            {about.currently.rows.map((row, i) => (
-              <Row key={i} path={`about.currently.rows.${i}`} link={row.link} />
+            {rows.map((row, i) => (
+              <Row key={i} path={`about.currently.rows.${i}`} link={row.link} index={i} count={rows.length} />
             ))}
           </dl>
+          <AddItem listPath="about.currently.rows" template={NEW_ROW} label="row" className="mt-4" />
         </aside>
       </div>
     </section>
   );
 }
 
-// One "Currently" row. A row with a `link` renders its value as a link with an arrow.
-function Row({ path, link }) {
+// One "Currently" row. A row with a `link` renders its value as a link with an arrow (site
+// paths through the router, other URLs in a new tab).
+function Row({ path, link, index, count }) {
+  const href = safeUrl(link);
+  const linkClass = 'inline-flex items-center gap-1.5 text-ocean-100 hover:text-white transition-colors';
+  const linkContent = (
+    <>
+      <Editable path={`${path}.value`} />
+      <FaArrowRight className="h-2.5 w-2.5" />
+    </>
+  );
+
   return (
-    <div className="grid grid-cols-[88px_1fr] gap-3 items-baseline">
+    <div className="relative site-item grid grid-cols-[88px_1fr] gap-3 items-baseline">
       <Editable path={`${path}.label`} as="dt" className="text-[11px] font-semibold uppercase tracking-widest text-ocean-200/60" />
-      {link ? (
+      {href ? (
         <dd className="text-ocean-50/90 leading-snug">
-          <Link to={link} className="inline-flex items-center gap-1.5 text-ocean-100 hover:text-white transition-colors">
-            <Editable path={`${path}.value`} />
-            <FaArrowRight className="h-2.5 w-2.5" />
-          </Link>
+          {href.startsWith('/') ? (
+            <Link to={href} className={linkClass}>
+              {linkContent}
+            </Link>
+          ) : (
+            <a href={href} target="_blank" rel="noopener noreferrer" className={linkClass}>
+              {linkContent}
+            </a>
+          )}
         </dd>
       ) : (
         <Editable path={`${path}.value`} as="dd" className="text-ocean-50/90 leading-snug" />
       )}
+      {/* Edit mode only: sits under the value. Empty = a plain row. */}
+      <LinkEdit path={`${path}.link`} label={href ? 'Link' : 'Add link'} className="col-start-2 justify-self-start" />
+      <ItemControls listPath="about.currently.rows" index={index} count={count} label="row" />
     </div>
   );
 }

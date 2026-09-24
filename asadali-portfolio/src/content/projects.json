@@ -43,12 +43,10 @@
         "Anthropic Claude"
       ],
       "github": "https://github.com/Twoos123/cs2-meta-engine",
-      "repoUrl": "https://github.com/Twoos123/cs2-meta-engine",
-      "demo": null,
+      "demo": "",
       "caseStudy": {
         "tagline": "Turning raw .dem files into pro-level CS2 intel — grenade lineups, 2D replays, economy tracking, heatmaps, and AI scouting reports, all in one dashboard.",
         "heroImage": "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/landing.png",
-        "screenshotBase": "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots",
         "origin": "This one started with a conversation. I was in an interview and the interviewer brought up OpenClaw and Claude, and how agentic AI workflows are already good enough to handle a real chunk of analyst-style work. It stuck with me, because I'd been sitting on a problem for a while: every time I wanted to dig into a CS2 match properly, I was either scrubbing demos manually or looking at Refrag and SCL, the two main paid platforms, each running around $70/team for roughly 6 slots. That conversation flipped the question for me. Instead of paying for the product, how far could I push things on my own? How much of that paid tool could I actually build with a good pipeline and the right AI in the loop?",
         "problem": "I built this for myself. I'm currently top 2,000 in NA on Faceit, and at that level the gap between players is mostly about preparation: util timings, opponent tendencies, map-specific habits. Pro teams have analysts and six-figure tools to surface that stuff; solo ranked players don't. Refrag and SCL sell exactly this kind of intel, but locked behind a $70/team subscription built for orgs, not individuals. CS2 Meta Engine is me rebuilding that pipeline end-to-end so I can run the same analysis on my own demos, with AI doing the scouting work I'd otherwise pay an analyst for.",
         "solution": "A three-layer system that ingests HLTV and FACEIT demos, extracts tick-level events into structured data, and surfaces the result as grenade lineups, 2D replays, economy breakdowns, heatmaps, Player Profiles, and auto-generated anti-strat reports — all in a single React dashboard. Anti-strat and Player Profile computation is fully client-side from cached timeline JSON, so there are zero extra backend calls after the first parse.",
@@ -101,62 +99,72 @@
         "features": [
           {
             "name": "Grenade lineup intelligence",
-            "file": "lineups.png",
-            "desc": "Every smoke/flash/molly across pro demos, clustered by throw position + angle and ranked by win_rate × log(throws) × avg_damage. Technique detection (stand/walk/run/crouch/jump), callout labels, execute combo detection, and 1024×1024 radar overlay with adjustable sliders."
+            "desc": "Every smoke/flash/molly across pro demos, clustered by throw position + angle and ranked by win_rate × log(throws) × avg_damage. Technique detection (stand/walk/run/crouch/jump), callout labels, execute combo detection, and 1024×1024 radar overlay with adjustable sliders.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/lineups.png"
+            ]
           },
           {
             "name": "Demo picker & ingestion",
-            "files": [
-              "demo-picker.png",
-              "landing.png"
-            ],
-            "desc": "Browse demos grouped by map, or pull them directly from HLTV (filter by team/event/map) or FACEIT (look up any player by profile URL). The pipeline auto-downloads, extracts, parses, clusters lineups, and updates Player Profiles — with a real-time progress bar for each phase."
+            "desc": "Browse demos grouped by map, or pull them directly from HLTV (filter by team/event/map) or FACEIT (look up any player by profile URL). The pipeline auto-downloads, extracts, parses, clusters lineups, and updates Player Profiles — with a real-time progress bar for each phase.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/demo-picker.png",
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/landing.png"
+            ]
           },
           {
             "name": "2D match replay",
-            "file": "replay.png",
-            "desc": "Full match playback on a 1024×1024 radar. Player positions, yaw direction, health bars, weapon icons, armor indicators. Smoke clouds (20s), molotov patches (7s), flash bursts, HE shockwaves with countdown timers. HUD scrubber with round tick markers, kill feed with headshot/wallbang/noscope icons, and AI match recap."
+            "desc": "Full match playback on a 1024×1024 radar. Player positions, yaw direction, health bars, weapon icons, armor indicators. Smoke clouds (20s), molotov patches (7s), flash bursts, HE shockwaves with countdown timers. HUD scrubber with round tick markers, kill feed with headshot/wallbang/noscope icons, and AI match recap.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/replay.png"
+            ]
           },
           {
             "name": "Insights — round, patterns & heatmap",
-            "files": [
-              "insights.png",
-              "insights-patterns.png",
-              "insights-heatmap.png"
-            ],
-            "desc": "Three overlay modes: Round mode shows utility paths, victim entry/exit markers, flash blinds, and AOE radii. Patterns mode detects repeated grenade sequences with flash effectiveness scoring and lets you live-scrub to any throw. Heatmap mode aggregates all grenade landings, filterable by HE / Smoke / Flash / Molotov."
+            "desc": "Three overlay modes: Round mode shows utility paths, victim entry/exit markers, flash blinds, and AOE radii. Patterns mode detects repeated grenade sequences with flash effectiveness scoring and lets you live-scrub to any throw. Heatmap mode aggregates all grenade landings, filterable by HE / Smoke / Flash / Molotov.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/insights.png",
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/insights-patterns.png",
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/insights-heatmap.png"
+            ]
           },
           {
             "name": "Economy tracker",
-            "file": "economy.png",
-            "desc": "Equipment value bar chart (T vs CT per round), buy-type classification (Eco / Force / Half / Full), loss-bonus tracking ($1400 base + $500/loss), and a round-by-round table with winner, buy types, equipment values, and cash spent for both sides."
+            "desc": "Equipment value bar chart (T vs CT per round), buy-type classification (Eco / Force / Half / Full), loss-bonus tracking ($1400 base + $500/loss), and a round-by-round table with winner, buy types, equipment values, and cash spent for both sides.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/economy.png"
+            ]
           },
           {
             "name": "Heatmaps",
-            "file": "heatmap.png",
-            "desc": "Gaussian-blur position density, death location, and grenade landing overlays rendered on a canvas layer. Filterable by half (1st/2nd/all), team (T/CT/both), and individual player to surface role patterns and map tendencies across matches."
+            "desc": "Gaussian-blur position density, death location, and grenade landing overlays rendered on a canvas layer. Filterable by half (1st/2nd/all), team (T/CT/both), and individual player to surface role patterns and map tendencies across matches.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/heatmap.png"
+            ]
           },
           {
             "name": "Per-player stats",
-            "file": "stats.png",
-            "desc": "Full scoreboard with K/D, +/-, HS%, first kills/deaths, 2K–5K rounds, and survival rate. Expandable detail cards break down kill types (headshot, wallbang, noscope, smoke, blind), opening duels won/lost, utility usage, and multi-kill rounds — all computed client-side from timeline data."
+            "desc": "Full scoreboard with K/D, +/-, HS%, first kills/deaths, 2K–5K rounds, and survival rate. Expandable detail cards break down kill types (headshot, wallbang, noscope, smoke, blind), opening duels won/lost, utility usage, and multi-kill rounds — all computed client-side from timeline data.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/stats.png"
+            ]
           },
           {
             "name": "Anti-Strat scouting report",
-            "files": [
-              "anti-strat.png",
-              "anti-strat-2.png",
-              "anti-strat-3.png"
-            ],
-            "desc": "Select any opponent team: get site hit frequency bars, utility tendency radar heatmap, AWP position heatmap (primary AWPer identified), first-blood timing, round-win pattern SVG donut rings, and per-player breakdowns with weapons and opening duels — computed entirely client-side from cached timelines, no new backend calls."
+            "desc": "Select any opponent team: get site hit frequency bars, utility tendency radar heatmap, AWP position heatmap (primary AWPer identified), first-blood timing, round-win pattern SVG donut rings, and per-player breakdowns with weapons and opening duels — computed entirely client-side from cached timelines, no new backend calls.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/anti-strat.png",
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/anti-strat-2.png",
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/anti-strat-3.png"
+            ]
           },
           {
             "name": "Player Profiles",
-            "files": [
-              "players.png",
-              "player-detail.png"
-            ],
-            "desc": "Cross-demo leaderboard ranked by rating, with role inference (AWP / Entry / Support / Lurker / Rifler) derived from AWP ratio, opening kill rate, utility rate, and survival rate. Detail view shows a role radar chart, per-map/side splits, and recent match history up to 50 matches."
+            "desc": "Cross-demo leaderboard ranked by rating, with role inference (AWP / Entry / Support / Lurker / Rifler) derived from AWP ratio, opening kill rate, utility rate, and survival rate. Detail view shows a role radar chart, per-map/side splits, and recent match history up to 50 matches.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/players.png",
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/player-detail.png"
+            ]
           }
         ],
         "decisions": [
@@ -244,11 +252,10 @@
         "Tailwind CSS"
       ],
       "github": "https://github.com/uOttawaSESA/sesa-website",
-      "repoUrl": "https://github.com/uOttawaSESA/sesa-website",
       "demo": "https://sesa-aegl.ca",
       "caseStudy": {
         "tagline": "The digital home for 3,000+ uOttawa software engineering students, shipped by a student team over 6+ months.",
-        "screenshotBase": "/assets/Projects/sesa",
+        "heroImage": "/assets/Projects/SESA-Website.png",
         "origin": "I'd been SESA's Dev Lead for about a year before this rebuild started, and honestly the team I inherited wasn't really alive. The club was practically dead. We built it up from the ground up when a few younger software engineering students hit me up wanting to get involved, and I pulled in a handful of friends to round out the team. When I was promoted to Co-Director in early 2025, I kept a hand on the technical side but finally had the scope to actually get the project off the ground. The January 2025 figma doc came out of that transition: lock in the design direction with our designer, stand up a proper dev team, and build the site SESA actually needed. Bilingual, fast, events, resources, team info, and sponsor visibility all in one place.",
         "problem": "SESA represents around 3,000 EECS students at uOttawa. The old website technically existed, but it hadn't kept up with the association. Event info lived in Instagram story highlights, academic resources got buried in group chats, and sponsors had nowhere proper to be featured. We needed a hub that students would actually bookmark, that exec could update without breaking, and that read as polished enough to hand to potential partners like Microsoft or Amazon.",
         "solution": "A bilingual Next.js site covering events, academic resources, social programming, an exec team spotlight, sponsor logos, an FAQ, and community links. Content is edited through Supabase, deployed on Vercel, and served statically where possible so first-load performance stays fast on campus Wi-Fi.",
@@ -293,32 +300,40 @@
         "features": [
           {
             "name": "Events & calendar",
-            "file": "events.png",
-            "desc": "Workshops, career panels, and social nights surfaced with filter chips (All / Past / Today / Upcoming) so students can jump straight to what's happening this week."
+            "desc": "Workshops, career panels, and social nights surfaced with filter chips (All / Past / Today / Upcoming) so students can jump straight to what's happening this week.",
+            "screenshots": [
+              "/assets/Projects/sesa/events.png"
+            ]
           },
           {
             "name": "Resources library",
-            "file": "resources.png",
-            "desc": "Free study materials curated by the academic team: course notes, problem walkthroughs, and tutor links, all searchable and tagged by course."
+            "desc": "Free study materials curated by the academic team: course notes, problem walkthroughs, and tutor links, all searchable and tagged by course.",
+            "screenshots": [
+              "/assets/Projects/sesa/resources.png"
+            ]
           },
           {
             "name": "Meet the team",
-            "file": "about.png",
-            "desc": "Tabs for every team (Co-Directors, Partnerships, Events, Communications, Development, Academic, Advisors) so students can put names to the people running SESA."
+            "desc": "Tabs for every team (Co-Directors, Partnerships, Events, Communications, Development, Academic, Advisors) so students can put names to the people running SESA.",
+            "screenshots": [
+              "/assets/Projects/sesa/about.png"
+            ]
           },
           {
             "name": "Partners & sponsors",
-            "files": [
-              "sponsors.png",
-              "sponsors-2.png",
-              "sponsors-3.png"
-            ],
-            "desc": "Logo wall for industry partners (Microsoft, Amazon, Deloitte, Ciena, Bank of Canada, and more) plus a direct path for new sponsors to get in touch."
+            "desc": "Logo wall for industry partners (Microsoft, Amazon, Deloitte, Ciena, Bank of Canada, and more) plus a direct path for new sponsors to get in touch.",
+            "screenshots": [
+              "/assets/Projects/sesa/sponsors.png",
+              "/assets/Projects/sesa/sponsors-2.png",
+              "/assets/Projects/sesa/sponsors-3.png"
+            ]
           },
           {
             "name": "Get in touch",
-            "file": "contact.png",
-            "desc": "Inquiry form for collaborations, sponsorships, and student questions. Routed to exec so nothing gets lost in the Instagram DMs."
+            "desc": "Inquiry form for collaborations, sponsorships, and student questions. Routed to exec so nothing gets lost in the Instagram DMs.",
+            "screenshots": [
+              "/assets/Projects/sesa/contact.png"
+            ]
           }
         ],
         "decisions": [
@@ -353,11 +368,13 @@
               "people": [
                 {
                   "name": "Rolf Addoumie",
-                  "linkedin": "https://www.linkedin.com/in/rolfaddoumie/"
+                  "subtitle": "",
+                  "url": "https://www.linkedin.com/in/rolfaddoumie/"
                 },
                 {
                   "name": "Kelly Gao",
-                  "linkedin": "https://www.linkedin.com/in/kellymiugao/"
+                  "subtitle": "",
+                  "url": "https://www.linkedin.com/in/kellymiugao/"
                 }
               ]
             },
@@ -366,7 +383,8 @@
               "people": [
                 {
                   "name": "Riki Mcalear",
-                  "linkedin": "https://www.linkedin.com/in/riki-mcalear/"
+                  "subtitle": "",
+                  "url": "https://www.linkedin.com/in/riki-mcalear/"
                 }
               ]
             },
@@ -375,15 +393,18 @@
               "people": [
                 {
                   "name": "Tazim Khan",
-                  "linkedin": "https://www.linkedin.com/in/tazim-khan/"
+                  "subtitle": "",
+                  "url": "https://www.linkedin.com/in/tazim-khan/"
                 },
                 {
                   "name": "Adam Thompson-Sharpe",
-                  "linkedin": "https://www.linkedin.com/in/adamts/"
+                  "subtitle": "",
+                  "url": "https://www.linkedin.com/in/adamts/"
                 },
                 {
                   "name": "Raman Gupta",
-                  "linkedin": "https://www.linkedin.com/in/gupta-raman/"
+                  "subtitle": "",
+                  "url": "https://www.linkedin.com/in/gupta-raman/"
                 }
               ]
             }
@@ -404,8 +425,8 @@
         "Groq API"
       ],
       "github": "https://github.com/Twoos123/pawnversation",
-      "repoUrl": "https://github.com/Twoos123/pawnversation",
-      "demo": "https://pawnversation.vercel.app"
+      "demo": "https://pawnversation.vercel.app",
+      "caseStudy": null
     },
     {
       "id": 2,
@@ -423,8 +444,8 @@
         "Cloudinary"
       ],
       "github": "https://github.com/Twoos123/ecomm-mern",
-      "repoUrl": "https://github.com/Twoos123/ecomm-mern",
-      "demo": null
+      "demo": "",
+      "caseStudy": null
     },
     {
       "id": 3,
@@ -437,8 +458,8 @@
         "OpenAI"
       ],
       "github": "https://github.com/Twoos123/GPT-Clone-AA",
-      "repoUrl": "https://github.com/Twoos123/GPT-Clone-AA",
-      "demo": null
+      "demo": "",
+      "caseStudy": null
     },
     {
       "id": 4,
@@ -452,8 +473,8 @@
         "React"
       ],
       "github": "https://github.com/Twoos123/Pokedex",
-      "repoUrl": "https://github.com/Twoos123/Pokedex",
-      "demo": null
+      "demo": "",
+      "caseStudy": null
     },
     {
       "id": 5,
@@ -464,8 +485,8 @@
         "Python"
       ],
       "github": "https://github.com/Twoos123/Python-Planetsim",
-      "repoUrl": "https://github.com/Twoos123/Python-Planetsim",
-      "demo": null
+      "demo": "",
+      "caseStudy": null
     },
     {
       "id": 6,
@@ -478,8 +499,8 @@
         "JavaScript"
       ],
       "github": "https://github.com/Twoos123/TriviaGame",
-      "repoUrl": "https://github.com/Twoos123/TriviaGame",
-      "demo": null
+      "demo": "",
+      "caseStudy": null
     },
     {
       "id": 7,
@@ -494,8 +515,8 @@
         "Android Studio"
       ],
       "github": "https://github.com/Twoos123/SEG200-Project",
-      "repoUrl": "https://github.com/Twoos123/SEG200-Project",
-      "demo": null
+      "demo": "",
+      "caseStudy": null
     },
     {
       "id": 8,
@@ -508,8 +529,8 @@
         "Co:Here NLP"
       ],
       "github": "https://github.com/Twoos123/MenuMate",
-      "repoUrl": "https://github.com/Twoos123/MenuMate",
-      "demo": null
+      "demo": "",
+      "caseStudy": null
     },
     {
       "id": 9,
@@ -523,8 +544,8 @@
         "CSS3"
       ],
       "github": "https://github.com/Twoos123/RoadOptimization",
-      "repoUrl": "https://github.com/Twoos123/RoadOptimization",
-      "demo": null
+      "demo": "",
+      "caseStudy": null
     }
   ]
 }

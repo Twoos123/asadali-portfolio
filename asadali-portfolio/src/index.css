@@ -384,9 +384,236 @@
   cursor: pointer;
 }
 
-/* Footer "Pause animations" toggle (see hooks/useReducedMotion.js). Loading spinners keep
-   turning so a pending action never looks frozen. */
-html[data-motion-paused] *:not(.animate-spin),
+/* Text inside a link or button: clicks still follow it, a double-click edits the text. */
+.site-editable--in-control {
+  cursor: pointer;
+}
+
+.site-editable-image {
+  cursor: pointer;
+  outline: 1px dashed rgba(186, 230, 253, 0.55);
+  outline-offset: 2px;
+}
+
+.site-editable-image:hover {
+  outline: 2px solid #38bdf8;
+  filter: brightness(1.08);
+}
+
+.site-edit-control {
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px dashed rgba(186, 230, 253, 0.6);
+  background: rgba(8, 47, 73, 0.75);
+  color: #bae6fd;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.site-edit-control--changed {
+  border-color: rgba(251, 191, 36, 0.9);
+  color: #fde68a;
+}
+
+/* Move/remove buttons on list items: faint until the item is hovered. */
+.site-item-controls {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 30;
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(2, 6, 23, 0.85);
+  opacity: 0.55;
+  transition: opacity 0.15s;
+}
+
+/* Items whose text would sit under their controls: give the controls a line of their own
+   (only while editing, the only time the controls exist). */
+.site-item:has(> .site-item-controls) {
+  padding-top: 30px;
+}
+
+*:hover > .site-item-controls,
+.site-item-controls:focus-within {
+  opacity: 1;
+}
+
+.site-item-controls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  color: #bae6fd;
+  font-size: 10px;
+}
+
+.site-item-controls button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.site-item-controls button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.site-item-controls .site-item-controls__remove:hover {
+  color: #fda4af;
+}
+
+.site-add-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px dashed rgba(186, 230, 253, 0.6);
+  background: rgba(8, 47, 73, 0.5);
+  color: #bae6fd;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.site-add-item:hover {
+  border-style: solid;
+  background: rgba(14, 165, 233, 0.25);
+  color: #fff;
+}
+
+/* Admin console (src/editor/AdminConsole.js): status lights and the sonar scope. */
+.admin-led {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: rgba(186, 230, 253, 0.35);
+}
+
+.admin-led--good {
+  background: #34d399;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
+}
+
+.admin-led--warn {
+  background: #fbbf24;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.7);
+  animation: admin-blink 1.4s ease-in-out infinite;
+}
+
+.admin-led--bad {
+  background: #fb7185;
+  box-shadow: 0 0 8px rgba(251, 113, 133, 0.7);
+}
+
+@keyframes admin-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* Rings, crosshair, a rotating sweep, and section contacts that flare as it passes. */
+.sonar {
+  position: relative;
+  aspect-ratio: 1;
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.16), rgba(8, 47, 73, 0.45) 72%);
+  box-shadow: 0 0 40px -8px rgba(56, 189, 248, 0.45), inset 0 0 30px rgba(8, 47, 73, 0.6);
+}
+
+.sonar-rings,
+.sonar-cross,
+.sonar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.sonar-rings {
+  background: repeating-radial-gradient(circle, transparent 0 16.4%, rgba(125, 211, 252, 0.2) 16.4% 16.8%);
+}
+
+.sonar-cross {
+  background: linear-gradient(rgba(125, 211, 252, 0.18), rgba(125, 211, 252, 0.18)) center / 1px 100% no-repeat,
+    linear-gradient(90deg, rgba(125, 211, 252, 0.18), rgba(125, 211, 252, 0.18)) center / 100% 1px no-repeat;
+}
+
+.sonar-sweep {
+  background: conic-gradient(from 0deg, transparent 0 290deg, rgba(56, 189, 248, 0) 290deg, rgba(56, 189, 248, 0.45) 360deg);
+  animation: sonar-sweep 4s linear infinite;
+  will-change: transform;
+}
+
+@keyframes sonar-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sonar-contact {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  translate: -5px -5px;
+  cursor: pointer;
+}
+
+.sonar-blip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #bae6fd;
+  box-shadow: 0 0 12px rgba(125, 211, 252, 0.9);
+  animation: sonar-blip var(--period, 4s) linear var(--delay, 0s) infinite;
+}
+
+.sonar-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(186, 230, 253, 0.8);
+  transition: color 0.2s;
+}
+
+.sonar-contact:hover .sonar-label {
+  color: #fff;
+}
+
+.sonar-contact:hover .sonar-blip {
+  animation: none;
+  opacity: 1;
+  transform: scale(1.5);
+}
+
+@keyframes sonar-blip {
+  0% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+  25% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+}
+
+/* Footer "Pause animations" toggle (see hooks/useReducedMotion.js): everything freezes where
+   it is. Loading spinners keep turning so a pending action never looks frozen, and layers
+   driven by scrolling rather than time keep following the page. */
+html[data-motion-paused] *:not(.animate-spin):not(.snow-parallax):not(.deep-dark),
 html[data-motion-paused] *::before,
 html[data-motion-paused] *::after {
   animation-play-state: paused !important;
@@ -929,5 +1156,33 @@ footer {
   /* Override any problematic transforms on mobile */
   [style*="translateX(100vw)"] {
     transform: translateX(95vw) !important;
+  }
+}
+
+/* Hero sky (pages/Home.js): the sun pulses and the clouds drift a few pixels. */
+.sky-sun {
+  animation: sky-sun 4s ease-in-out infinite;
+}
+
+.sky-cloud {
+  animation: sky-cloud 10s ease-in-out infinite;
+}
+
+@keyframes sky-sun {
+  50% {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+@keyframes sky-cloud {
+  50% {
+    transform: translate(3px, -1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-sun,
+  .sky-cloud {
+    animation: none;
   }
 }

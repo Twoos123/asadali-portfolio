@@ -11,7 +11,8 @@
     "rows": [
       {
         "label": "Role",
-        "value": "Cloud Infrastructure Analyst Intern - DevOps @ Sun Life"
+        "value": "Cloud Infrastructure Analyst Intern - DevOps @ Sun Life",
+        "link": ""
       },
       {
         "label": "Building",
@@ -20,15 +21,18 @@
       },
       {
         "label": "Learning",
-        "value": "AI workflows & LLMs in production"
+        "value": "AI workflows & LLMs in production",
+        "link": ""
       },
       {
         "label": "Based in",
-        "value": "Ottawa, Ontario"
+        "value": "Ottawa, Ontario",
+        "link": ""
       },
       {
         "label": "Grinding",
-        "value": "CS2, Level 10 Faceit (Top 2,000 NA)"
+        "value": "CS2, Level 10 Faceit (Top 2,000 NA)",
+        "link": ""
       }
     ]
   }

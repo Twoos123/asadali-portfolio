@@ -4,74 +4,132 @@
   "entries": [
     {
       "kind": "incoming",
+      "logo": "",
       "org": "Next Chapter",
       "role": "Software Engineer · Seeking New Grad Roles",
       "period": "Available Dec 2026",
       "location": "Ottawa · Toronto · Montreal · Vancouver · Remote",
-      "skills": ["Full-Stack", "Backend", "Distributed Systems", "Cloud & DevOps"]
+      "description": "",
+      "skills": [
+        "Full-Stack",
+        "Backend",
+        "Distributed Systems",
+        "Cloud & DevOps"
+      ]
     },
     {
       "kind": "work",
-      "logo": "sunLife",
+      "logo": "/assets/sunlife.svg?v=3",
       "org": "Sun Life",
       "role": "Cloud Infrastructure Analyst Intern · DevOps",
       "period": "Sep 2026 - Dec 2026",
       "location": "Toronto, ON · Remote",
-      "skills": ["Kubernetes", "Docker", "Terraform", "Ansible", "Prometheus", "AWS"]
+      "description": "",
+      "skills": [
+        "Kubernetes",
+        "Docker",
+        "Terraform",
+        "Ansible",
+        "Prometheus",
+        "AWS"
+      ]
     },
     {
       "kind": "work",
-      "logo": "healthCanada",
+      "logo": "/assets/health-canada.svg?v=3",
       "org": "Health Canada",
       "role": "Software Engineer Intern · Fullstack",
       "period": "May 2026 - Aug 2026",
       "location": "Ottawa, ON · Hybrid",
-      "skills": ["React.js", "FastAPI", "Python", "Vite", "SQLite", "CI/CD"]
+      "description": "",
+      "skills": [
+        "React.js",
+        "FastAPI",
+        "Python",
+        "Vite",
+        "SQLite",
+        "CI/CD"
+      ]
     },
     {
       "kind": "work",
-      "logo": "uOttawa",
+      "logo": "/assets/uottawa.svg?v=3",
       "org": "University of Ottawa",
       "role": "Software Engineer Intern · Fullstack",
       "period": "Oct 2025 - Apr 2026",
       "location": "Ottawa, ON · Hybrid",
-      "skills": ["PHP", "MySQL", "Docker", "Apache", "Linux", "Drupal"]
+      "description": "",
+      "skills": [
+        "PHP",
+        "MySQL",
+        "Docker",
+        "Apache",
+        "Linux",
+        "Drupal"
+      ]
     },
     {
       "kind": "work",
-      "logo": "healthCanada",
+      "logo": "/assets/health-canada.svg?v=3",
       "org": "Health Canada",
       "role": "Software Engineer Intern · Fullstack",
       "period": "May 2025 - Aug 2025",
       "location": "Ottawa, ON · Hybrid",
-      "skills": ["Python", "Pandas", "Streamlit", "ArcGIS", "DuckDB", "Excel"]
+      "description": "",
+      "skills": [
+        "Python",
+        "Pandas",
+        "Streamlit",
+        "ArcGIS",
+        "DuckDB",
+        "Excel"
+      ]
     },
     {
       "kind": "volunteer",
-      "logo": "sesa",
+      "logo": "/assets/SESA.svg?v=3",
       "org": "uOttawa SESA",
       "role": "Co-Director → Advisor",
       "period": "Apr 2024 - Present",
       "location": "Ottawa, ON",
-      "skills": ["Leadership", "Full-Stack Web", "Event Operations", "Mentorship"]
+      "description": "",
+      "skills": [
+        "Leadership",
+        "Full-Stack Web",
+        "Event Operations",
+        "Mentorship"
+      ]
     },
     {
       "kind": "work",
-      "logo": "eightByEight",
+      "logo": "/assets/8x8.svg?v=3",
       "org": "8x8",
       "role": "Software Engineer Intern · Backend",
       "period": "Jan 2024 - May 2024",
       "location": "Ottawa, ON · Hybrid",
-      "skills": ["Java", "Spring Boot", "Docker", "REST APIs", "OAuth", "Postman"]
+      "description": "",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Docker",
+        "REST APIs",
+        "OAuth",
+        "Postman"
+      ]
     },
     {
       "kind": "volunteer",
-      "logo": "uOttaHack",
+      "logo": "/assets/uOttaHack.svg?v=3",
       "org": "uOttaHack",
       "role": "MLH Hackathon Organizer",
       "period": "Jun 2023 - Mar 2024",
       "location": "Ottawa, ON",
-      "skills": ["Event Logistics", "Technical Workshops", "Community"]
+      "description": "",
+      "skills": [
+        "Event Logistics",
+        "Technical Workshops",
+        "Community"
+      ]
     }
   ]
 }

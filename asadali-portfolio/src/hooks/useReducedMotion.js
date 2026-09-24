@@ -1,8 +1,11 @@
 import { useSyncExternalStore } from 'react';
 import useMediaQuery from './useMediaQuery';
 
-// Motion preference shared across the app: the visitor's OS setting, or the pause
-// toggle in the footer (remembered between visits).
+// Two separate motion settings:
+// - the footer's pause toggle (remembered between visits): every animation freezes where it
+//   is, and resumes from there. CSS animations pause via html[data-motion-paused] (index.css);
+//   animation loops stop their frames (components/ocean/ticker.js runWhileVisible).
+// - the visitor's OS "reduce motion" setting: animations are replaced by still versions.
 
 const STORAGE_KEY = 'motion-paused';
 const listeners = new Set();
@@ -37,9 +40,11 @@ export function useMotionPaused() {
   return useSyncExternalStore(subscribe, () => paused);
 }
 
-// True when animation should be kept still, for either reason.
+// For animation loops outside React.
+export const isMotionPaused = () => paused;
+export const onMotionPausedChange = subscribe;
+
+// True when the visitor's OS asks for reduced motion.
 export default function useReducedMotion() {
-  const prefersReduced = useMediaQuery('(prefers-reduced-motion: reduce)');
-  const pausedByVisitor = useMotionPaused();
-  return prefersReduced || pausedByVisitor;
+  return useMediaQuery('(prefers-reduced-motion: reduce)');
 }

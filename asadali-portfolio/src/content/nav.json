@@ -1,5 +1,6 @@
 {
   "logo": {
+    "image": "/assets/AsadLogo.png",
     "name": "Asad Ali",
     "subtitle": "Software Engineer"
   },
@@ -14,5 +15,6 @@
   "cta": {
     "label": "Let's talk",
     "mobileLabel": "Contact"
-  }
+  },
+  "admin": "Admin"
 }

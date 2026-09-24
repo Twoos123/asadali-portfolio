@@ -63,12 +63,33 @@ function authed(path, options) {
   return request(path, options, session.token);
 }
 
-// Commits the changes to main; resolves to { sha, url }.
-export const publishChanges = (changes) =>
-  authed('/api/editor/save', {
-    method: 'POST',
-    body: JSON.stringify({ changes: changes.map(({ path, after }) => ({ path, value: after })) }),
+const readAsBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result).split(',')[1]);
+    reader.onerror = () => reject(new Error(`Couldn't read ${file.name}.`));
+    reader.readAsDataURL(file);
   });
+
+// Commits the changed content files (whole documents) and any new images to main in one
+// commit. Resolves to { sha, url, paths }, where paths maps each upload id to its new
+// site path.
+export async function publishDraft({ files, uploads }) {
+  const encoded = await Promise.all(
+    uploads.map(async ({ id, file }) => ({ id, name: file.name, type: file.type, data: await readAsBase64(file) }))
+  );
+  return authed('/api/editor/save', { method: 'POST', body: JSON.stringify({ files, uploads: encoded }) });
+}
+
+// Public: is the server up (and how long it took), and which parts of the editor are set up.
+export async function serverHealth() {
+  const started = performance.now();
+  const setup = await request('/api/editor/health');
+  return { ...setup, ms: Math.round(performance.now() - started) };
+}
+
+// Recent commits that changed the site: { commits: [{ sha, message, date, url }] }.
+export const recentActivity = () => authed('/api/editor/activity');
 
 // Deploy progress for a commit: { state: 'pending' | 'running' | 'success' | 'failure', url }.
 export const deployStatus = (sha) => authed(`/api/editor/status?sha=${encodeURIComponent(sha)}`);

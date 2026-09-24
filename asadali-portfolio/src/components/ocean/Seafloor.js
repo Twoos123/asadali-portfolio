@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Kelp, { seeded } from './Kelp';
 import { readPointer, releasePointer, retainPointer } from './pointer';
-import { subscribe } from './ticker';
+import { runWhileVisible } from './ticker';
 import useReducedMotion from '../../hooks/useReducedMotion';
 
 // The hero seabed: hazy back dunes and plants, then whatever swims (children), then the
@@ -174,7 +174,6 @@ function usePlantSprings(sceneRef, layout, enabled) {
 
     const pointer = { active: false };
     let measuredWidth = -1;
-    let unsubscribe = null;
     let last = 0;
     let rect = null;
 
@@ -214,21 +213,10 @@ function usePlantSprings(sceneRef, layout, enabled) {
       }
     };
 
-    const start = () => {
-      if (unsubscribe) return;
-      last = performance.now();
-      unsubscribe = subscribe({ read, write });
-    };
-    const stop = () => {
-      if (unsubscribe) unsubscribe();
-      unsubscribe = null;
-    };
-    const observer = new IntersectionObserver((entries) => (entries[entries.length - 1].isIntersecting ? start() : stop()));
-    observer.observe(scene);
+    const stop = runWhileVisible(scene, { read, write }, { onStart: () => { last = performance.now(); } });
     retainPointer();
     return () => {
       stop();
-      observer.disconnect();
       releasePointer();
       plants.forEach((p) => {
         p.el.style.transform = '';

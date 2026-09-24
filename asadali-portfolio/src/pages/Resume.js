@@ -3,7 +3,9 @@ import { motion, useInView } from 'framer-motion';
 import { FaExpand, FaCompress, FaExternalLinkAlt, FaExclamationTriangle, FaRedo } from 'react-icons/fa';
 import OceanLife from '../components/ocean/OceanLife';
 import Editable from '../editor/Editable';
-import { useContent } from '../editor/store';
+import { LinkEdit } from '../editor/controls';
+import { safeUrl } from '../editor/markup';
+import { useContent, useEditing } from '../editor/store';
 
 function Resume() {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -16,20 +18,19 @@ function Resume() {
   const titleInView = useInView(titleRef, { threshold: 0.3, once: true });
   const resumeInView = useInView(resumeRef, { threshold: 0.1, once: true });
   const content = useContent('resume');
+  const editing = useEditing();
 
-  // Multiple URL formats for better compatibility
-  const resumeUrls = [
-    "https://drive.google.com/file/d/17k-FbUlKWx263njOeZHt0rcvE-LiNiSi/preview",
-    "https://docs.google.com/document/d/17k-FbUlKWx263njOeZHt0rcvE-LiNiSi/preview", 
-    "https://drive.google.com/uc?id=17k-FbUlKWx263njOeZHt0rcvE-LiNiSi&export=view"
-  ];
-  const downloadUrl = "https://drive.google.com/file/d/17k-FbUlKWx263njOeZHt0rcvE-LiNiSi/view?usp=sharing";
-  const directViewUrl = "https://drive.google.com/file/d/17k-FbUlKWx263njOeZHt0rcvE-LiNiSi/view";
+  // Preview URL formats (src/content/resume.json), tried in order until one loads. Empty or
+  // invalid links are skipped.
+  const resumeUrls = content.links.previews.map(safeUrl).filter(Boolean);
+  const directViewUrl = safeUrl(content.links.view);
+  const hasPreview = currentUrlIndex < resumeUrls.length;
 
   // Performance optimization: Add cache buster for fresh content when needed
   const getCachedResumeUrl = () => {
     const cacheTime = Math.floor(Date.now() / (1000 * 60 * 60 * 24)); // Cache for 24 hours
     const url = resumeUrls[currentUrlIndex];
+    if (!url) return undefined;
     const separator = url.includes('?') ? '&' : '?';
     return `${url}${separator}t=${cacheTime}`;
   };
@@ -83,11 +84,13 @@ function Resume() {
   useEffect(() => {
     if (resumeInView && !shouldLoadResume) {
       setShouldLoadResume(true);
-      
+      const previewUrl = getCachedResumeUrl();
+      if (!previewUrl) return undefined;
+
       // Preload Google Drive resources for better caching
       const preloadLink = document.createElement('link');
       preloadLink.rel = 'preload';
-      preloadLink.href = getCachedResumeUrl();
+      preloadLink.href = previewUrl;
       preloadLink.as = 'fetch';
       preloadLink.crossOrigin = 'anonymous';
       document.head.appendChild(preloadLink);
@@ -162,6 +165,15 @@ function Resume() {
           )}
         </div>
 
+        {editing && (
+          <div className="flex justify-center items-center gap-2 -mt-4 mb-8 flex-wrap">
+            <LinkEdit path="resume.links.view" label="Resume link (Open / View in Drive)" />
+            {content.links.previews.map((_, i) => (
+              <LinkEdit key={i} path={`resume.links.previews.${i}`} label={`Preview link ${i + 1}`} />
+            ))}
+          </div>
+        )}
+
         {/* Resume Iframe */}
         <motion.div
           className={`mx-auto rounded-2xl overflow-hidden backdrop-blur-md bg-white/5 border border-white/20 shadow-2xl ${
@@ -188,7 +200,7 @@ function Resume() {
           
           {shouldLoadResume ? (
             <>
-              {resumeError ? (
+              {resumeError || !hasPreview ? (
                 <div 
                   className="w-full flex flex-col items-center justify-center bg-white/5 rounded-xl border-2 border-red-400/20"
                   style={{ height: isFullscreen ? 'calc(100vh - 6rem)' : '80vh' }}

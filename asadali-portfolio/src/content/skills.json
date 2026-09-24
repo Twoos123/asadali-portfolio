@@ -3,33 +3,333 @@
   "heading": "Skills",
   "intro": "The tech I reach for most often, flowing by. Hover to pause, click any chip for the docs.",
   "viewAll": "View all",
-  "categories": {
-    "languages": {
+  "categories": [
+    {
       "rowLabel": "01 · LANGUAGES",
       "modalLabel": "01 · LANGUAGES",
-      "title": "Programming Languages"
+      "title": "Programming Languages",
+      "direction": "left",
+      "duration": 38,
+      "items": [
+        {
+          "name": "Java",
+          "link": "https://www.java.com",
+          "icon": "/assets/skills/Java.svg"
+        },
+        {
+          "name": "Python",
+          "link": "https://www.python.org",
+          "icon": "/assets/skills/Python.svg"
+        },
+        {
+          "name": "JavaScript",
+          "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+          "icon": "/assets/skills/JavaScript.svg"
+        },
+        {
+          "name": "TypeScript",
+          "link": "https://www.typescriptlang.org",
+          "icon": "/assets/skills/TypeScript.svg"
+        },
+        {
+          "name": "PHP",
+          "link": "https://www.php.net",
+          "icon": "/assets/skills/PHP.svg"
+        },
+        {
+          "name": "Kotlin",
+          "link": "https://kotlinlang.org",
+          "icon": "/assets/skills/Kotlin.svg"
+        },
+        {
+          "name": "HTML5",
+          "link": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+          "icon": "/assets/skills/HTML5.svg"
+        },
+        {
+          "name": "CSS3",
+          "link": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+          "icon": "/assets/skills/CSS3.svg"
+        },
+        {
+          "name": "C++",
+          "link": "https://www.cplusplus.com",
+          "icon": "/assets/skills/C++ (CPlusPlus).svg"
+        }
+      ]
     },
-    "frameworks": {
+    {
       "rowLabel": "02 · FRAMEWORKS",
       "modalLabel": "02 · FRAMEWORKS",
-      "title": "Frameworks & Libraries"
+      "title": "Frameworks & Libraries",
+      "direction": "right",
+      "duration": 44,
+      "items": [
+        {
+          "name": "React",
+          "link": "https://reactjs.org",
+          "icon": "/assets/skills/React.svg"
+        },
+        {
+          "name": "Next.js",
+          "link": "https://nextjs.org",
+          "icon": "/assets/skills/Next.js.svg"
+        },
+        {
+          "name": "Spring Boot",
+          "link": "https://spring.io/projects/spring-boot",
+          "icon": "/assets/skills/Spring.svg"
+        },
+        {
+          "name": "FastAPI",
+          "link": "https://fastapi.tiangolo.com",
+          "icon": "/assets/skills/FastAPI.svg"
+        },
+        {
+          "name": "Node.js",
+          "link": "https://nodejs.org",
+          "icon": "/assets/skills/Node.js.svg"
+        },
+        {
+          "name": "Express",
+          "link": "https://expressjs.com",
+          "icon": "/assets/skills/Express.svg"
+        },
+        {
+          "name": "Flask",
+          "link": "https://flask.palletsprojects.com",
+          "icon": "/assets/skills/Flask.svg"
+        },
+        {
+          "name": "Tailwind CSS",
+          "link": "https://tailwindcss.com",
+          "icon": "/assets/skills/Tailwind CSS.svg"
+        },
+        {
+          "name": "Chakra UI",
+          "link": "https://chakra-ui.com",
+          "icon": "/assets/skills/Chakra UI.svg"
+        },
+        {
+          "name": "Vite",
+          "link": "https://vitejs.dev",
+          "icon": "/assets/skills/Vite.js.svg"
+        },
+        {
+          "name": "GraphQL",
+          "link": "https://graphql.org",
+          "icon": "/assets/skills/GraphQL.svg"
+        },
+        {
+          "name": "Streamlit",
+          "link": "https://streamlit.io",
+          "icon": "/assets/skills/Streamlit.svg"
+        }
+      ]
     },
-    "cloudDevops": {
+    {
       "rowLabel": "03 · CLOUD & DEVOPS",
       "modalLabel": "03 · CLOUD & DEVOPS",
-      "title": "Cloud, Infrastructure & DevOps"
+      "title": "Cloud, Infrastructure & DevOps",
+      "direction": "left",
+      "duration": 40,
+      "items": [
+        {
+          "name": "AWS",
+          "link": "https://aws.amazon.com",
+          "icon": "react:FaAws"
+        },
+        {
+          "name": "Kubernetes",
+          "link": "https://kubernetes.io",
+          "icon": "/assets/skills/Kubernetes.svg"
+        },
+        {
+          "name": "Docker",
+          "link": "https://www.docker.com",
+          "icon": "/assets/skills/Docker.svg"
+        },
+        {
+          "name": "Terraform",
+          "link": "https://www.terraform.io",
+          "icon": "react:SiTerraform"
+        },
+        {
+          "name": "Ansible",
+          "link": "https://www.ansible.com",
+          "icon": "react:SiAnsible"
+        },
+        {
+          "name": "Prometheus",
+          "link": "https://prometheus.io",
+          "icon": "react:SiPrometheus"
+        },
+        {
+          "name": "Grafana",
+          "link": "https://grafana.com",
+          "icon": "react:SiGrafana"
+        },
+        {
+          "name": "Jenkins",
+          "link": "https://www.jenkins.io",
+          "icon": "/assets/skills/Jenkins.svg"
+        },
+        {
+          "name": "Linux",
+          "link": "https://www.kernel.org",
+          "icon": "/assets/skills/Linux.svg"
+        },
+        {
+          "name": "Bash",
+          "link": "https://www.gnu.org/software/bash/",
+          "icon": "/assets/skills/Bash.svg"
+        },
+        {
+          "name": "Bitbucket",
+          "link": "https://bitbucket.org",
+          "icon": "react:SiBitbucket"
+        }
+      ]
     },
-    "databases": {
+    {
       "rowLabel": "04 · DATABASES",
       "modalLabel": "04 · DATABASES",
-      "title": "Databases & Storage"
+      "title": "Databases & Storage",
+      "direction": "right",
+      "duration": 36,
+      "items": [
+        {
+          "name": "PostgreSQL",
+          "link": "https://www.postgresql.org",
+          "icon": "/assets/skills/PostgresSQL.svg"
+        },
+        {
+          "name": "MySQL",
+          "link": "https://www.mysql.com",
+          "icon": "/assets/skills/MySQL.svg"
+        },
+        {
+          "name": "MongoDB",
+          "link": "https://www.mongodb.com",
+          "icon": "/assets/skills/MongoDB.svg"
+        },
+        {
+          "name": "Redis",
+          "link": "https://redis.io",
+          "icon": "/assets/skills/Redis.svg"
+        },
+        {
+          "name": "SQLite",
+          "link": "https://www.sqlite.org",
+          "icon": "/assets/skills/SQLite.svg"
+        },
+        {
+          "name": "DuckDB",
+          "link": "https://duckdb.org",
+          "icon": "react:SiDuckdb"
+        },
+        {
+          "name": "Trino Starburst",
+          "link": "https://trino.io",
+          "icon": "react:SiTrino"
+        },
+        {
+          "name": "Firebase",
+          "link": "https://firebase.google.com",
+          "icon": "/assets/skills/Firebase.svg"
+        },
+        {
+          "name": "Supabase",
+          "link": "https://supabase.com",
+          "icon": "react:SiSupabase"
+        }
+      ]
     },
-    "tools": {
+    {
       "rowLabel": "05 · TOOLS & ECOSYSTEM",
       "modalLabel": "05 · TOOLS",
-      "title": "Developer Tools & Ecosystem"
+      "title": "Developer Tools & Ecosystem",
+      "direction": "left",
+      "duration": 46,
+      "items": [
+        {
+          "name": "Git",
+          "link": "https://git-scm.com",
+          "icon": "/assets/skills/Git.svg"
+        },
+        {
+          "name": "GitHub",
+          "link": "https://github.com",
+          "icon": "/assets/skills/GitHub.svg"
+        },
+        {
+          "name": "Postman",
+          "link": "https://www.postman.com",
+          "icon": "/assets/skills/Postman.svg"
+        },
+        {
+          "name": "Playwright",
+          "link": "https://playwright.dev",
+          "icon": "/assets/skills/Playwright.svg"
+        },
+        {
+          "name": "JIRA",
+          "link": "https://www.atlassian.com/software/jira",
+          "icon": "/assets/skills/Jira.svg"
+        },
+        {
+          "name": "OAuth 2.0",
+          "link": "https://oauth.net/2/",
+          "icon": "/assets/skills/Oauth.svg"
+        },
+        {
+          "name": "Stripe",
+          "link": "https://stripe.com",
+          "icon": "react:SiStripe"
+        },
+        {
+          "name": "Vercel",
+          "link": "https://vercel.com",
+          "icon": "/assets/skills/Vercel.svg"
+        },
+        {
+          "name": "Cloudinary",
+          "link": "https://cloudinary.com",
+          "icon": "/assets/skills/Cloudinary.svg"
+        },
+        {
+          "name": "OpenAI",
+          "link": "https://openai.com",
+          "icon": "/assets/skills/Openai.svg"
+        },
+        {
+          "name": "Groq",
+          "link": "https://groq.com",
+          "icon": "/assets/skills/Groq.svg"
+        },
+        {
+          "name": "Co:Here",
+          "link": "https://cohere.ai",
+          "icon": "/assets/skills/Cohere.svg"
+        },
+        {
+          "name": "Apache",
+          "link": "https://httpd.apache.org",
+          "icon": "/assets/skills/Apache.svg"
+        },
+        {
+          "name": "Drupal",
+          "link": "https://www.drupal.org",
+          "icon": "/assets/skills/Drupal.svg"
+        },
+        {
+          "name": "Android Studio",
+          "link": "https://developer.android.com/studio",
+          "icon": "/assets/skills/Android Studio.svg"
+        }
+      ]
     }
-  },
+  ],
   "modal": {
     "eyebrow": "Full toolkit",
     "heading": "Everything I work with"

@@ -93,6 +93,10 @@ app.use((req, res, next) => {
   next();
 });
 
+// On-site editor (see editor.js). Mounted before the app-wide body parser because saves can
+// carry images, over its 100 kB limit; the router parses its own bodies.
+app.use('/api/editor', editorRouter);
+
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -242,9 +246,6 @@ app.get('/', (req, res) => {
     }
   });
 });
-
-// On-site text editor (see editor.js)
-app.use('/api/editor', editorRouter);
 
 // 404 handler
 app.use('*', (req, res) => {

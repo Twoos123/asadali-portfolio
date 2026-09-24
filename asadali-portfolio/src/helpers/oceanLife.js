@@ -177,6 +177,33 @@ export const oceanLife = {
       },
     ],
   },
+  // The admin console at /admin.
+  admin: {
+    feeding: true,
+    bubbles: { count: 6, mobileCount: 3, band: [0, 1] },
+    creatures: [
+      {
+        species: 'jellyfish',
+        count: 2,
+        mobileCount: 1,
+        band: [0.1, 0.45],
+        scale: [0.75, 0.9],
+        color: '#ffffff',
+        detail: 'rgba(244, 114, 182, 0.55)',
+        opacity: 0.55,
+      },
+      {
+        species: 'small-fish',
+        count: 1,
+        mobileCount: 1,
+        school: [5, 7],
+        band: [0.55, 0.9],
+        scale: [0.6, 0.72],
+        color: '#e0f2fe',
+        opacity: 0.6,
+      },
+    ],
+  },
   contact: {
     celebrate: true,
     creatures: [

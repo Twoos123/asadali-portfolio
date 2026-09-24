@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { FaLinkedin, FaGithub, FaEnvelope, FaFileAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import Skills from './Skills';
 import Projects from './Projects';
@@ -16,7 +15,10 @@ import DeepLight from '../components/ocean/DeepLight';
 import MarineSnow from '../components/ocean/MarineSnow';
 import { SURFACE_COLOR, setWaterColor } from '../components/ocean/waterColor';
 import Editable from '../editor/Editable';
-import { useContent } from '../editor/store';
+import { useContent, useEditing } from '../editor/store';
+import { AddItem, ItemControls } from '../editor/controls';
+import { safeUrl } from '../editor/markup';
+import { NEW_SOCIAL_LINK, SocialLinkFields, linkTargetProps, socialIcon } from '../components/socialLinks';
 
 // Slim kelp fronds framing the page edges (desktop only).
 const SIDE_KELP = {
@@ -216,41 +218,25 @@ function Home() {
               position: 'relative' // Needed for z-index and positioning context for sun/clouds
             }}>
               {/* Sun */}
-              <motion.div 
-                className="absolute top-8 right-16 w-20 h-20 rounded-full"
+              {/* CSS animations (index.css), so the footer's pause button freezes them. */}
+              <div
+                className="sky-sun absolute top-8 right-16 w-20 h-20 rounded-full"
                 style={{ background: 'radial-gradient(circle, #FFD700 0%, #FFA500 100%)' }}
-                animate={{ 
-                  scale: [1, 1.1, 1],
-                  rotate: [0, 5, 0]
-                }}
-                transition={{ 
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
               />
               
               {/* Clouds */}
               {clouds.map((cloud) => (
-                <motion.div
+                <div
                   key={cloud.id}
-                  className="absolute rounded-full opacity-80 hidden md:block"
+                  className="sky-cloud absolute rounded-full opacity-80 hidden md:block"
                   style={{
                     background: 'linear-gradient(135deg, #FFFFFF 0%, #F0F8FF 100%)',
                     width: `${cloud.width}px`,
                     height: `${cloud.height}px`,
                     top: `${cloud.top}%`,
                     left: `${cloud.left}%`,
-                    pointerEvents: 'none'
-                  }}
-                  animate={{
-                    x: [0, 3, 0],
-                    y: [0, -1, 0]
-                  }}
-                  transition={{
-                    duration: 8 + cloud.id * 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
+                    pointerEvents: 'none',
+                    animationDuration: `${8 + cloud.id * 2}s`
                   }}
                 />
               ))}
@@ -298,16 +284,7 @@ function Home() {
               >
                 <Editable path="hero.subtitle" />
               </motion.p>
-              <StaggerContainer 
-                className="flex justify-center space-x-6" 
-                staggerDelay={0.1}
-                direction="up"
-                distance={20}
-              >
-                <SocialLink href="https://www.linkedin.com/in/asadbinali/" icon={FaLinkedin} labelKey="linkedin" hoverColor="hover:text-blue-300" />
-                <SocialLink href="https://github.com/Twoos123" icon={FaGithub} labelKey="github" hoverColor="hover:text-gray-300" />
-               
-              </StaggerContainer>
+              <HeroSocial />
             </motion.div>
 
           </div>
@@ -335,33 +312,72 @@ function Home() {
   );
 }
 
-// labelKey picks the hover label from hero.social in src/content/hero.json.
-function SocialLink({ href, icon: Icon, labelKey, hoverColor }) {
+// The hero's social links: hero.social in src/content/hero.json ({ icon, label, url }).
+function HeroSocial() {
   const { social } = useContent('hero');
+  const editing = useEditing();
+  // StaggerContainer wraps each child in its own animated item, so pass a flat list.
+  const links = social.map((link, i) => (
+    <SocialLink key={i} link={link} index={i} count={social.length} editing={editing} />
+  ));
   return (
-    <motion.a 
-      href={href} 
-      target="_blank" 
-      rel="noopener noreferrer" 
+    <>
+      <StaggerContainer
+        className="flex justify-center space-x-6"
+        staggerDelay={0.1}
+        direction="up"
+        distance={20}
+      >
+        {links}
+      </StaggerContainer>
+      {editing && (
+        <div className="mt-6">
+          <AddItem listPath="hero.social" template={NEW_SOCIAL_LINK} label="social link" />
+        </div>
+      )}
+    </>
+  );
+}
+
+function SocialLink({ link, index, count, editing }) {
+  const path = `hero.social.${index}`;
+  const { Icon, hover } = socialIcon(link.icon);
+  const href = safeUrl(link.url);
+  const anchor = (
+    <motion.a
+      href={href}
+      {...linkTargetProps(href)}
       className="group relative"
-      whileHover={{ 
-        scale: 1.2, 
+      whileHover={{
+        scale: 1.2,
         y: -5,
         transition: { duration: 0.2 }
       }}
       whileTap={{ scale: 0.9 }}
     >
-      <Icon className={`text-4xl md:text-5xl text-white ${hoverColor} transition-all duration-300 drop-shadow-lg`} />
-      <span className="sr-only">{social[labelKey]}</span>
-      <motion.span 
-        className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-sm bg-blue-900 bg-opacity-80 text-white px-3 py-1 rounded-lg whitespace-nowrap pointer-events-none"
-        initial={{ opacity: 0, y: 10 }}
-        whileHover={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.2 }}
-      >
-        <Editable path={`hero.social.${labelKey}`} />
-      </motion.span>
+      <Icon className={`text-4xl md:text-5xl text-white ${hover} transition-all duration-300 drop-shadow-lg`} />
+      <span className="sr-only">{link.label}</span>
+      {!editing && (
+        <motion.span
+          className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-sm bg-blue-900 bg-opacity-80 text-white px-3 py-1 rounded-lg whitespace-nowrap pointer-events-none"
+          initial={{ opacity: 0, y: 10 }}
+          whileHover={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <Editable path={`${path}.label`} />
+        </motion.span>
+      )}
     </motion.a>
+  );
+  if (!editing) return anchor;
+
+  // Editing: the label (normally a hover tooltip), URL and icon are shown under the icon.
+  return (
+    <div className="relative flex flex-col items-center gap-1.5 pt-8">
+      <ItemControls listPath="hero.social" index={index} count={count} label="social link" />
+      {anchor}
+      <SocialLinkFields path={path} labelClassName="text-sm text-white" />
+    </div>
   );
 }
 

@@ -4,11 +4,12 @@ import { FaEnvelope, FaCopy, FaCheck, FaPaperPlane } from 'react-icons/fa';
 import SuccessAnimation from '../components/animations/SuccessAnimation';
 import OceanLife from '../components/ocean/OceanLife';
 import Editable from '../editor/Editable';
-import { useContent } from '../editor/store';
+import { useContent, useEditing } from '../editor/store';
 import { API_BASE } from '../config';
 
 function Contact() {
   const content = useContent('contact');
+  const editing = useEditing();
   const [emailCopied, setEmailCopied] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -72,14 +73,12 @@ function Contact() {
         window.dispatchEvent(new Event('ocean:celebrate'));
         setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
-        throw new Error(data.error || 'Failed to send message');
+        throw new Error(data.error || content.form.error);
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      setFeedbackMessage(error.message || 'Failed to send message. Please try again or contact me directly via email.');
+      setFeedbackMessage(error.message || content.form.error);
       setSubmissionStatus('error');
-      // We can show an error component here if needed
-      alert(error.message || 'Failed to send message. Please try again or contact me directly via email.');
     } finally {
       setIsSubmitting(false);
     }
@@ -127,7 +126,7 @@ function Contact() {
                   {/* Contact Info Section */}
                   <div className="space-y-6">
                     <Editable path="contact.info.heading" as="h2" className="font-display text-2xl font-semibold text-white mb-4 tracking-tight" />
-                    <Editable path="contact.info.intro" as="p" className="text-ocean-100/80 leading-relaxed" />
+                    <Editable path="contact.info.intro" as="p" rich className="text-ocean-100/80 leading-relaxed" />
 
                     <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/10"
                       style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}>
@@ -146,7 +145,7 @@ function Contact() {
                       </motion.button>
                     </div>
 
-                    <Editable path="contact.info.note" as="p" className="text-ocean-200/70 text-sm" />
+                    <Editable path="contact.info.note" as="p" rich className="text-ocean-200/70 text-sm" />
                   </div>
 
                   {/* Contact Form Section */}
@@ -155,46 +154,54 @@ function Contact() {
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input
-                          type="text"
-                          name="name"
-                          placeholder="Your Name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-ocean-200/50 focus:outline-none focus:border-ocean-300/60 focus:ring-2 focus:ring-ocean-300/20 focus:bg-white/10 transition"
-                        />
+                        <Field name="name" editing={editing}>
+                          <input
+                            type="text"
+                            name="name"
+                            placeholder={content.form.placeholders.name}
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-ocean-200/50 focus:outline-none focus:border-ocean-300/60 focus:ring-2 focus:ring-ocean-300/20 focus:bg-white/10 transition"
+                          />
+                        </Field>
 
-                        <input
-                          type="email"
-                          name="email"
-                          placeholder="Your Email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-ocean-200/50 focus:outline-none focus:border-ocean-300/60 focus:ring-2 focus:ring-ocean-300/20 focus:bg-white/10 transition"
-                        />
+                        <Field name="email" editing={editing}>
+                          <input
+                            type="email"
+                            name="email"
+                            placeholder={content.form.placeholders.email}
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-ocean-200/50 focus:outline-none focus:border-ocean-300/60 focus:ring-2 focus:ring-ocean-300/20 focus:bg-white/10 transition"
+                          />
+                        </Field>
                       </div>
 
-                      <input
-                        type="text"
-                        name="subject"
-                        placeholder="Subject"
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-ocean-200/50 focus:outline-none focus:border-ocean-300/60 focus:ring-2 focus:ring-ocean-300/20 focus:bg-white/10 transition"
-                      />
+                      <Field name="subject" editing={editing}>
+                        <input
+                          type="text"
+                          name="subject"
+                          placeholder={content.form.placeholders.subject}
+                          value={formData.subject}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-ocean-200/50 focus:outline-none focus:border-ocean-300/60 focus:ring-2 focus:ring-ocean-300/20 focus:bg-white/10 transition"
+                        />
+                      </Field>
 
-                      <textarea
-                        name="message"
-                        placeholder="Your Message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        required
-                        rows={6}
-                        className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-ocean-200/50 focus:outline-none focus:border-ocean-300/60 focus:ring-2 focus:ring-ocean-300/20 focus:bg-white/10 transition resize-none"
-                      />
+                      <Field name="message" editing={editing}>
+                        <textarea
+                          name="message"
+                          placeholder={content.form.placeholders.message}
+                          value={formData.message}
+                          onChange={handleInputChange}
+                          required
+                          rows={6}
+                          className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-ocean-200/50 focus:outline-none focus:border-ocean-300/60 focus:ring-2 focus:ring-ocean-300/20 focus:bg-white/10 transition resize-none"
+                        />
+                      </Field>
 
                       <motion.button
                         type="submit"
@@ -211,14 +218,59 @@ function Contact() {
                         )}
                         <Editable path={isSubmitting ? 'contact.form.sending' : 'contact.form.submit'} className="relative z-10" />
                       </motion.button>
+                      {submissionStatus === 'error' && (
+                        <p role="alert" className="text-sm text-rose-300 text-center">
+                          {feedbackMessage}
+                        </p>
+                      )}
                     </form>
                   </div>
                 </div>
+
+                {editing && <OtherMessages />}
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       </div>
+    </div>
+  );
+}
+
+// While editing, a form field's placeholder (contact.form.placeholders) is edited in a
+// caption above it. Otherwise the field renders exactly as is.
+function Field({ name, editing, children }) {
+  if (!editing) return children;
+  return (
+    <div>
+      <div className="mb-1.5 text-[11px] text-ocean-200/60">
+        Placeholder: <Editable path={`contact.form.placeholders.${name}`} className="text-ocean-50" />
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// Edit mode only: texts that otherwise only appear for a moment (or never, if the server
+// sends its own message), so they can be edited too.
+function OtherMessages() {
+  const rows = [
+    ['Copy button, after copying', 'contact.info.copied'],
+    ['Send button, while sending', 'contact.form.sending'],
+    ['Sent (if the server gives no message)', 'contact.form.successFallback'],
+    ['Error (if the server gives no reason)', 'contact.form.error'],
+  ];
+  return (
+    <div className="mt-8 rounded-2xl border border-dashed border-white/20 p-4 text-xs text-ocean-200/70">
+      <p className="mb-2 font-semibold uppercase tracking-widest text-[11px]">Other messages (edit mode only)</p>
+      <dl className="grid grid-cols-1 sm:grid-cols-[220px_1fr] gap-x-4 gap-y-2">
+        {rows.map(([label, path]) => (
+          <React.Fragment key={path}>
+            <dt>{label}</dt>
+            <Editable path={path} as="dd" className="text-ocean-50" />
+          </React.Fragment>
+        ))}
+      </dl>
     </div>
   );
 }

@@ -11,9 +11,16 @@
   },
   "form": {
     "heading": "Send a Message",
+    "placeholders": {
+      "name": "Your Name",
+      "email": "Your Email",
+      "subject": "Subject",
+      "message": "Your Message"
+    },
     "submit": "Send Message",
     "sending": "Sending...",
     "successFallback": "Your message has been sent successfully!",
+    "error": "Failed to send message",
     "success": {
       "heading": "Success!",
       "again": "Send Another Message"

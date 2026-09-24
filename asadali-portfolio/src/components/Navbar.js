@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaBars, FaTimes, FaArrowRight } from 'react-icons/fa';
+import { FaBars, FaTimes, FaArrowRight, FaLock } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import Editable from '../editor/Editable';
+import { EditableImage } from '../editor/controls';
 
-const logo = process.env.PUBLIC_URL + '/assets/AsadLogo.png';
-
-// Labels live in src/content/nav.json (nav.links.<id>); the ids track which section is active.
+// Labels and the logo live in src/content/nav.json (nav.links.<id>, nav.logo); the ids and
+// targets stay here (they track which section is active and where each link scrolls to).
 const NAV_LINKS = [
   { id: 'home', target: '#home' },
   { id: 'about', target: '#about' },
@@ -17,6 +17,9 @@ const NAV_LINKS = [
 ];
 
 const CTA = { id: 'contact', target: '.contact-section' };
+
+// The admin console is its own route (not a section), so it's a router link. Label: nav.admin.
+const ADMIN = { id: 'admin', to: '/admin' };
 
 const NAV_HEIGHT_DESKTOP = 80;
 const NAV_HEIGHT_MOBILE = 64;
@@ -31,6 +34,7 @@ function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const onHome = location.pathname === '/';
+  const onAdmin = location.pathname === ADMIN.to;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 16);
@@ -137,7 +141,11 @@ function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 lg:h-20 flex items-center justify-between gap-4">
           <motion.button
-            onClick={handleLogoClick}
+            onClick={(e) => {
+              // Replacing the logo in edit mode clicks its hidden file input, which bubbles here.
+              if (e.target.tagName === 'INPUT') return;
+              handleLogoClick();
+            }}
             className="flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean-300/60 rounded-xl p-1 -m-1 group"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
@@ -145,7 +153,7 @@ function Navbar() {
           >
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-ocean-400/40 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
-              <img className="relative h-8 w-8 lg:h-10 lg:w-10" src={logo} alt="" />
+              <EditableImage path="nav.logo.image" className="relative h-8 w-8 lg:h-10 lg:w-10" alt="" />
             </div>
             <div className="hidden sm:flex flex-col items-start leading-none">
               <Editable path="nav.logo.name" className="font-display text-lg font-bold text-white tracking-tight" />
@@ -177,7 +185,19 @@ function Navbar() {
             })}
           </div>
 
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex items-center gap-2">
+            <Link
+              to={ADMIN.to}
+              aria-current={onAdmin ? 'page' : undefined}
+              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full border text-sm font-medium transition-colors duration-150 ${
+                onAdmin
+                  ? 'bg-white/12 border-white/25 text-white'
+                  : 'border-white/15 text-ocean-100/75 hover:text-white hover:border-white/30 hover:bg-white/5'
+              }`}
+            >
+              <FaLock className="h-3 w-3" />
+              <Editable path="nav.admin" />
+            </Link>
             <motion.button
               onClick={() => handleNavClick(CTA.target, CTA.id)}
               className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-ocean-500 to-ocean-400 hover:from-ocean-400 hover:to-ocean-300 text-white text-sm font-semibold shadow-glow hover:shadow-glow-strong overflow-hidden"
@@ -231,7 +251,32 @@ function Navbar() {
             id="mobile-menu"
           >
             <div className="flex flex-col gap-1">
-              {[...NAV_LINKS, CTA].map((link, i) => {
+              {[...NAV_LINKS, ADMIN, CTA].map((link, i) => {
+                if (link.id === ADMIN.id) {
+                  return (
+                    <motion.div
+                      key={link.id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.04 * i, duration: 0.2 }}
+                    >
+                      <Link
+                        to={ADMIN.to}
+                        onClick={() => setIsOpen(false)}
+                        aria-current={onAdmin ? 'page' : undefined}
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+                          onAdmin ? 'bg-white/10 border border-white/15 text-white' : 'text-ocean-50 hover:bg-white/5'
+                        }`}
+                      >
+                        <span className="inline-flex items-center gap-2.5">
+                          <FaLock className="h-3 w-3 text-ocean-200/80" />
+                          <Editable path="nav.admin" />
+                        </span>
+                        {onAdmin && <span className="h-1.5 w-1.5 rounded-full bg-ocean-300" />}
+                      </Link>
+                    </motion.div>
+                  );
+                }
                 const isActive = onHome && link.id === activeId;
                 const isCta = link.id === CTA.id;
                 return (

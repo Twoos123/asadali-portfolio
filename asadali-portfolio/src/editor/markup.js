@@ -12,7 +12,11 @@ export const HIGHLIGHT_CLASS = 'text-ocean-100';
 export const LINK_CLASS =
   'text-ocean-200 underline decoration-ocean-400/50 underline-offset-4 hover:text-white hover:decoration-ocean-300 transition-colors';
 
-const isSafeUrl = (url) => /^(\/|https?:\/\/|mailto:)/i.test(url);
+const isSafeUrl = (url) => /^(\/(?!\/)|https?:\/\/|mailto:)/i.test(url);
+
+// For any URL that comes from content and ends up in an href/src: site paths, http(s) and
+// mailto only (never javascript: or data:). Returns undefined for anything else.
+export const safeUrl = (url) => (typeof url === 'string' && isSafeUrl(url.trim()) ? url.trim() : undefined);
 
 export function renderMarkup(text, { linkClassName = LINK_CLASS, highlightClassName = HIGHLIGHT_CLASS } = {}) {
   if (typeof text !== 'string' || !text) return text ?? null;

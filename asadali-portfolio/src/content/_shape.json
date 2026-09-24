@@ -1,0 +1,1265 @@
+{
+  "about": {
+    "types": [
+      "object"
+    ],
+    "keys": {
+      "eyebrow": {
+        "types": [
+          "string"
+        ]
+      },
+      "heading": {
+        "types": [
+          "string"
+        ]
+      },
+      "paragraphs": {
+        "types": [
+          "array"
+        ],
+        "item": {
+          "types": [
+            "string"
+          ]
+        }
+      },
+      "currently": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "label": {
+            "types": [
+              "string"
+            ]
+          },
+          "rows": {
+            "types": [
+              "array"
+            ],
+            "item": {
+              "types": [
+                "object"
+              ],
+              "keys": {
+                "label": {
+                  "types": [
+                    "string"
+                  ]
+                },
+                "value": {
+                  "types": [
+                    "string"
+                  ]
+                },
+                "link": {
+                  "types": [
+                    "string"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "caseStudy": {
+    "types": [
+      "object"
+    ],
+    "keys": {
+      "back": {
+        "types": [
+          "string"
+        ]
+      },
+      "eyebrow": {
+        "types": [
+          "string"
+        ]
+      },
+      "notFound": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "heading": {
+            "types": [
+              "string"
+            ]
+          },
+          "back": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "headerButtons": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "viewRepository": {
+            "types": [
+              "string"
+            ]
+          },
+          "liveDemo": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "noCaseStudy": {
+        "types": [
+          "string"
+        ]
+      },
+      "origin": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "eyebrow": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "sections": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "problem": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "eyebrow": {
+                "types": [
+                  "string"
+                ]
+              },
+              "title": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "approach": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "eyebrow": {
+                "types": [
+                  "string"
+                ]
+              },
+              "title": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "architecture": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "eyebrow": {
+                "types": [
+                  "string"
+                ]
+              },
+              "title": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "features": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "eyebrow": {
+                "types": [
+                  "string"
+                ]
+              },
+              "title": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "decisions": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "eyebrow": {
+                "types": [
+                  "string"
+                ]
+              },
+              "title": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "learnings": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "eyebrow": {
+                "types": [
+                  "string"
+                ]
+              },
+              "title": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "credits": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "eyebrow": {
+                "types": [
+                  "string"
+                ]
+              },
+              "title": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "cta": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "eyebrow": {
+            "types": [
+              "string"
+            ]
+          },
+          "withDemo": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "title": {
+                "types": [
+                  "string"
+                ]
+              },
+              "body": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "withoutDemo": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "title": {
+                "types": [
+                  "string"
+                ]
+              },
+              "body": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "liveSite": {
+            "types": [
+              "string"
+            ]
+          },
+          "viewOnGithub": {
+            "types": [
+              "string"
+            ]
+          },
+          "back": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "contact": {
+    "types": [
+      "object"
+    ],
+    "keys": {
+      "eyebrow": {
+        "types": [
+          "string"
+        ]
+      },
+      "heading": {
+        "types": [
+          "string"
+        ]
+      },
+      "info": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "heading": {
+            "types": [
+              "string"
+            ]
+          },
+          "intro": {
+            "types": [
+              "string"
+            ]
+          },
+          "email": {
+            "types": [
+              "string"
+            ]
+          },
+          "copy": {
+            "types": [
+              "string"
+            ]
+          },
+          "copied": {
+            "types": [
+              "string"
+            ]
+          },
+          "note": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "form": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "heading": {
+            "types": [
+              "string"
+            ]
+          },
+          "placeholders": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "name": {
+                "types": [
+                  "string"
+                ]
+              },
+              "email": {
+                "types": [
+                  "string"
+                ]
+              },
+              "subject": {
+                "types": [
+                  "string"
+                ]
+              },
+              "message": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "submit": {
+            "types": [
+              "string"
+            ]
+          },
+          "sending": {
+            "types": [
+              "string"
+            ]
+          },
+          "successFallback": {
+            "types": [
+              "string"
+            ]
+          },
+          "error": {
+            "types": [
+              "string"
+            ]
+          },
+          "success": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "heading": {
+                "types": [
+                  "string"
+                ]
+              },
+              "again": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "experience": {
+    "types": [
+      "object"
+    ],
+    "keys": {
+      "eyebrow": {
+        "types": [
+          "string"
+        ]
+      },
+      "heading": {
+        "types": [
+          "string"
+        ]
+      },
+      "entries": {
+        "types": [
+          "array"
+        ],
+        "item": {
+          "types": [
+            "object"
+          ],
+          "keys": {
+            "kind": {
+              "types": [
+                "string"
+              ]
+            },
+            "logo": {
+              "types": [
+                "string"
+              ]
+            },
+            "org": {
+              "types": [
+                "string"
+              ]
+            },
+            "role": {
+              "types": [
+                "string"
+              ]
+            },
+            "period": {
+              "types": [
+                "string"
+              ]
+            },
+            "location": {
+              "types": [
+                "string"
+              ]
+            },
+            "description": {
+              "types": [
+                "string"
+              ]
+            },
+            "skills": {
+              "types": [
+                "array"
+              ],
+              "item": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "footer": {
+    "types": [
+      "object"
+    ],
+    "keys": {
+      "copyright": {
+        "types": [
+          "string"
+        ]
+      },
+      "social": {
+        "types": [
+          "array"
+        ],
+        "item": {
+          "types": [
+            "object"
+          ],
+          "keys": {
+            "icon": {
+              "types": [
+                "string"
+              ]
+            },
+            "label": {
+              "types": [
+                "string"
+              ]
+            },
+            "url": {
+              "types": [
+                "string"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "hero": {
+    "types": [
+      "object"
+    ],
+    "keys": {
+      "name": {
+        "types": [
+          "string"
+        ]
+      },
+      "subtitle": {
+        "types": [
+          "string"
+        ]
+      },
+      "social": {
+        "types": [
+          "array"
+        ],
+        "item": {
+          "types": [
+            "object"
+          ],
+          "keys": {
+            "icon": {
+              "types": [
+                "string"
+              ]
+            },
+            "label": {
+              "types": [
+                "string"
+              ]
+            },
+            "url": {
+              "types": [
+                "string"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "nav": {
+    "types": [
+      "object"
+    ],
+    "keys": {
+      "logo": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "image": {
+            "types": [
+              "string"
+            ]
+          },
+          "name": {
+            "types": [
+              "string"
+            ]
+          },
+          "subtitle": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "links": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "home": {
+            "types": [
+              "string"
+            ]
+          },
+          "about": {
+            "types": [
+              "string"
+            ]
+          },
+          "skills": {
+            "types": [
+              "string"
+            ]
+          },
+          "projects": {
+            "types": [
+              "string"
+            ]
+          },
+          "experience": {
+            "types": [
+              "string"
+            ]
+          },
+          "resume": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "cta": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "label": {
+            "types": [
+              "string"
+            ]
+          },
+          "mobileLabel": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "admin": {
+        "types": [
+          "string"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "types": [
+      "object"
+    ],
+    "keys": {
+      "page": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "eyebrow": {
+            "types": [
+              "string"
+            ]
+          },
+          "heading": {
+            "types": [
+              "string"
+            ]
+          },
+          "filters": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "toggle": {
+                "types": [
+                  "string"
+                ]
+              },
+              "all": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "resultsCount": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "showing": {
+                "types": [
+                  "string"
+                ]
+              },
+              "of": {
+                "types": [
+                  "string"
+                ]
+              },
+              "projects": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "card": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "caseStudyBadge": {
+                "types": [
+                  "string"
+                ]
+              },
+              "liveDemoBadge": {
+                "types": [
+                  "string"
+                ]
+              },
+              "showLessSkills": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "seeMore": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "label": {
+                "types": [
+                  "string"
+                ]
+              },
+              "remaining": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          },
+          "noResults": {
+            "types": [
+              "object"
+            ],
+            "keys": {
+              "message": {
+                "types": [
+                  "string"
+                ]
+              },
+              "clearFilters": {
+                "types": [
+                  "string"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "items": {
+        "types": [
+          "array"
+        ],
+        "item": {
+          "types": [
+            "object"
+          ],
+          "keys": {
+            "id": {
+              "types": [
+                "number"
+              ]
+            },
+            "name": {
+              "types": [
+                "string"
+              ]
+            },
+            "description": {
+              "types": [
+                "string"
+              ]
+            },
+            "image": {
+              "types": [
+                "string"
+              ]
+            },
+            "skills": {
+              "types": [
+                "array"
+              ],
+              "item": {
+                "types": [
+                  "string"
+                ]
+              }
+            },
+            "github": {
+              "types": [
+                "string"
+              ]
+            },
+            "demo": {
+              "types": [
+                "string"
+              ]
+            },
+            "caseStudy": {
+              "types": [
+                "null",
+                "object"
+              ],
+              "keys": {
+                "tagline": {
+                  "types": [
+                    "string"
+                  ]
+                },
+                "heroImage": {
+                  "types": [
+                    "string"
+                  ]
+                },
+                "origin": {
+                  "types": [
+                    "string"
+                  ]
+                },
+                "problem": {
+                  "types": [
+                    "string"
+                  ]
+                },
+                "solution": {
+                  "types": [
+                    "string"
+                  ]
+                },
+                "architecture": {
+                  "types": [
+                    "array"
+                  ],
+                  "item": {
+                    "types": [
+                      "object"
+                    ],
+                    "keys": {
+                      "title": {
+                        "types": [
+                          "string"
+                        ]
+                      },
+                      "subtitle": {
+                        "types": [
+                          "string"
+                        ]
+                      },
+                      "desc": {
+                        "types": [
+                          "string"
+                        ]
+                      },
+                      "tech": {
+                        "types": [
+                          "array"
+                        ],
+                        "item": {
+                          "types": [
+                            "string"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "features": {
+                  "types": [
+                    "array"
+                  ],
+                  "item": {
+                    "types": [
+                      "object"
+                    ],
+                    "keys": {
+                      "name": {
+                        "types": [
+                          "string"
+                        ]
+                      },
+                      "desc": {
+                        "types": [
+                          "string"
+                        ]
+                      },
+                      "screenshots": {
+                        "types": [
+                          "array"
+                        ],
+                        "item": {
+                          "types": [
+                            "string"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "decisions": {
+                  "types": [
+                    "array"
+                  ],
+                  "item": {
+                    "types": [
+                      "object"
+                    ],
+                    "keys": {
+                      "q": {
+                        "types": [
+                          "string"
+                        ]
+                      },
+                      "a": {
+                        "types": [
+                          "string"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "learnings": {
+                  "types": [
+                    "array"
+                  ],
+                  "item": {
+                    "types": [
+                      "string"
+                    ]
+                  }
+                },
+                "credits": {
+                  "types": [
+                    "object"
+                  ],
+                  "keys": {
+                    "blurb": {
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "groups": {
+                      "types": [
+                        "array"
+                      ],
+                      "item": {
+                        "types": [
+                          "object"
+                        ],
+                        "keys": {
+                          "label": {
+                            "types": [
+                              "string"
+                            ]
+                          },
+                          "people": {
+                            "types": [
+                              "array"
+                            ],
+                            "item": {
+                              "types": [
+                                "object"
+                              ],
+                              "keys": {
+                                "name": {
+                                  "types": [
+                                    "string"
+                                  ]
+                                },
+                                "subtitle": {
+                                  "types": [
+                                    "string"
+                                  ]
+                                },
+                                "url": {
+                                  "types": [
+                                    "string"
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "resume": {
+    "types": [
+      "object"
+    ],
+    "keys": {
+      "heading": {
+        "types": [
+          "string"
+        ]
+      },
+      "links": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "view": {
+            "types": [
+              "string"
+            ]
+          },
+          "previews": {
+            "types": [
+              "array"
+            ],
+            "item": {
+              "types": [
+                "string"
+              ]
+            }
+          }
+        }
+      },
+      "buttons": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "openInNewTab": {
+            "types": [
+              "string"
+            ]
+          },
+          "fullscreen": {
+            "types": [
+              "string"
+            ]
+          },
+          "exitFullscreen": {
+            "types": [
+              "string"
+            ]
+          },
+          "retry": {
+            "types": [
+              "string"
+            ]
+          },
+          "tryAgain": {
+            "types": [
+              "string"
+            ]
+          },
+          "viewInDrive": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "loading": {
+        "types": [
+          "string"
+        ]
+      },
+      "error": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "heading": {
+            "types": [
+              "string"
+            ]
+          },
+          "message": {
+            "types": [
+              "string"
+            ]
+          },
+          "allFailedMessage": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "skills": {
+    "types": [
+      "object"
+    ],
+    "keys": {
+      "eyebrow": {
+        "types": [
+          "string"
+        ]
+      },
+      "heading": {
+        "types": [
+          "string"
+        ]
+      },
+      "intro": {
+        "types": [
+          "string"
+        ]
+      },
+      "viewAll": {
+        "types": [
+          "string"
+        ]
+      },
+      "categories": {
+        "types": [
+          "array"
+        ],
+        "item": {
+          "types": [
+            "object"
+          ],
+          "keys": {
+            "rowLabel": {
+              "types": [
+                "string"
+              ]
+            },
+            "modalLabel": {
+              "types": [
+                "string"
+              ]
+            },
+            "title": {
+              "types": [
+                "string"
+              ]
+            },
+            "direction": {
+              "types": [
+                "string"
+              ]
+            },
+            "duration": {
+              "types": [
+                "number"
+              ]
+            },
+            "items": {
+              "types": [
+                "array"
+              ],
+              "item": {
+                "types": [
+                  "object"
+                ],
+                "keys": {
+                  "name": {
+                    "types": [
+                      "string"
+                    ]
+                  },
+                  "link": {
+                    "types": [
+                      "string"
+                    ]
+                  },
+                  "icon": {
+                    "types": [
+                      "string"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "modal": {
+        "types": [
+          "object"
+        ],
+        "keys": {
+          "eyebrow": {
+            "types": [
+              "string"
+            ]
+          },
+          "heading": {
+            "types": [
+              "string"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

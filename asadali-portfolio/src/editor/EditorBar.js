@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FaCheck, FaExternalLinkAlt, FaPen, FaTimes } from 'react-icons/fa';
+import { FaCheck, FaExternalLinkAlt, FaPen, FaSignOutAlt, FaTimes } from 'react-icons/fa';
 import { editorStore, useChanges, useEditing } from './store';
-import { deployStatus, getSession, login, publishChanges } from './api';
+import { deployStatus, getSession, login, logout, publishDraft } from './api';
+import { askConfirm, Dialog } from './dialogs';
 
-// The editing toolbar (shown with ?edit): pending changes, and the publish flow of
+// The editing toolbar (shown in edit mode): pending changes, and the publish flow of
 // log in -> review and confirm -> commit to main -> wait for the deploy to go live.
 
 const POLL_MS = 5000;
@@ -11,11 +12,24 @@ const POLL_LIMIT_MS = 8 * 60 * 1000;
 
 const label = (path) => path.split('.').join(' › ');
 
+// A short, human description of any content value for the review list.
+function describe(value) {
+  if (value === undefined || value === null || value === '') return '(empty)';
+  if (typeof value === 'string') return value.startsWith('upload:') ? '(new image)' : value;
+  if (typeof value !== 'object') return String(value);
+  if (Array.isArray(value)) return `${value.length} item${value.length === 1 ? '' : 's'}`;
+  const named = ['name', 'title', 'org', 'label', 'heading', 'text'].find((key) => typeof value[key] === 'string');
+  if (named) return value[named];
+  const firstText = Object.values(value).find((v) => typeof v === 'string' && v);
+  return firstText || 'item';
+}
+
 export default function EditorBar() {
   const editing = useEditing();
   const changes = useChanges();
   const [step, setStep] = useState(null); // null | 'login' | 'confirm'
   const [status, setStatus] = useState(null); // { state, message, commitUrl, runUrl }
+  const [loggedIn, setLoggedIn] = useState(() => Boolean(getSession()));
 
   // Don't lose unpublished edits to an accidental reload or tab close.
   useEffect(() => {
@@ -32,35 +46,47 @@ export default function EditorBar() {
 
   const startPublish = () => setStep(getSession() ? 'confirm' : 'login');
 
-  const exit = () => {
-    if (changes.length && !window.confirm('Discard your unpublished changes and leave edit mode?')) return;
+  const exit = async () => {
+    if (changes.length && !(await askConfirm({ title: 'Leave edit mode?', message: `Your ${changes.length} unpublished change${changes.length === 1 ? '' : 's'} will be discarded.`, confirmLabel: 'Discard & leave', danger: true }))) return;
+    editorStore.discard();
+    editorStore.setEditing(false);
+  };
+
+  const signOut = async () => {
+    if (changes.length && !(await askConfirm({ title: 'Log out?', message: `Your ${changes.length} unpublished change${changes.length === 1 ? '' : 's'} will be discarded.`, confirmLabel: 'Discard & log out', danger: true }))) return;
+    logout();
+    setLoggedIn(false);
     editorStore.discard();
     editorStore.setEditing(false);
   };
 
   const publish = async () => {
-    const pending = editorStore.changes();
+    const files = Object.fromEntries(editorStore.changedFiles().map((file) => [file, editorStore.draftFile(file)]));
+    const uploads = editorStore.pendingUploads();
     setStep(null);
-    setStatus({ state: 'saving', message: 'Saving your changes…' });
+    setStatus({ state: 'saving', message: uploads.length ? `Uploading ${uploads.length} image${uploads.length === 1 ? '' : 's'} and saving…` : 'Saving your changes…' });
     try {
-      const commit = await publishChanges(pending);
-      editorStore.markPublished();
+      const commit = await publishDraft({ files, uploads });
+      editorStore.markPublished(commit.paths);
       setStatus({ state: 'running', message: 'Saved. Publishing the site…', commitUrl: commit.url });
       watchDeploy(commit.sha, commit.url, setStatus);
     } catch (error) {
-      if (error.needsLogin) setStep('login');
+      if (error.needsLogin) {
+        setLoggedIn(false);
+        setStep('login');
+      }
       setStatus({ state: 'failure', message: error.message });
     }
   };
 
   return (
     <>
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[2000] flex items-center gap-2 rounded-full border border-white/20 bg-ocean-950/90 px-3 py-2 text-sm text-white shadow-glass-lg backdrop-blur-xl">
-        <FaPen className="ml-1 h-3 w-3 text-ocean-300" />
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[2000] flex max-w-[96vw] items-center gap-2 rounded-full border border-white/20 bg-ocean-950/90 px-3 py-2 text-sm text-white shadow-glass-lg backdrop-blur-xl">
+        <FaPen className="ml-1 h-3 w-3 shrink-0 text-ocean-300" />
         <span className="px-1 font-medium">
           Editing
-          <span className="ml-2 text-ocean-200/80">
-            {changes.length ? `${changes.length} unpublished change${changes.length === 1 ? '' : 's'}` : 'Click any text to change it'}
+          <span className="ml-2 hidden text-ocean-200/80 sm:inline">
+            {changes.length ? `${changes.length} unpublished change${changes.length === 1 ? '' : 's'}` : 'Click text or images to change them · double-click links and buttons'}
           </span>
         </span>
         {changes.length > 0 && (
@@ -73,13 +99,26 @@ export default function EditorBar() {
             </button>
           </>
         )}
-        <button type="button" onClick={exit} aria-label="Leave edit mode" className="rounded-full p-2 text-ocean-100 hover:bg-white/10">
+        {loggedIn && (
+          <button type="button" onClick={signOut} aria-label="Log out" title="Log out" className="rounded-full p-2 text-ocean-100 hover:bg-white/10">
+            <FaSignOutAlt className="h-3 w-3" />
+          </button>
+        )}
+        <button type="button" onClick={exit} aria-label="Leave edit mode" title="Leave edit mode" className="rounded-full p-2 text-ocean-100 hover:bg-white/10">
           <FaTimes className="h-3 w-3" />
         </button>
       </div>
 
       {status && <StatusToast status={status} onClose={() => setStatus(null)} />}
-      {step === 'login' && <LoginDialog onCancel={() => setStep(null)} onDone={() => setStep('confirm')} />}
+      {step === 'login' && (
+        <LoginDialog
+          onCancel={() => setStep(null)}
+          onDone={() => {
+            setLoggedIn(true);
+            setStep('confirm');
+          }}
+        />
+      )}
       {step === 'confirm' && <ConfirmDialog changes={changes} onCancel={() => setStep(null)} onConfirm={publish} />}
     </>
   );
@@ -108,23 +147,7 @@ function watchDeploy(sha, commitUrl, setStatus) {
   setTimeout(poll, POLL_MS);
 }
 
-function Dialog({ title, children, onClose, wide }) {
-  useEffect(() => {
-    const onKey = (e) => e.key === 'Escape' && onClose();
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [onClose]);
-  return (
-    <div className="fixed inset-0 z-[2100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <div role="dialog" aria-modal="true" aria-label={title} className={`w-full ${wide ? 'max-w-2xl' : 'max-w-sm'} rounded-2xl border border-white/15 bg-ocean-950 p-6 text-white shadow-glass-lg`}>
-        <h2 className="font-display text-xl font-bold">{title}</h2>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function LoginDialog({ onCancel, onDone }) {
+export function PasswordForm({ onDone, onCancel, submitLabel = 'Log in' }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -145,41 +168,62 @@ function LoginDialog({ onCancel, onDone }) {
   };
 
   return (
-    <Dialog title="Log in to publish" onClose={onCancel}>
-      <form onSubmit={submit} className="mt-4 space-y-3">
-        <input
-          ref={inputRef}
-          type="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Editor password"
-          className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-white placeholder-ocean-200/50 outline-none focus:border-ocean-400"
-        />
-        {error && <p className="text-sm text-rose-300">{error}</p>}
-        <div className="flex justify-end gap-2 pt-1">
+    <form onSubmit={submit} className="mt-4 space-y-3">
+      <input
+        ref={inputRef}
+        type="password"
+        autoComplete="current-password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Editor password"
+        className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-white placeholder-ocean-200/50 outline-none focus:border-ocean-400"
+      />
+      {error && <p className="text-sm text-rose-300">{error}</p>}
+      <div className="flex justify-end gap-2 pt-1">
+        {onCancel && (
           <button type="button" onClick={onCancel} className="rounded-full px-4 py-2 text-ocean-100 hover:bg-white/10">
             Cancel
           </button>
-          <button type="submit" disabled={busy || !password} className="rounded-full bg-ocean-500 px-5 py-2 font-semibold hover:bg-ocean-400 disabled:opacity-50">
-            {busy ? 'Checking…' : 'Log in'}
-          </button>
-        </div>
-      </form>
+        )}
+        <button type="submit" disabled={busy || !password} className="rounded-full bg-ocean-500 px-5 py-2 font-semibold hover:bg-ocean-400 disabled:opacity-50">
+          {busy ? 'Checking…' : submitLabel}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function LoginDialog({ onCancel, onDone }) {
+  return (
+    <Dialog title="Log in to publish" onClose={onCancel}>
+      <PasswordForm onCancel={onCancel} onDone={onDone} />
     </Dialog>
   );
 }
 
+const KIND_STYLE = {
+  added: { label: 'Added', className: 'text-emerald-300' },
+  removed: { label: 'Removed', className: 'text-rose-300' },
+  reordered: { label: 'Reordered', className: 'text-ocean-300' },
+  changed: { label: 'Changed', className: 'text-amber-200' },
+};
+
 function ConfirmDialog({ changes, onCancel, onConfirm }) {
   return (
     <Dialog title={`Publish ${changes.length} change${changes.length === 1 ? '' : 's'}?`} onClose={onCancel} wide>
-      <p className="mt-1 text-sm text-ocean-200/80">This commits the new text to main and redeploys the live site.</p>
+      <p className="mt-1 text-sm text-ocean-200/80">This commits the new content to main and redeploys the live site.</p>
       <ul className="mt-4 max-h-[55vh] space-y-3 overflow-y-auto pr-1">
-        {changes.map(({ path, before, after }) => (
-          <li key={path} className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-sm">
-            <div className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ocean-300">{label(path)}</div>
-            <div className="whitespace-pre-wrap text-rose-200/90 line-through decoration-rose-300/40">{before || '(empty)'}</div>
-            <div className="mt-1 whitespace-pre-wrap text-emerald-200">{after || '(empty)'}</div>
+        {changes.map(({ path, kind, before, after }) => (
+          <li key={`${kind}-${path}`} className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-sm">
+            <div className="mb-2 flex items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-widest">
+              <span className="text-ocean-300">{label(path)}</span>
+              <span className={KIND_STYLE[kind].className}>{KIND_STYLE[kind].label}</span>
+            </div>
+            {(kind === 'changed' || kind === 'removed') && (
+              <div className="whitespace-pre-wrap text-rose-200/90 line-through decoration-rose-300/40">{describe(before)}</div>
+            )}
+            {(kind === 'changed' || kind === 'added') && <div className="mt-1 whitespace-pre-wrap text-emerald-200">{describe(after)}</div>}
+            {kind === 'reordered' && <div className="text-ocean-100/90">New order: {after.map(describe).join(', ')}</div>}
           </li>
         ))}
       </ul>

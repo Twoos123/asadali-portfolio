@@ -1,6 +1,6 @@
 import { SPECIES } from './species';
 import { retainPointer, releasePointer, readPointer, readScrollSpeed, readTaps } from './pointer';
-import { subscribe } from './ticker';
+import { runWhileVisible } from './ticker';
 
 // A tiny steering-behaviour simulation for one ocean layer. Creatures are plain DOM nodes
 // moved with composited transforms; only their small SVG parts repaint. The loop runs only
@@ -688,7 +688,6 @@ export function createOceanSim(container, plan, { reducedMotion = false } = {}) 
   }
   if (reducedMotion) return { destroy() {} };
 
-  let unsubscribe = null;
   let last = 0;
   let lastTap = performance.now();
   let rect = null;
@@ -735,28 +734,24 @@ export function createOceanSim(container, plan, { reducedMotion = false } = {}) 
     for (const f of food) renderFood(f);
   };
 
-  const start = () => {
-    if (unsubscribe) return;
-    last = performance.now();
-    rect = null;
-    unsubscribe = subscribe({ read, write });
-  };
-  const stop = () => {
-    if (unsubscribe) unsubscribe();
-    unsubscribe = null;
-  };
-
-  const observer = new IntersectionObserver((entries) => (entries[entries.length - 1].isIntersecting ? start() : stop()), {
-    rootMargin: '150px 0px',
-  });
-  observer.observe(container);
+  const stop = runWhileVisible(
+    container,
+    { read, write },
+    {
+      rootMargin: '150px 0px',
+      onStart: () => {
+        last = performance.now();
+        lastTap = last;
+        rect = null;
+      },
+    }
+  );
   retainPointer();
   if (plan.celebrate) window.addEventListener('ocean:celebrate', onCelebrate);
 
   return {
     destroy() {
       stop();
-      observer.disconnect();
       releasePointer();
       window.removeEventListener('ocean:celebrate', onCelebrate);
     },
