@@ -76,8 +76,7 @@ function alignLists(a, b) {
   let j = 0;
   while (i < a.length || j < b.length) {
     if (i < a.length && j < b.length && as[i] === bs[j]) {
-      i += 1;
-      j += 1;
+      ops.push({ type: 'keep', i: i++, j: j++ });
     } else if (j < b.length && (i >= a.length || lcs[i][j + 1] >= lcs[i + 1][j])) {
       ops.push({ type: 'add', j: j++ });
     } else {
@@ -90,7 +89,7 @@ function alignLists(a, b) {
 function diff(before, after, path, out) {
   if (same(before, after)) return;
   if (Array.isArray(before) && Array.isArray(after)) {
-    let ops = alignLists(before, after);
+    const ops = alignLists(before, after);
     // An item removed in one place and added unchanged in another was moved.
     const removed = new Map();
     for (const op of ops) {
@@ -106,26 +105,35 @@ function diff(before, after, path, out) {
         moved.add(op);
       }
     }
-    if (moved.size) {
-      out.push({ path, kind: 'reordered', before, after });
-      ops = ops.filter((op) => !moved.has(op));
-    }
-    // A removal next to an addition is an edit of that item: show what changed inside it.
-    for (let k = 0; k < ops.length; k++) {
-      const op = ops[k];
-      const next = ops[k + 1];
-      if (op.type === 'remove' && next && next.type === 'add' && typeof before[op.i] === typeof after[next.j]) {
-        diff(before[op.i], after[next.j], `${path}.${next.j}`, out);
-        k += 1;
-      } else if (op.type === 'add' && next && next.type === 'remove' && typeof after[op.j] === typeof before[next.i]) {
-        diff(before[next.i], after[op.j], `${path}.${op.j}`, out);
-        k += 1;
-      } else if (op.type === 'add') {
-        out.push({ path: `${path}.${op.j}`, kind: 'added', before: undefined, after: after[op.j] });
-      } else {
-        out.push({ path: `${path}.${op.i}`, kind: 'removed', before: before[op.i], after: undefined });
+    if (moved.size) out.push({ path, kind: 'reordered', before, after });
+
+    // Between two unchanged items, the first removed item and the first added one are the
+    // same item edited in place (and so on in order): show what changed inside each. Any
+    // left over were really added or removed.
+    let removes = [];
+    let adds = [];
+    const flush = () => {
+      const pairs = Math.min(removes.length, adds.length);
+      for (let k = 0; k < pairs; k++) {
+        const was = before[removes[k].i];
+        const now = after[adds[k].j];
+        if (typeof was === typeof now) {
+          diff(was, now, `${path}.${adds[k].j}`, out);
+        } else {
+          out.push({ path: `${path}.${removes[k].i}`, kind: 'removed', before: was, after: undefined });
+          out.push({ path: `${path}.${adds[k].j}`, kind: 'added', before: undefined, after: now });
+        }
       }
+      for (const op of adds.slice(pairs)) out.push({ path: `${path}.${op.j}`, kind: 'added', before: undefined, after: after[op.j] });
+      for (const op of removes.slice(pairs)) out.push({ path: `${path}.${op.i}`, kind: 'removed', before: before[op.i], after: undefined });
+      removes = [];
+      adds = [];
+    };
+    for (const op of ops) {
+      if (op.type === 'keep') flush();
+      else if (!moved.has(op)) (op.type === 'remove' ? removes : adds).push(op);
     }
+    flush();
     return;
   }
   if (isObject(before) && isObject(after)) {
