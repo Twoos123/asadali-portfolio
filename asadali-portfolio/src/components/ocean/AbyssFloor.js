@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import OceanLife from './OceanLife';
 import { seeded } from './Kelp';
@@ -82,10 +82,40 @@ const SPECKS = [
   { x: 0.36, y: 0.3, tier: 3 },
 ];
 
-// Where the chests lie half-buried in the near ledge, in content order (on phones, further
-// in from the edges).
-const CHEST_SLOTS = [0.12, 0.505, 0.885];
-const PHONE_CHEST_SLOTS = [0.17, 0.5, 0.83];
+// Where the chests lie, in content order (footer.abyss.chests): wedged between the vent
+// chimneys, half-buried in the near ledge, far back on a ridge, and tucked in behind the
+// first cluster of tube worms. The further away, the smaller (size) and the more they fade
+// toward the water's blue (haze). All but the ledge chest are drawn under the page's
+// darkness like the rock around them, so their colours are lifted to make up for it.
+const CHEST_SLOTS = [
+  { place: 'vent', size: 0.7, haze: 0.18, lift: 1.75 },
+  { place: 'ledge', x: 0.855, phoneX: 0.6, size: 1, haze: 0, lift: 1 },
+  { place: 'ridge', x: 0.47, size: 0.46, haze: 0.5, lift: 1.9, blur: true },
+  { place: 'worms', size: 0.68, haze: 0.16, lift: 1.75 },
+];
+
+// The chest's colours at the front; deeper chests mix these toward HAZE.
+const CHEST_COLORS = {
+  inside: '#1f1206',
+  gold: '#f59e0b',
+  goldLight: '#fcd34d',
+  shine: '#fffbeb',
+  wood: '#4a2c17',
+  lid: '#5a3519',
+  grain: '#2a170a',
+  band: '#8c6a2c',
+  bandShade: '#6f5324',
+  trim: '#a88436',
+  lock: '#c29a45',
+};
+const HAZE = [58, 78, 118];
+
+// A colour brightened by `lift`, then mixed toward the haze by `haze`.
+function tone(hex, { lift = 1, haze = 0 }) {
+  const n = parseInt(hex.slice(1), 16);
+  const rgb = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c, i) => Math.min(255, c * lift) * (1 - haze) + HAZE[i] * haze);
+  return `rgb(${rgb.map((c) => Math.round(c)).join(',')})`;
+}
 
 // Coins and bubbles thrown up by an opening chest (offsets in px at the reference size).
 const COINS = [
@@ -169,7 +199,8 @@ function layoutAbyss(W) {
     }
     return { fill: `${polyline(points)}L${W} ${H}L0 ${H}Z`, edge: polyline(points) };
   };
-  const farRidge = ridge((xf) => 222 + 38 * Math.sin(xf * 4.3 + 1.1) + 20 * Math.sin(xf * 10.1 + 0.3) + 9 * Math.sin(xf * 23.7 + 2.2), 26 * s, 1.5 * s);
+  const farHeight = (xf) => 222 + 38 * Math.sin(xf * 4.3 + 1.1) + 20 * Math.sin(xf * 10.1 + 0.3) + 9 * Math.sin(xf * 23.7 + 2.2);
+  const farRidge = ridge(farHeight, 26 * s, 1.5 * s);
   const nearRidge = ridge((xf) => 168 + 24 * Math.sin(xf * 5.6 + 2.6) + 14 * Math.sin(xf * 13.3 + 0.9) + 7 * Math.sin(xf * 29 + 1.4), 18 * s, 3.5 * s);
 
   // Basalt outcrops, rooted behind the rock surface.
@@ -368,24 +399,30 @@ function layoutAbyss(W) {
     delay: -rng() * 10,
   }));
 
-  // The near ledge: a dark band of rock in the foreground with a few big boulders, and the
-  // chests half-buried in it with a stone or two against them.
+  // The near ledge: a dark band of rock in the foreground with a few big boulders, and a
+  // chest half-buried in it with a stone or two against it.
   const chestW = 70 * cs;
   const chestH = chestW * (50 / 60);
-  const buried = chestH * 0.3;
   const cardW = Math.min(250, W - 24);
   const ledgeBase = (x) => {
     const xf = x / W;
     return (36 + 6 * Math.sin(xf * 9.1 + 1.3) + 3 * Math.sin(xf * 23 + 0.7)) * s;
   };
-  const slots = (tier === 1 ? PHONE_CHEST_SLOTS : CHEST_SLOTS).map((xf) => xf * W);
-  // Boulders that would bury a chest are left out.
+  const wormCluster = clusters.find((cluster) => cluster.chimney === 0 && cluster.dx < 0);
+  const slotX = (slot) => {
+    const w = chestW * slot.size;
+    if (slot.place === 'vent') return c1.cx + c1.base / 2 + w / 2 + 1 * s;
+    if (slot.place === 'worms') return wormCluster.cx - 12 * ls;
+    return (tier === 1 && slot.phoneX ? slot.phoneX : slot.x) * W;
+  };
+  const ledgeSlots = CHEST_SLOTS.filter((slot) => slot.place === 'ledge').map(slotX);
+  // Boulders that would bury the ledge chest are left out.
   const nearRocks = visible(NEAR_ROCKS)
     .map((r) => ({ x: r.x * W, w: r.w * s, h: r.h * s }))
-    .filter((r) => slots.every((cx) => Math.abs(r.x - cx) > r.w / 2 + chestW * 0.6));
+    .filter((r) => ledgeSlots.every((cx) => Math.abs(r.x - cx) > r.w / 2 + chestW * 0.6));
   const lumps = (x) => {
     let h = 0;
-    for (const cx of slots) {
+    for (const cx of ledgeSlots) {
       h += 11 * cs * Math.exp(-(((x - cx + chestW * 0.54) / (8 * cs)) ** 2));
       h += 8 * cs * Math.exp(-(((x - cx - chestW * 0.56) / (7 * cs)) ** 2));
     }
@@ -415,15 +452,52 @@ function layoutAbyss(W) {
   }
   // Cards stay on screen, and clear of the kelp framing the page from 768px (Home.js).
   const margin = W >= 768 ? 76 : 12;
-  const chests = slots.map((x) => {
+  const chests = CHEST_SLOTS.map((slot) => {
+    const x = slotX(slot);
+    const w = chestW * slot.size;
+    const h = chestH * slot.size;
+    const onLedge = slot.place === 'ledge';
+    // What the chest rests on (height up from the bottom at a given x).
+    const surface = onLedge ? ledgeBase : slot.place === 'ridge' ? (px) => farHeight(px / W) * s : groundAt;
+    // Sit it on the lowest point under it, sunk a little into the rock.
+    let rest = Infinity;
+    for (let k = -0.4; k <= 0.4; k += 0.2) rest = Math.min(rest, surface(x + k * w));
+    const buried = onLedge ? h * 0.3 : h * 0.16;
+    const bottom = (onLedge ? ledgeBase(x) : rest) - buried;
+    // Chests set into the rock behind are clipped along its surface, so they sink into it.
+    let clip;
+    if (!onLedge) {
+      // (Open to well above the chest, so a lifted lid isn't clipped.)
+      const points = ['-10% -80%', '110% -80%'];
+      for (let k = 1; k >= 0; k -= 0.125) {
+        const depth = clamp(surface(x + (k - 0.5) * w) - bottom, 0, h);
+        points.push(`${(k * 100).toFixed(1)}% ${f1(h - depth)}px`);
+      }
+      clip = `polygon(${points.join(',')})`;
+    }
     const left = x - cardW / 2;
     return {
+      place: slot.place,
+      back: !onLedge,
       left: (x / W) * 100,
-      bottom: ledgeBase(x),
-      w: chestW,
-      h: chestH - buried,
+      bottom: bottom + buried,
+      w,
+      h: h - buried,
       buried,
-      scale: cs,
+      scale: cs * slot.size,
+      clip,
+      blur: slot.blur,
+      colors: Object.fromEntries(Object.entries(CHEST_COLORS).map(([name, hex]) => [name, tone(hex, slot)])),
+      // Stones wedging the vent chest in place.
+      stones:
+        slot.place === 'vent'
+          ? [
+              { dx: -w * 0.55, w: w * 0.42, h: h * 0.42 },
+              { dx: w * 0.5, w: w * 0.36, h: h * 0.34 },
+            ].map((stone) => ({ ...stone, left: ((x + stone.dx) / W) * 100, bottom: groundAt(x + stone.dx) - 2 * s }))
+          : [],
+      // A knoll on the far ridge for the far chest to sit in.
+      knoll: slot.place === 'ridge' ? { left: (x / W) * 100, bottom: bottom + buried - 11 * s, w: w * 2.3, h: 16 * s } : null,
       cardW,
       shift: clamp(left, margin, W - margin - cardW) - left,
     };
@@ -596,13 +670,13 @@ function useIdleOffscreen(ref) {
 // Art
 // ---------------------------------------------------------------------------------------
 
-// Under the darkness: ridges, rock and chimneys.
-function AbyssBack({ layout, uid }) {
+// Under the darkness: ridges, rock, chimneys and the deeper chests.
+function AbyssBack({ layout, uid, chests, open }) {
   const { W, H } = layout;
   const id = (name) => `${uid}-${name}`;
   return (
     <div className="abyss-back" aria-hidden="true">
-      <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
+      <svg className="abyss-scene" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
         <defs>
           <linearGradient id={id('far')} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#40517c" stopOpacity="0.1" />
@@ -668,6 +742,7 @@ function AbyssBack({ layout, uid }) {
         <path d={layout.rim} fill="none" stroke="rgba(160, 190, 232, 0.16)" strokeWidth="4" strokeLinejoin="round" />
         <path d={layout.rim} fill="none" stroke="rgba(180, 206, 242, 0.7)" strokeWidth="1.3" strokeLinejoin="round" />
       </svg>
+      <SunkChests chests={chests} open={open} />
     </div>
   );
 }
@@ -824,38 +899,74 @@ function AbyssLife({ layout, uid }) {
   );
 }
 
-function ChestArt({ width, height, buried }) {
+// A chest in a given palette (CHEST_COLORS, toned for its depth).
+function ChestArt({ colors: c, style }) {
   return (
-    <svg className="abyss-chest-art" viewBox="0 0 60 50" style={{ width, height, bottom: -buried }} aria-hidden="true" focusable="false">
+    <svg className="abyss-chest-art" viewBox="0 0 60 50" style={style} aria-hidden="true" focusable="false">
       {/* What's inside, seen once the lid lifts */}
       <g className="abyss-chest-inside">
-        <path d="M7 22L8 13Q30 7 52 13L53 22Z" fill="#1f1206" />
-        <ellipse cx="32" cy="17" rx="22" ry="9" fill="#fde68a" opacity="0.35" />
-        <path d="M8 22Q12 15.5 17 17Q21 12.5 26 15Q30 11 35 14.5Q40 12 44 16Q49 15 52 22Z" fill="#f59e0b" />
-        <path d="M11 21Q15 17 19 18.5Q23 15 27 17Q31 14 35 16.5Q40 15 43 18Q47 17.5 49 21Z" fill="#fcd34d" />
-        <circle cx="20" cy="17" r="1.3" fill="#fffbeb" />
-        <circle cx="33" cy="15" r="1.1" fill="#fffbeb" />
-        <circle cx="42" cy="17.5" r="1" fill="#fffbeb" />
+        <path d="M7 22L8 13Q30 7 52 13L53 22Z" fill={c.inside} />
+        <ellipse cx="32" cy="17" rx="22" ry="9" fill={c.goldLight} opacity="0.3" />
+        <path d="M8 22Q12 15.5 17 17Q21 12.5 26 15Q30 11 35 14.5Q40 12 44 16Q49 15 52 22Z" fill={c.gold} />
+        <path d="M11 21Q15 17 19 18.5Q23 15 27 17Q31 14 35 16.5Q40 15 43 18Q47 17.5 49 21Z" fill={c.goldLight} />
+        <circle cx="20" cy="17" r="1.3" fill={c.shine} />
+        <circle cx="33" cy="15" r="1.1" fill={c.shine} />
+        <circle cx="42" cy="17.5" r="1" fill={c.shine} />
       </g>
-      <path d="M5 21H55V46Q55 49 52 49H8Q5 49 5 46Z" fill="#4a2c17" />
+      <path d="M5 21H55V46Q55 49 52 49H8Q5 49 5 46Z" fill={c.wood} />
       <path d="M40 21H55V46Q55 49 52 49H40Z" fill="#000" opacity="0.2" />
-      <path d="M5 30H55M5 39H55" stroke="#2a170a" strokeWidth="1" />
-      <rect x="10" y="21" width="5" height="28" fill="#8c6a2c" />
-      <rect x="45" y="21" width="5" height="28" fill="#6f5324" />
-      <rect x="5" y="21" width="50" height="3" fill="#a88436" />
+      <path d="M5 30H55M5 39H55" stroke={c.grain} strokeWidth="1" />
+      <rect x="10" y="21" width="5" height="28" fill={c.band} />
+      <rect x="45" y="21" width="5" height="28" fill={c.bandShade} />
+      <rect x="5" y="21" width="50" height="3" fill={c.trim} />
       {/* The lid, hinged at the back left */}
       <g className="abyss-chest-lid">
-        <path d="M5 22V14Q5 5 30 4Q55 5 55 14V22Z" fill="#5a3519" />
+        <path d="M5 22V14Q5 5 30 4Q55 5 55 14V22Z" fill={c.lid} />
         <path d="M40 22V6.2Q51 8 55 14V22Z" fill="#000" opacity="0.18" />
-        <path d="M10 22V8.2L15 7V22Z" fill="#8c6a2c" />
-        <path d="M45 22V7L50 8.2V22Z" fill="#6f5324" />
-        <rect x="5" y="19" width="50" height="3" fill="#a88436" />
-        <path d="M9 11Q18 6.5 30 6" fill="none" stroke="#fde68a" strokeOpacity="0.3" strokeWidth="1.2" strokeLinecap="round" />
+        <path d="M10 22V8.2L15 7V22Z" fill={c.band} />
+        <path d="M45 22V7L50 8.2V22Z" fill={c.bandShade} />
+        <rect x="5" y="19" width="50" height="3" fill={c.trim} />
+        <path d="M9 11Q18 6.5 30 6" fill="none" stroke={c.goldLight} strokeOpacity="0.3" strokeWidth="1.2" strokeLinecap="round" />
       </g>
-      <rect x="26" y="19" width="8" height="10" rx="1.5" fill="#c29a45" />
-      <circle cx="30" cy="23.2" r="1.3" fill="#2a170a" />
-      <path d="M29.4 23.5H30.6V26.5H29.4Z" fill="#2a170a" />
+      <rect x="26" y="19" width="8" height="10" rx="1.5" fill={c.lock} />
+      <circle cx="30" cy="23.2" r="1.3" fill={c.grain} />
+      <path d="M29.4 23.5H30.6V26.5H29.4Z" fill={c.grain} />
     </svg>
+  );
+}
+
+// The deeper chests' art, set into the rock under the page's darkness (their buttons are in
+// the front layer), with the stones wedging the vent chest in place.
+function SunkChests({ chests, open }) {
+  return chests.map(
+    (c, i) =>
+      c.back && (
+        <React.Fragment key={i}>
+          <div
+            className={`abyss-sunk-chest${open === i ? ' is-open' : ''}${c.blur ? ' abyss-sunk-chest--far' : ''}`}
+            style={{ left: `${c.left}%`, bottom: c.bottom - c.buried, width: c.w, height: c.h + c.buried, clipPath: c.clip }}
+          >
+            <ChestArt colors={c.colors} />
+          </div>
+          {c.knoll && (
+            <svg
+              className="abyss-stone abyss-sunk-chest--far"
+              viewBox="0 0 100 30"
+              preserveAspectRatio="none"
+              style={{ left: `${c.knoll.left}%`, bottom: c.knoll.bottom, width: c.knoll.w, height: c.knoll.h }}
+            >
+              <path d="M0 30C12 29 17 11 30 9L70 9C83 11 88 29 100 30Z" fill="#33416a" />
+              <path d="M8 24C14 16 20 10 30 9L60 9" fill="none" stroke="rgba(160, 190, 235, 0.35)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+            </svg>
+          )}
+          {c.stones.map((stone, j) => (
+            <svg key={j} className="abyss-stone" viewBox="0 0 40 24" preserveAspectRatio="none" style={{ left: `${stone.left}%`, bottom: stone.bottom, width: stone.w, height: stone.h }}>
+              <path d="M1 24C0 14 6 5 16 3C26 1 37 8 39 17C40 20 40 22 39 24Z" fill="#46536a" />
+              <path d="M8 11C11 7 16 5.5 21 5.8" fill="none" stroke="rgba(176, 202, 240, 0.5)" strokeWidth="1.2" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+            </svg>
+          ))}
+        </React.Fragment>
+      )
   );
 }
 
@@ -902,7 +1013,7 @@ function Chest({ chest, index, slot, open, onToggle, cardId }) {
   const cs = slot.scale;
   return (
     <div
-      className={`abyss-chest${open ? ' is-open' : ''}`}
+      className={`abyss-chest${open ? ' is-open' : ''}${slot.back ? ' abyss-chest--sunk' : ''}`}
       style={{
         left: `${slot.left}%`,
         bottom: slot.bottom,
@@ -911,6 +1022,8 @@ function Chest({ chest, index, slot, open, onToggle, cardId }) {
         '--card-w': `${slot.cardW}px`,
         '--card-shift': `${f1(slot.shift)}px`,
         '--sparkle-delay': `${(-index * 1.9).toFixed(1)}s`,
+        '--sparkle-size': `${f1(13 * clamp(cs, 0.55, 1))}px`,
+        '--coin': `${f1(8 * clamp(cs, 0.6, 1))}px`,
       }}
       onKeyDown={(e) => {
         if (e.key === 'Escape' && open && !e.defaultPrevented) {
@@ -929,7 +1042,8 @@ function Chest({ chest, index, slot, open, onToggle, cardId }) {
         aria-label={`Treasure chest: ${chest.label || 'unopened'}`}
         onClick={() => onToggle(index)}
       >
-        <ChestArt width={slot.w} height={slot.h + slot.buried} buried={slot.buried} />
+        {/* Deeper chests are drawn in the rock behind (SunkChests); the button sits over them. */}
+        {!slot.back && <ChestArt colors={slot.colors} style={{ width: slot.w, height: slot.h + slot.buried, bottom: -slot.buried }} />}
         <span className="abyss-chest-sparkle" aria-hidden="true" />
       </button>
       <div id={cardId} className="abyss-chest-card">
@@ -959,25 +1073,14 @@ function Chest({ chest, index, slot, open, onToggle, cardId }) {
   );
 }
 
-// The chests: footer.abyss.chests in src/content/footer.json ({ label, text, link }), one per
-// slot on the seabed. Opening one closes any other, so their cards never overlap.
-function Chests({ layout, uid }) {
-  const footer = useContent('footer');
-  const chests = (footer?.abyss?.chests || []).slice(0, layout.chests.length);
-  const [open, setOpen] = useState(-1);
+// The chests' buttons and cards: footer.abyss.chests in src/content/footer.json ({ label,
+// text, link }), one per slot on the seabed (CHEST_SLOTS).
+function Chests({ layout, chests, open, onToggle, uid }) {
   if (!chests.length) return null;
   return (
     <div className="abyss-chests" role="group" aria-label="Treasure chests on the seabed">
       {chests.map((chest, i) => (
-        <Chest
-          key={i}
-          chest={chest}
-          index={i}
-          slot={layout.chests[i]}
-          open={open === i}
-          onToggle={(index) => setOpen((current) => (current === index ? -1 : index))}
-          cardId={`${uid}-chest-${i}`}
-        />
+        <Chest key={i} chest={chest} index={i} slot={layout.chests[i]} open={open === i} onToggle={onToggle} cardId={`${uid}-chest-${i}`} />
       ))}
     </div>
   );
@@ -989,19 +1092,24 @@ export default function AbyssFloor() {
   const layout = useMemo(() => (width ? layoutAbyss(width) : null), [width]);
   const reducedMotion = useReducedMotion();
   const uid = `abyss-${useId().replace(/:/g, '')}`;
+  const footer = useContent('footer');
+  const chests = (footer?.abyss?.chests || []).slice(0, CHEST_SLOTS.length);
+  // One chest open at a time, so their cards never overlap.
+  const [open, setOpen] = useState(-1);
+  const toggle = useCallback((index) => setOpen((current) => (current === index ? -1 : index)), []);
   useAbyssLife(rootRef, layout, !reducedMotion);
   useIdleOffscreen(rootRef);
 
   return (
     <div ref={rootRef} className="abyss" style={layout ? { height: layout.H } : undefined}>
-      {layout && <AbyssBack layout={layout} uid={uid} />}
+      {layout && <AbyssBack layout={layout} uid={uid} chests={layout.chests.slice(0, chests.length)} open={open} />}
       {layout && <AbyssSmoke layout={layout} />}
       {/* Clicks on the water send up bubbles here too, rising on into the contact section. */}
       <OceanLife section="abyss" />
       {layout && (
         <div className="abyss-front">
           <AbyssLife layout={layout} uid={uid} />
-          <Chests layout={layout} uid={uid} />
+          <Chests layout={layout} chests={chests} open={open} onToggle={toggle} uid={uid} />
           <svg className="abyss-ledge" viewBox={`0 0 ${layout.W} ${layout.H}`} preserveAspectRatio="none" aria-hidden="true">
             <path d={layout.ledge} fill="#0a0f1c" />
             <path d={layout.ledgeCracks} fill="none" stroke="rgba(0, 0, 0, 0.55)" strokeWidth="1" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />

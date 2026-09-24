@@ -15,18 +15,23 @@
   "abyss": {
     "chests": [
       {
-        "label": "Resume",
-        "text": "You found the resume! All my experience, on one page.",
-        "link": "/#resume"
+        "label": "Source code",
+        "text": "Every fish, bubble and jellyfish on this site, and this seabed, runs on a small animation engine I wrote for it. The code's on GitHub.",
+        "link": "https://github.com/Twoos123/asadali-portfolio"
       },
       {
-        "label": "Side project",
-        "text": "cs2-meta-engine: the CS2 demo analysis pipeline I'm building instead of paying $70 a month for one.",
-        "link": "/project/10"
+        "label": "GitHub",
+        "text": "My GitHub profile is a live CS2 HUD, redrawn every day from my commits.",
+        "link": "https://github.com/Twoos123"
       },
       {
         "label": "Fun fact",
         "text": "Vents like these pour out water hotter than 350 °C, and whole ecosystems live off them without any sunlight.",
+        "link": ""
+      },
+      {
+        "label": "Hidden feature",
+        "text": "Click anywhere in the water and bubbles rise from it, crossing on into the section above. Up in the shallows, clicks drop food too, and the fish come over to eat it.",
         "link": ""
       }
     ]
