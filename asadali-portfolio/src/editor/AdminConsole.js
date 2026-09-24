@@ -87,6 +87,17 @@ export default function AdminConsole() {
     if (target) setTimeout(() => document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' }), 400);
   };
 
+  // A sonar contact: for the owner it opens the editor at that section; for everyone else
+  // it's just a shortcut to the section on the normal site.
+  const pickSection = (target) => {
+    if (session) {
+      openEditor(target);
+      return;
+    }
+    navigate('/');
+    setTimeout(() => document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' }), 400);
+  };
+
   const signOut = () => {
     logout();
     editorStore.discard();
@@ -116,9 +127,9 @@ export default function AdminConsole() {
           <GlassCard className="p-6 md:p-8">
             <div className="mb-6 flex items-center justify-between gap-3">
               <span className="eyebrow">Site sections</span>
-              <span className="text-xs text-ocean-200/70">Pick one to start editing there</span>
+              <span className="text-xs text-ocean-200/70">{session ? 'Pick one to start editing there' : 'Pick one to jump there'}</span>
             </div>
-            <Sonar onPick={openEditor} />
+            <Sonar onPick={pickSection} />
             <dl className="mt-8 space-y-3 text-sm">
               <StatusRow
                 label="Server"

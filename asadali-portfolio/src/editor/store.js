@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import siteContent, { CONTENT_FILES } from '../content';
+import { getSession } from './api';
 
 // The editor's state lives outside React so that editing one thing only re-renders what
 // depends on it. `draft` is a full working copy of the site content: text edits, added,
@@ -26,9 +27,12 @@ let editing = false;
 let version = 0;
 const listeners = new Set();
 
+// Edit mode is only for the logged-in owner (see AdminConsole); visitors never see it.
 try {
-  editing = new URLSearchParams(window.location.search).has('edit') || window.sessionStorage.getItem(SESSION_FLAG) === '1';
+  const wanted = new URLSearchParams(window.location.search).has('edit') || window.sessionStorage.getItem(SESSION_FLAG) === '1';
+  editing = wanted && Boolean(getSession());
   if (editing) window.sessionStorage.setItem(SESSION_FLAG, '1');
+  else window.sessionStorage.removeItem(SESSION_FLAG);
 } catch {
   // No URL or storage (tests, locked-down browsers): stay in view mode.
 }
@@ -212,7 +216,7 @@ export const editorStore = {
 
   isEditing: () => editing,
   setEditing(value) {
-    editing = value;
+    editing = Boolean(value) && Boolean(getSession());
     try {
       if (value) window.sessionStorage.setItem(SESSION_FLAG, '1');
       else window.sessionStorage.removeItem(SESSION_FLAG);
