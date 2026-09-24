@@ -144,8 +144,12 @@ const swayStyle = (item, sway = item.sway) => ({
   '--sway-delay': `${item.delay.toFixed(2)}s`,
 });
 
+// Bump when the reef SVGs change: GitHub Pages lets browsers keep images for hours, so
+// without a new URL visitors can go on seeing the old art.
+const ART_VERSION = 2;
+
 function Plant({ item, soft }) {
-  const src = `${process.env.PUBLIC_URL}/assets/${item.src}.svg`;
+  const src = `${process.env.PUBLIC_URL}/assets/${item.src}.svg?v=${ART_VERSION}`;
   return (
     <div className="seafloor-item" data-soft={soft && item.sway ? '' : undefined} style={{ left: `${item.x * 100}%`, bottom: item.bottom, height: item.height }}>
       <img src={src} alt="" draggable="false" className={item.sway ? 'seafloor-sway' : undefined} style={item.sway ? swayStyle(item) : undefined} />
