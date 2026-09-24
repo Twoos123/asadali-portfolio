@@ -448,6 +448,13 @@ function updateCross(c, dt, env) {
   c.traveled += step;
   c.x += c.face * step;
   c.y = c.y0 + Math.sin((c.traveled / c.distance) * Math.PI) * c.rise + Math.sin(env.t * 0.4 + c.seed) * 6;
+  // Stay wholly inside the section: its layer clips at the section's edges, so anything past
+  // them (the kraken's glow, a curling arm) would be cut off along a hard line. `margin` is
+  // how far, as a share of the height, the creature's art reaches beyond its box.
+  const reach = c.h * (cfg.margin || 0);
+  const minY = c.h * c.origin[1] + reach;
+  const maxY = env.H - c.h * (1 - c.origin[1]) - reach;
+  c.y = minY <= maxY ? clamp(c.y, minY, maxY) : env.H / 2;
   c.pitch = clamp(Math.atan2((c.y - previousY) / Math.max(dt, 1e-3), c.speed), -0.25, 0.25);
   if (c.traveled >= c.distance) {
     c.state = 'wait';

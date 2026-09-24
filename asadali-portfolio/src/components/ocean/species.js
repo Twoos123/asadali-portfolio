@@ -452,7 +452,8 @@ export const SPECIES = {
     Art: KrakenArt,
     size: [220, 140],
     motion: 'cross',
-    cross: { speed: [30, 40], firstWait: [2, 4], wait: [8, 18] },
+    // margin: the glow (index.css .ocean-kraken-glow) reaches 20% past the box, arms a bit more.
+    cross: { speed: [30, 40], firstWait: [2, 4], wait: [8, 18], margin: 0.25 },
     setup(c) {
       c.arms = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => ({
         root: [110 + i * 2.2, 80 + i * 2.2],
