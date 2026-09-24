@@ -3,13 +3,19 @@
 //   npm run setup-editor
 //
 // 1. Asks for a password twice without echoing it (so it stays out of your shell history).
-// 2. Creates an authenticator secret: add it to an authenticator app (Google Authenticator,
-//    1Password, Authy, …) as a setup key, then type the code it shows to confirm.
+// 2. Creates an authenticator secret and shows it as a QR code to scan with an authenticator
+//    app (Google Authenticator, 1Password, Authy, …), then asks for a code to confirm. The QR
+//    code is drawn locally (never by a website, which would see the secret).
 // 3. Creates a random session secret.
 // Running it again and replacing the values logs out every existing session.
 
 const crypto = require('crypto');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const readline = require('readline');
+const { spawn } = require('child_process');
+const QRCode = require('qrcode');
 const totp = require('../totp');
 
 const MIN_LENGTH = 14;
@@ -35,6 +41,33 @@ const ask = (question, { hidden = false } = {}) =>
     muted = hidden;
   });
 
+// The browser copy of the QR code, if one was opened: removed whenever the script ends.
+let qrPage = null;
+const removeQrPage = () => {
+  if (qrPage) fs.rmSync(qrPage, { force: true });
+  qrPage = null;
+};
+process.on('exit', removeQrPage);
+rl.on('SIGINT', () => process.exit(130));
+
+// A larger QR code in the default browser, for terminals whose font doesn't draw the one
+// above cleanly. A local file with no scripts or external requests.
+async function openQrPage(uri, key) {
+  const svg = await QRCode.toString(uri, { type: 'svg', margin: 4, width: 320, errorCorrectionLevel: 'M' });
+  qrPage = path.join(os.tmpdir(), `site-editor-qr-${crypto.randomBytes(6).toString('hex')}.html`);
+  fs.writeFileSync(
+    qrPage,
+    `<!doctype html><meta charset="utf-8"><meta name="referrer" content="no-referrer"><title>Site editor setup</title>
+<body style="font-family:system-ui,sans-serif;background:#fff;color:#111;display:grid;place-items:center;min-height:90vh;text-align:center">
+<div><h1 style="font-size:20px">Scan with your authenticator app</h1>${svg}
+<p>Setup key: <code>${key}</code></p><p style="color:#666">This page is deleted when the setup finishes.</p></div></body>`,
+    { mode: 0o600 }
+  );
+  const [command, args] =
+    process.platform === 'win32' ? ['cmd', ['/c', 'start', '', qrPage]] : process.platform === 'darwin' ? ['open', [qrPage]] : ['xdg-open', [qrPage]];
+  spawn(command, args, { detached: true, stdio: 'ignore' }).unref();
+}
+
 function fail(message) {
   console.error(`\n${message}`);
   rl.close();
@@ -52,18 +85,28 @@ function fail(message) {
   if (again !== password) fail("The passwords didn't match.");
 
   const secret = totp.generateSecret();
-  console.log('\nNow add the editor to your authenticator app. Choose "enter a setup key" and type:');
-  console.log(`\n    Account:  asadbinali.com editor`);
-  console.log(`    Key:      ${secret.match(/.{1,4}/g).join(' ')}`);
+  const key = secret.match(/.{1,4}/g).join(' ');
+  const uri = totp.setupUri(secret, 'editor', 'asadbinali.com');
+  console.log('\nNow scan this QR code with your authenticator app (add account → scan a QR code):\n');
+  console.log(await QRCode.toString(uri, { type: 'terminal', small: true, errorCorrectionLevel: 'M' }));
+  console.log('No camera? Choose "enter a setup key" in the app instead:');
+  console.log('    Account:  asadbinali.com editor');
+  console.log(`    Key:      ${key}`);
   console.log('    Type:     time-based\n');
-  console.log(`(Or, in an app that takes links: ${totp.setupUri(secret, 'editor', 'asadbinali.com')})\n`);
 
-  for (let tries = 0; ; tries++) {
-    const code = (await ask('Code shown in the app: ')).replace(/\s/g, '');
+  for (let tries = 0; tries < 3; ) {
+    const code = (await ask('Code shown in the app (or press Enter to open a bigger QR code in your browser): ')).replace(/\s/g, '');
+    if (!code) {
+      if (!qrPage) await openQrPage(uri, key);
+      console.log('Opened the QR code in your browser. Scan it, then type the code the app shows.');
+      continue;
+    }
     if (totp.verify(secret, code) !== null) break;
-    if (tries === 2) fail("Those codes didn't match. Check that the app's clock is right and run the setup again.");
+    tries += 1;
+    if (tries === 3) fail("Those codes didn't match. Check that your phone's clock is set automatically and run the setup again.");
     console.log("That code didn't match. Wait for the next one and try again.");
   }
+  removeQrPage();
   rl.close();
 
   console.log('\nHashing the password (this takes a moment)…');
