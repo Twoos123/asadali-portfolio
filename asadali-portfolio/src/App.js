@@ -11,6 +11,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import { SURFACE_COLOR, onWaterColor } from './components/ocean/waterColor';
+import { installWaterClicks } from './components/ocean/waterClicks';
 import EditorBar from './editor/EditorBar';
 import AdminConsole from './editor/AdminConsole';
 import EditorDialogs from './editor/dialogs';
@@ -27,6 +28,9 @@ function App() {
       }),
     []
   );
+
+  // Fast clicks on the water shouldn't select or drag text (see waterClicks.js).
+  useEffect(() => installWaterClicks(), []);
 
   return (
     // Transparent (App.css gives .App a grey background) so the water layer shows through.

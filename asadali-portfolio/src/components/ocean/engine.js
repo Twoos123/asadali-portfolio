@@ -361,30 +361,44 @@ function updateSwim(c, dt, env) {
 }
 
 // Jellyfish and octopus: contract to push off, then relax and slowly sink.
+// A new place to drift to: a depth within the band and a spot across the section.
+function pickDrift(c, env, top, bottom) {
+  c.goalY = rand(top, bottom);
+  c.goalX = rand(0.08, 0.92) * env.W;
+}
+
 function updatePulse(c, dt, env) {
   const p = c.species.pulse;
   const [top, bottom] = bandOf(c.spec, env);
+  if (c.goalY === undefined) pickDrift(c, env, top, bottom);
 
   c.cycle += dt / c.period;
   if (c.cycle >= 1) {
     c.cycle %= 1;
     const depth = (c.y - top) / Math.max(bottom - top, 1);
     c.period = p.period * rand(0.85, 1.2) * (depth < 0.2 ? 1.6 : depth > 0.8 ? 0.75 : 1);
-    c.skip = c.y < top;
+    // Like a real jellyfish: pulse up toward the depth it has picked, rest and sink once
+    // above it, pause now and then on the way, and pick somewhere new when it gets there.
+    if (Math.abs(c.y - c.goalY) < 20 || Math.random() < 0.06) pickDrift(c, env, top, bottom);
+    c.skip = c.y < c.goalY || (c.y < (top + bottom) / 2 && Math.random() < 0.15);
   }
 
   const k = p.contract;
   const u = c.cycle;
-  c.squeeze = u < k ? Math.sin((u / k) * (Math.PI / 2)) : 0.5 + 0.5 * Math.cos(((u - k) / (1 - k)) * Math.PI);
+  const squeeze = u < k ? Math.sin((u / k) * (Math.PI / 2)) : 0.5 + 0.5 * Math.cos(((u - k) / (1 - k)) * Math.PI);
+  // A resting bell still breathes, just gently.
+  c.squeeze = c.skip ? squeeze * 0.35 : squeeze;
   if (u < k && !c.skip) {
     const thrust = p.thrust * Math.sin((u / k) * Math.PI);
     c.vx += Math.sin(c.angle) * thrust * dt;
     c.vy -= Math.cos(c.angle) * thrust * dt;
   }
-  c.vy += p.sink * dt;
+  c.vy += (c.skip ? p.rest : p.sink) * dt;
   c.vx += (drift(env.t * 0.3, c.seed) - 0.5) * p.drift * dt;
 
   let tilt = (drift(env.t * 0.25, c.seed * 1.7) - 0.5) * 2 * p.tilt;
+  // Lean toward where it's heading, so its pulses carry it sideways as well as up.
+  tilt += clamp((c.goalX - c.x) / (env.W * 0.25), -1, 1) * p.lean;
   if (c.x < env.W * 0.08) tilt += 0.4;
   else if (c.x > env.W * 0.92) tilt -= 0.4;
   if (c.y > bottom) tilt *= 0.3;

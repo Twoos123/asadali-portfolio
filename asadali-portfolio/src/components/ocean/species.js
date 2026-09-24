@@ -350,7 +350,8 @@ export const SPECIES = {
     size: [60, 120],
     origin: [0.5, 0.15],
     motion: 'pulse',
-    pulse: { period: 2.9, contract: 0.3, thrust: 170, sink: 7, drag: 1.6, drift: 10, tilt: 0.3, shy: 95, push: 160 },
+    // rest: how fast it sinks between pulses when resting; lean: tilt toward where it's going.
+    pulse: { period: 2.9, contract: 0.3, thrust: 170, sink: 7, rest: 26, lean: 0.5, drag: 1.6, drift: 10, tilt: 0.3, shy: 95, push: 160 },
     setup(c) {
       c.tentacles = [7, 15, 23, 37, 45, 53].map((x) => ({
         x,
@@ -381,7 +382,7 @@ export const SPECIES = {
     size: [80, 110],
     origin: [0.5, 0.3],
     motion: 'pulse',
-    pulse: { period: 4.2, contract: 0.22, thrust: 260, sink: 12, drag: 1.3, drift: 12, tilt: 0.55, shy: 120, push: 220 },
+    pulse: { period: 4.2, contract: 0.22, thrust: 260, sink: 12, rest: 30, lean: 0.45, drag: 1.3, drift: 12, tilt: 0.55, shy: 120, push: 220 },
     setup(c) {
       c.arms = [25, 29.5, 34, 38, 42, 46, 50.5, 55].map((x, i) => ({
         x,
