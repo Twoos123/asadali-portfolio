@@ -1,0 +1,17 @@
+{
+  "heading": "Resume",
+  "buttons": {
+    "openInNewTab": "Open in New Tab",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit Fullscreen",
+    "retry": "Retry",
+    "tryAgain": "Try Again",
+    "viewInDrive": "View in Google Drive"
+  },
+  "loading": "Loading Resume...",
+  "error": {
+    "heading": "Resume Loading Issue",
+    "message": "There was an issue loading the resume preview. This sometimes happens with Google Drive embedding.",
+    "allFailedMessage": "Unable to load resume preview after trying all formats. Please use the direct links below."
+  }
+}

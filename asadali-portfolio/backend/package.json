@@ -1,11 +1,12 @@
 {
   "name": "portfolio-backend",
   "version": "1.0.0",
-  "description": "Backend server for portfolio contact form",
+  "description": "Backend server for the portfolio contact form and on-site text editor",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "hash-password": "node scripts/hash-editor-password.js"
   },
   "dependencies": {
     "body-parser": "^1.20.4",
@@ -26,5 +27,8 @@
     "nodemailer"
   ],
   "author": "Asad Ali",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
 }

@@ -1,0 +1,46 @@
+# Builds the site and publishes it to the gh-pages branch (which GitHub Pages serves at
+# asadbinali.com) on every push to main, including commits made by the on-site editor.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'asadali-portfolio/**'
+      - '!asadali-portfolio/backend/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Deploy one commit at a time, and never cancel a deploy that's already publishing.
+concurrency:
+  group: deploy-site
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: asadali-portfolio
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: asadali-portfolio/package-lock.json
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: asadali-portfolio/build
+          cname: asadbinali.com
+          commit_message: 'Deploy ${{ github.sha }}'

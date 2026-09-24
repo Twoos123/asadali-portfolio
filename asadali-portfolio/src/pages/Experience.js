@@ -4,13 +4,18 @@ import "react-vertical-timeline-component/style.min.css";
 import { FaBriefcase, FaHandsHelping, FaHourglassHalf, FaMapMarkerAlt } from 'react-icons/fa';
 import { FadeInSection } from '../components/animations';
 import OceanLife from '../components/ocean/OceanLife';
+import Editable from '../editor/Editable';
+import { useContent } from '../editor/store';
 
-const uOttaHack = process.env.PUBLIC_URL + '/assets/uOttaHack.svg?v=3';
-const eightbyeight = process.env.PUBLIC_URL + '/assets/8x8.svg?v=3';
-const SESA = process.env.PUBLIC_URL + '/assets/SESA.svg?v=3';
-const uOttawa = process.env.PUBLIC_URL + '/assets/uottawa.svg?v=3';
-const HealthCanada = process.env.PUBLIC_URL + '/assets/health-canada.svg?v=3';
-const SunLife = process.env.PUBLIC_URL + '/assets/sunlife.svg?v=3';
+// Logo images stay in code; each entry in src/content/experience.json picks one by key.
+const LOGOS = {
+  sunLife: process.env.PUBLIC_URL + '/assets/sunlife.svg?v=3',
+  healthCanada: process.env.PUBLIC_URL + '/assets/health-canada.svg?v=3',
+  uOttawa: process.env.PUBLIC_URL + '/assets/uottawa.svg?v=3',
+  sesa: process.env.PUBLIC_URL + '/assets/SESA.svg?v=3',
+  eightByEight: process.env.PUBLIC_URL + '/assets/8x8.svg?v=3',
+  uOttaHack: process.env.PUBLIC_URL + '/assets/uOttaHack.svg?v=3',
+};
 
 const ACCENTS = {
   work: 'from-ocean-400 to-ocean-500',
@@ -18,10 +23,20 @@ const ACCENTS = {
   incoming: 'from-amber-300 to-orange-400',
 };
 
+const ICONS = {
+  work: FaBriefcase,
+  volunteer: FaHandsHelping,
+  incoming: FaHourglassHalf,
+};
+
 const ICON_STYLES = {
-  work: { background: 'linear-gradient(135deg, #38bdf8, #0ea5e9)' },
-  volunteer: { background: 'linear-gradient(135deg, #a78bfa, #d946ef)' },
-  incoming: { background: 'linear-gradient(135deg, #fcd34d, #fb923c)' },
+  work: { background: 'linear-gradient(135deg, #38bdf8, #0ea5e9)', color: '#fff' },
+  volunteer: { background: 'linear-gradient(135deg, #a78bfa, #d946ef)', color: '#fff' },
+  incoming: {
+    background: 'linear-gradient(135deg, #fcd34d, #fb923c)',
+    color: '#fff',
+    boxShadow: '0 0 0 4px rgba(251, 191, 36, 0.25), 0 0 20px rgba(251, 191, 36, 0.5)',
+  },
 };
 
 const CONTENT_STYLE = {
@@ -33,7 +48,11 @@ const CONTENT_STYLE = {
 
 const CONTENT_ARROW_STYLE = { display: 'none' };
 
-function TimelineCard({ kind, org, role, period, location, logo, logoAlt, logoClass, isIncoming, skills, children }) {
+// `entry` is the published entry (for structure); its text is rendered from `path` so edits show live.
+function TimelineCard({ entry, path }) {
+  const { kind, logo, org, location, skills, description } = entry;
+  const isIncoming = kind === 'incoming';
+
   return (
     <div
       className="group relative rounded-2xl overflow-hidden border border-white/15 bg-ocean-950/50 hover:bg-ocean-950/60 hover:border-white/25 transition-all duration-300 shadow-glass"
@@ -48,7 +67,7 @@ function TimelineCard({ kind, org, role, period, location, logo, logoAlt, logoCl
             {isIncoming ? (
               <span className="text-3xl font-bold text-amber-500 font-display">?</span>
             ) : (
-              <img src={logo} alt={logoAlt} className={logoClass || "h-full w-full object-contain"} />
+              <img src={LOGOS[logo]} alt={org} className="h-full w-full object-contain" />
             )}
           </div>
 
@@ -56,20 +75,21 @@ function TimelineCard({ kind, org, role, period, location, logo, logoAlt, logoCl
           <div className="min-w-0 flex-1">
             {/* Top row: Organization name + Period badge */}
             <div className="flex items-center justify-between gap-2">
-              <h3 className="font-display text-lg sm:text-xl font-bold text-white tracking-tight leading-tight m-0">{org}</h3>
-              <span className="shrink-0 hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold tracking-wider uppercase bg-white/10 border border-white/10 text-ocean-100">
-                {period}
-              </span>
+              <Editable path={`${path}.org`} as="h3" className="font-display text-lg sm:text-xl font-bold text-white tracking-tight leading-tight m-0" />
+              <Editable
+                path={`${path}.period`}
+                className="shrink-0 hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold tracking-wider uppercase bg-white/10 border border-white/10 text-ocean-100"
+              />
             </div>
 
             {/* Role */}
-            <div className="text-xs sm:text-sm font-semibold text-ocean-200 tracking-wide mt-0.5 sm:whitespace-nowrap">{role}</div>
+            <Editable path={`${path}.role`} as="div" className="text-xs sm:text-sm font-semibold text-ocean-200 tracking-wide mt-0.5 sm:whitespace-nowrap" />
 
             {/* Location */}
             {location && (
               <div className="text-[11px] sm:text-xs text-ocean-300/80 flex items-center gap-1.5 mt-0.5 font-medium tracking-wide sm:whitespace-nowrap">
                 <FaMapMarkerAlt className="text-ocean-400 text-[10px] shrink-0" />
-                <span>{location}</span>
+                <Editable path={`${path}.location`} />
               </div>
             )}
           </div>
@@ -77,24 +97,24 @@ function TimelineCard({ kind, org, role, period, location, logo, logoAlt, logoCl
 
         {/* Mobile period display */}
         <div className="sm:hidden mb-2">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase bg-white/10 border border-white/10 text-ocean-100">
-            {period}
-          </span>
+          <Editable
+            path={`${path}.period`}
+            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase bg-white/10 border border-white/10 text-ocean-100"
+          />
         </div>
 
-        {children && (
-          <p className="text-ocean-50/85 text-xs sm:text-sm leading-relaxed mb-3">{children}</p>
+        {description && (
+          <Editable path={`${path}.description`} as="p" className="text-ocean-50/85 text-xs sm:text-sm leading-relaxed mb-3" />
         )}
 
         {skills && skills.length > 0 && (
           <div className="flex flex-wrap gap-1.5 pt-1.5 mt-1">
             {skills.map((skill, idx) => (
-              <span
+              <Editable
                 key={idx}
+                path={`${path}.skills.${idx}`}
                 className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-white/[0.05] border border-white/[0.08] text-ocean-200/90 group-hover:bg-white/[0.08] group-hover:border-white/15 transition-all"
-              >
-                {skill}
-              </span>
+              />
             ))}
           </div>
         )}
@@ -105,6 +125,7 @@ function TimelineCard({ kind, org, role, period, location, logo, logoAlt, logoCl
 
 function Experience() {
   const [isMobile, setIsMobile] = useState(false);
+  const content = useContent('experience');
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -123,172 +144,28 @@ function Experience() {
 
       <FadeInSection direction="up" delay={0.2} threshold={0.3}>
         <div className='py-16 text-center relative z-10'>
-          <span className="eyebrow">Journey so far</span>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight">Experience</h1>
+          <Editable path="experience.eyebrow" className="eyebrow" />
+          <Editable path="experience.heading" as="h1" className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight" />
         </div>
       </FadeInSection>
 
       <div className="relative z-10">
         <FadeInSection direction="up" delay={0.3} threshold={0.2}>
           <VerticalTimeline lineColor="rgba(255,255,255,0.18)" animate={!isMobile}>
-
-            {/* Next Chapter / New Grad Availability */}
-            <VerticalTimelineElement
-              iconStyle={{ ...ICON_STYLES.incoming, color: '#fff', boxShadow: '0 0 0 4px rgba(251, 191, 36, 0.25), 0 0 20px rgba(251, 191, 36, 0.5)' }}
-              icon={<FaHourglassHalf />}
-              contentStyle={CONTENT_STYLE}
-              contentArrowStyle={CONTENT_ARROW_STYLE}
-            >
-              <TimelineCard
-                kind="incoming"
-                org="Next Chapter"
-                role="Software Engineer · Seeking New Grad Roles"
-                period="Available Dec 2026"
-                location="Ottawa · Toronto · Montreal · Vancouver · Remote"
-                isIncoming={true}
-                skills={['Full-Stack', 'Backend', 'Distributed Systems', 'Cloud & DevOps']}
-              />
-            </VerticalTimelineElement>
-
-            {/* Sun Life */}
-            <VerticalTimelineElement
-              iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
-              icon={<FaBriefcase />}
-              contentStyle={CONTENT_STYLE}
-              contentArrowStyle={CONTENT_ARROW_STYLE}
-            >
-              <TimelineCard
-                kind="work"
-                org="Sun Life"
-                role="Cloud Infrastructure Analyst Intern · DevOps"
-                period="Sep 2026 - Dec 2026"
-                location="Toronto, ON · Remote"
-                logo={SunLife}
-                logoAlt="Sun Life"
-                logoClass="h-full w-full object-contain"
-                skills={['Kubernetes', 'Docker', 'Terraform', 'Ansible', 'Prometheus', 'AWS']}
-              />
-            </VerticalTimelineElement>
-
-            {/* Health Canada 2026 */}
-            <VerticalTimelineElement
-              iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
-              icon={<FaBriefcase />}
-              contentStyle={CONTENT_STYLE}
-              contentArrowStyle={CONTENT_ARROW_STYLE}
-            >
-              <TimelineCard
-                kind="work"
-                org="Health Canada"
-                role="Software Engineer Intern · Fullstack"
-                period="May 2026 - Aug 2026"
-                location="Ottawa, ON · Hybrid"
-                logo={HealthCanada}
-                logoAlt="Health Canada"
-                logoClass="h-full w-full object-contain"
-                skills={['React.js', 'FastAPI', 'Python', 'Vite', 'SQLite', 'CI/CD']}
-              />
-            </VerticalTimelineElement>
-
-            {/* uOttawa Faculty of Law */}
-            <VerticalTimelineElement
-              iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
-              icon={<FaBriefcase />}
-              contentStyle={CONTENT_STYLE}
-              contentArrowStyle={CONTENT_ARROW_STYLE}
-            >
-              <TimelineCard
-                kind="work"
-                org="University of Ottawa"
-                role="Software Engineer Intern · Fullstack"
-                period="Oct 2025 - Apr 2026"
-                location="Ottawa, ON · Hybrid"
-                logo={uOttawa}
-                logoAlt="University of Ottawa"
-                logoClass="h-full w-full object-contain"
-                skills={['PHP', 'MySQL', 'Docker', 'Apache', 'Linux', 'Drupal']}
-              />
-            </VerticalTimelineElement>
-
-            {/* Health Canada 2025 */}
-            <VerticalTimelineElement
-              iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
-              icon={<FaBriefcase />}
-              contentStyle={CONTENT_STYLE}
-              contentArrowStyle={CONTENT_ARROW_STYLE}
-            >
-              <TimelineCard
-                kind="work"
-                org="Health Canada"
-                role="Software Engineer Intern · Fullstack"
-                period="May 2025 - Aug 2025"
-                location="Ottawa, ON · Hybrid"
-                logo={HealthCanada}
-                logoAlt="Health Canada"
-                logoClass="h-full w-full object-contain"
-                skills={['Python', 'Pandas', 'Streamlit', 'ArcGIS', 'DuckDB', 'Excel']}
-              />
-            </VerticalTimelineElement>
-
-            {/* SESA */}
-            <VerticalTimelineElement
-              iconStyle={{ ...ICON_STYLES.volunteer, color: '#fff' }}
-              icon={<FaHandsHelping />}
-              contentStyle={CONTENT_STYLE}
-              contentArrowStyle={CONTENT_ARROW_STYLE}
-            >
-              <TimelineCard
-                kind="volunteer"
-                org="uOttawa SESA"
-                role="Co-Director → Advisor"
-                period="Apr 2024 - Present"
-                location="Ottawa, ON"
-                logo={SESA}
-                logoAlt="uOttawa SESA"
-                logoClass="h-full w-full object-contain"
-                skills={['Leadership', 'Full-Stack Web', 'Event Operations', 'Mentorship']}
-              />
-            </VerticalTimelineElement>
-
-            {/* 8x8 */}
-            <VerticalTimelineElement
-              iconStyle={{ ...ICON_STYLES.work, color: '#fff' }}
-              icon={<FaBriefcase />}
-              contentStyle={CONTENT_STYLE}
-              contentArrowStyle={CONTENT_ARROW_STYLE}
-            >
-              <TimelineCard
-                kind="work"
-                org="8x8"
-                role="Software Engineer Intern · Backend"
-                period="Jan 2024 - May 2024"
-                location="Ottawa, ON · Hybrid"
-                logo={eightbyeight}
-                logoAlt="8x8"
-                logoClass="h-full w-full object-contain"
-                skills={['Java', 'Spring Boot', 'Docker', 'REST APIs', 'OAuth', 'Postman']}
-              />
-            </VerticalTimelineElement>
-
-            {/* uOttaHack */}
-            <VerticalTimelineElement
-              iconStyle={{ ...ICON_STYLES.volunteer, color: '#fff' }}
-              icon={<FaHandsHelping />}
-              contentStyle={CONTENT_STYLE}
-              contentArrowStyle={CONTENT_ARROW_STYLE}
-            >
-              <TimelineCard
-                kind="volunteer"
-                org="uOttaHack"
-                role="MLH Hackathon Organizer"
-                period="Jun 2023 - Mar 2024"
-                location="Ottawa, ON"
-                logo={uOttaHack}
-                logoAlt="uOttaHack"
-                logoClass="h-full w-full object-contain"
-                skills={['Event Logistics', 'Technical Workshops', 'Community']}
-              />
-            </VerticalTimelineElement>
+            {content.entries.map((entry, i) => {
+              const Icon = ICONS[entry.kind];
+              return (
+                <VerticalTimelineElement
+                  key={i}
+                  iconStyle={ICON_STYLES[entry.kind]}
+                  icon={<Icon />}
+                  contentStyle={CONTENT_STYLE}
+                  contentArrowStyle={CONTENT_ARROW_STYLE}
+                >
+                  <TimelineCard entry={entry} path={`experience.entries.${i}`} />
+                </VerticalTimelineElement>
+              );
+            })}
           </VerticalTimeline>
         </FadeInSection>
       </div>

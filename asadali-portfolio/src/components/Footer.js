@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaLinkedin, FaGithub, FaEnvelope, FaFileAlt, FaPause, FaPlay } from 'react-icons/fa';
 import { setMotionPaused, useMotionPaused } from '../hooks/useReducedMotion';
+import Editable from '../editor/Editable';
 
 function Footer() {
   const motionPaused = useMotionPaused();
@@ -12,7 +13,7 @@ function Footer() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0 flex flex-col md:flex-row items-center gap-3 md:gap-5">
-            <p className="text-blue-200">&copy; 2026 Asad Ali. All rights reserved.</p>
+            <Editable path="footer.copyright" as="p" className="text-blue-200" />
             <button
               type="button"
               onClick={() => setMotionPaused(!motionPaused)}

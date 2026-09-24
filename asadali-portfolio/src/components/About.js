@@ -2,45 +2,27 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
 import OceanLife from './ocean/OceanLife';
+import Editable from '../editor/Editable';
+import { useContent } from '../editor/store';
 
 function About() {
+  const about = useContent('about');
+
   return (
     <section id="about" className="relative py-20 md:py-24 px-4">
       <OceanLife section="about" />
       <div className="max-w-6xl mx-auto relative z-10 grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
         <div className="md:col-span-3">
-          <span className="eyebrow">About</span>
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-white mt-3 tracking-tight">
-            Hi, I'm Asad.
-          </h2>
+          <Editable path="about.eyebrow" className="eyebrow" />
+          <Editable
+            path="about.heading"
+            as="h2"
+            className="font-display text-3xl md:text-4xl font-bold text-white mt-3 tracking-tight"
+          />
           <div className="mt-5 space-y-4 text-ocean-50/85 leading-relaxed text-base md:text-lg">
-            <p>
-              I'm a final-year software engineering student at uOttawa. Most of my time
-              goes toward real product work, currently interning at <span className="text-ocean-100">Sun Life</span> as
-              a Cloud Infrastructure Analyst and recently leading the enterprise rebuild of
-              an internal Case Management Tool at <span className="text-ocean-100">Health Canada</span>.
-              On the side, I tend to build the tools I wish were free: I'd rather put in the engineering
-              time than pay a monthly subscription for something I could own. That's where{' '}
-              <Link to="/project/10" className="text-ocean-200 underline decoration-ocean-400/50 underline-offset-4 hover:text-white hover:decoration-ocean-300 transition-colors">
-                CS2 Meta Engine
-              </Link>{' '}
-              came from. I'm not about to pay $70 a month to improve at a game I play at
-              a high level, so I'm building the analysis pipeline myself.
-            </p>
-            <p>
-              This fall at Sun Life marks my fifth internship role, after previous internships at{' '}
-              <span className="text-ocean-100">Health Canada</span>,{' '}
-              <span className="text-ocean-100">8x8</span>, and part-time
-              fullstack work at <span className="text-ocean-100">uOttawa's Faculty of
-              Law</span>. In between I advise the uOttawa Software Engineering Students'
-              Association and spend a lot of time going deep on AI: how modern agentic
-              workflows are built, how to weave them into real products, and where they
-              actually move the needle.
-            </p>
-            <p>
-              I care about software that feels fast, stays small, and respects the user.
-              If that sounds like your kind of thing, let's talk.
-            </p>
+            {about.paragraphs.map((_, i) => (
+              <Editable key={i} path={`about.paragraphs.${i}`} as="p" rich />
+            ))}
           </div>
         </div>
 
@@ -53,22 +35,13 @@ function About() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
             </span>
-            <span className="eyebrow">Currently</span>
+            <Editable path="about.currently.label" className="eyebrow" />
           </div>
 
           <dl className="space-y-4 text-sm">
-            <Row label="Role" value="Cloud Infrastructure Analyst Intern - DevOps @ Sun Life" />
-            <Row
-              label="Building"
-              value={
-                <Link to="/project/10" className="inline-flex items-center gap-1.5 text-ocean-100 hover:text-white transition-colors">
-                  CS2 Meta Engine <FaArrowRight className="h-2.5 w-2.5" />
-                </Link>
-              }
-            />
-            <Row label="Learning" value="AI workflows & LLMs in production" />
-            <Row label="Based in" value="Ottawa, Ontario" />
-            <Row label="Grinding" value="CS2, Level 10 Faceit (Top 2,000 NA)" />
+            {about.currently.rows.map((row, i) => (
+              <Row key={i} path={`about.currently.rows.${i}`} link={row.link} />
+            ))}
           </dl>
         </aside>
       </div>
@@ -76,11 +49,21 @@ function About() {
   );
 }
 
-function Row({ label, value }) {
+// One "Currently" row. A row with a `link` renders its value as a link with an arrow.
+function Row({ path, link }) {
   return (
     <div className="grid grid-cols-[88px_1fr] gap-3 items-baseline">
-      <dt className="text-[11px] font-semibold uppercase tracking-widest text-ocean-200/60">{label}</dt>
-      <dd className="text-ocean-50/90 leading-snug">{value}</dd>
+      <Editable path={`${path}.label`} as="dt" className="text-[11px] font-semibold uppercase tracking-widest text-ocean-200/60" />
+      {link ? (
+        <dd className="text-ocean-50/90 leading-snug">
+          <Link to={link} className="inline-flex items-center gap-1.5 text-ocean-100 hover:text-white transition-colors">
+            <Editable path={`${path}.value`} />
+            <FaArrowRight className="h-2.5 w-2.5" />
+          </Link>
+        </dd>
+      ) : (
+        <Editable path={`${path}.value`} as="dd" className="text-ocean-50/90 leading-snug" />
+      )}
     </div>
   );
 }

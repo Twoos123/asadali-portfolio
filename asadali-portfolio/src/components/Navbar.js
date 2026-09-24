@@ -2,19 +2,21 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaArrowRight } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
+import Editable from '../editor/Editable';
 
 const logo = process.env.PUBLIC_URL + '/assets/AsadLogo.png';
 
+// Labels live in src/content/nav.json (nav.links.<id>); the ids track which section is active.
 const NAV_LINKS = [
-  { label: 'Home', target: '#home' },
-  { label: 'About', target: '#about' },
-  { label: 'Skills', target: '#skills' },
-  { label: 'Projects', target: '#projects' },
-  { label: 'Experience', target: '#experience' },
-  { label: 'Resume', target: '.resume-section' },
+  { id: 'home', target: '#home' },
+  { id: 'about', target: '#about' },
+  { id: 'skills', target: '#skills' },
+  { id: 'projects', target: '#projects' },
+  { id: 'experience', target: '#experience' },
+  { id: 'resume', target: '.resume-section' },
 ];
 
-const CTA = { label: 'Contact', target: '.contact-section' };
+const CTA = { id: 'contact', target: '.contact-section' };
 
 const NAV_HEIGHT_DESKTOP = 80;
 const NAV_HEIGHT_MOBILE = 64;
@@ -24,7 +26,7 @@ const getNavHeight = () =>
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeLabel, setActiveLabel] = useState('Home');
+  const [activeId, setActiveId] = useState('home');
   const lockUntilRef = useRef(0);
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,15 +42,7 @@ function Navbar() {
   useEffect(() => {
     if (!onHome) return;
 
-    const trackedTargets = [
-      { label: 'Home', target: '#home' },
-      { label: 'About', target: '#about' },
-      { label: 'Skills', target: '#skills' },
-      { label: 'Projects', target: '#projects' },
-      { label: 'Experience', target: '#experience' },
-      { label: 'Resume', target: '.resume-section' },
-      { label: 'Contact', target: '.contact-section' },
-    ];
+    const trackedTargets = [...NAV_LINKS, CTA];
 
     const getElements = () =>
       trackedTargets
@@ -61,7 +55,7 @@ function Navbar() {
     const pickActive = () => {
       if (Date.now() < lockUntilRef.current) return;
       if (window.scrollY < 80) {
-        setActiveLabel('Home');
+        setActiveId('home');
         return;
       }
       const probe = window.scrollY + getNavHeight() + 40;
@@ -70,7 +64,7 @@ function Navbar() {
         const top = entry.el.getBoundingClientRect().top + window.scrollY;
         if (top <= probe) current = entry;
       }
-      setActiveLabel(current.label);
+      setActiveId(current.id);
     };
 
     pickActive();
@@ -95,9 +89,9 @@ function Navbar() {
   }, []);
 
   const handleNavClick = useCallback(
-    (target, label) => {
+    (target, id) => {
       setIsOpen(false);
-      if (label) setActiveLabel(label);
+      if (id) setActiveId(id);
       lockUntilRef.current = Date.now() + 900;
       if (onHome) {
         scrollToTarget(target);
@@ -114,7 +108,7 @@ function Navbar() {
 
   const handleLogoClick = () => {
     setIsOpen(false);
-    setActiveLabel('Home');
+    setActiveId('home');
     lockUntilRef.current = Date.now() + 900;
     if (onHome) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -154,20 +148,18 @@ function Navbar() {
               <img className="relative h-8 w-8 lg:h-10 lg:w-10" src={logo} alt="" />
             </div>
             <div className="hidden sm:flex flex-col items-start leading-none">
-              <span className="font-display text-lg font-bold text-white tracking-tight">Asad Ali</span>
-              <span className="text-[11px] font-medium text-ocean-200/70 tracking-widest uppercase mt-0.5">
-                Software Engineer
-              </span>
+              <Editable path="nav.logo.name" className="font-display text-lg font-bold text-white tracking-tight" />
+              <Editable path="nav.logo.subtitle" className="text-[11px] font-medium text-ocean-200/70 tracking-widest uppercase mt-0.5" />
             </div>
           </motion.button>
 
           <div className="hidden lg:flex items-center gap-1">
             {NAV_LINKS.map((link) => {
-              const isActive = onHome && link.label === activeLabel;
+              const isActive = onHome && link.id === activeId;
               return (
                 <button
-                  key={link.label}
-                  onClick={() => handleNavClick(link.target, link.label)}
+                  key={link.id}
+                  onClick={() => handleNavClick(link.target, link.id)}
                   className={`relative px-4 py-2.5 text-[15px] font-medium tracking-tight rounded-xl transition-colors duration-100 ${
                     isActive ? 'text-white' : 'text-ocean-100/75 hover:text-white'
                   }`}
@@ -179,7 +171,7 @@ function Navbar() {
                       transition={{ type: 'tween', ease: [0.32, 0.72, 0, 1], duration: 0.18 }}
                     />
                   )}
-                  <span className="relative z-10">{link.label}</span>
+                  <Editable path={`nav.links.${link.id}`} className="relative z-10" />
                 </button>
               );
             })}
@@ -187,13 +179,13 @@ function Navbar() {
 
           <div className="hidden lg:block">
             <motion.button
-              onClick={() => handleNavClick(CTA.target, CTA.label)}
+              onClick={() => handleNavClick(CTA.target, CTA.id)}
               className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-ocean-500 to-ocean-400 hover:from-ocean-400 hover:to-ocean-300 text-white text-sm font-semibold shadow-glow hover:shadow-glow-strong overflow-hidden"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.96 }}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/25 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              <span className="relative">Let's talk</span>
+              <Editable path="nav.cta.label" className="relative" />
               <FaArrowRight className="relative h-3 w-3 transition-transform group-hover:translate-x-0.5" />
             </motion.button>
           </div>
@@ -240,15 +232,15 @@ function Navbar() {
           >
             <div className="flex flex-col gap-1">
               {[...NAV_LINKS, CTA].map((link, i) => {
-                const isActive = onHome && link.label === activeLabel;
-                const isCta = link.label === CTA.label;
+                const isActive = onHome && link.id === activeId;
+                const isCta = link.id === CTA.id;
                 return (
                   <motion.button
-                    key={link.label}
+                    key={link.id}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.04 * i, duration: 0.2 }}
-                    onClick={() => handleNavClick(link.target, link.label)}
+                    onClick={() => handleNavClick(link.target, link.id)}
                     className={`flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                       isCta
                         ? 'bg-gradient-to-r from-ocean-500 to-ocean-400 text-white shadow-glow mt-2'
@@ -257,7 +249,7 @@ function Navbar() {
                         : 'text-ocean-50 hover:bg-white/5'
                     }`}
                   >
-                    <span>{link.label}</span>
+                    <Editable path={isCta ? 'nav.cta.mobileLabel' : `nav.links.${link.id}`} />
                     {isCta && <FaArrowRight className="h-3 w-3" />}
                     {isActive && !isCta && <span className="h-1.5 w-1.5 rounded-full bg-ocean-300" />}
                   </motion.button>

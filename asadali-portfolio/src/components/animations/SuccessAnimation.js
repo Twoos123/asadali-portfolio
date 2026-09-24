@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Editable from '../../editor/Editable';
 
 const SuccessAnimation = ({ message, onReset }) => {
   const containerVariants = {
@@ -75,7 +76,7 @@ const SuccessAnimation = ({ message, onReset }) => {
         className="mt-6 text-2xl font-bold text-white"
         variants={childVariants}
       >
-        Success!
+        <Editable path="contact.form.success.heading" />
       </motion.h2>
       <motion.p className="mt-2 text-center text-gray-300" variants={childVariants}>
         {message}
@@ -87,7 +88,7 @@ const SuccessAnimation = ({ message, onReset }) => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        Send Another Message
+        <Editable path="contact.form.success.again" />
       </motion.button>
     </motion.div>
   );

@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { FaExpand, FaCompress, FaExternalLinkAlt, FaExclamationTriangle, FaRedo } from 'react-icons/fa';
 import OceanLife from '../components/ocean/OceanLife';
+import Editable from '../editor/Editable';
+import { useContent } from '../editor/store';
 
 function Resume() {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -13,6 +15,7 @@ function Resume() {
   const resumeRef = useRef(null);
   const titleInView = useInView(titleRef, { threshold: 0.3, once: true });
   const resumeInView = useInView(resumeRef, { threshold: 0.1, once: true });
+  const content = useContent('resume');
 
   // Multiple URL formats for better compatibility
   const resumeUrls = [
@@ -115,7 +118,7 @@ function Resume() {
           animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          Resume
+          <Editable path="resume.heading" />
         </motion.h1>
 
         {/* Resume Controls */}
@@ -129,7 +132,7 @@ function Resume() {
             whileTap={{ scale: 0.95 }}
           >
             <FaExternalLinkAlt className="h-4 w-4" />
-            Open in New Tab
+            <Editable path="resume.buttons.openInNewTab" />
           </motion.a>
           
           <motion.button
@@ -139,7 +142,11 @@ function Resume() {
             whileTap={{ scale: 0.95 }}
           >
             {isFullscreen ? <FaCompress className="h-4 w-4" /> : <FaExpand className="h-4 w-4" />}
-            {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+            {isFullscreen ? (
+              <Editable key="exit" path="resume.buttons.exitFullscreen" />
+            ) : (
+              <Editable key="enter" path="resume.buttons.fullscreen" />
+            )}
           </motion.button>
 
           {resumeError && (
@@ -150,7 +157,7 @@ function Resume() {
               whileTap={{ scale: 0.95 }}
             >
               <FaRedo className="h-4 w-4" />
-              Retry
+              <Editable path="resume.buttons.retry" />
             </motion.button>
           )}
         </div>
@@ -172,7 +179,7 @@ function Resume() {
                 className="flex items-center justify-center w-10 h-10 rounded-full backdrop-blur-md bg-black/20 border border-white/20 text-white hover:bg-black/40 transition-all duration-300 shadow-lg"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                title="Exit Fullscreen"
+                title={content.buttons.exitFullscreen}
               >
                 <FaCompress className="h-4 w-4" />
               </motion.button>
@@ -188,13 +195,12 @@ function Resume() {
                 >
                   <div className="text-center text-red-100 max-w-md px-6">
                     <FaExclamationTriangle className="h-12 w-12 mx-auto mb-4 text-red-400" />
-                    <h3 className="text-xl font-semibold mb-2">Resume Loading Issue</h3>
-                    <p className="text-red-200 mb-6">
-                      {currentUrlIndex >= resumeUrls.length - 1 
-                        ? "Unable to load resume preview after trying all formats. Please use the direct links below."
-                        : "There was an issue loading the resume preview. This sometimes happens with Google Drive embedding."
-                      }
-                    </p>
+                    <Editable path="resume.error.heading" as="h3" className="text-xl font-semibold mb-2" />
+                    {currentUrlIndex >= resumeUrls.length - 1 ? (
+                      <Editable key="all-failed" path="resume.error.allFailedMessage" as="p" className="text-red-200 mb-6" />
+                    ) : (
+                      <Editable key="failed" path="resume.error.message" as="p" className="text-red-200 mb-6" />
+                    )}
                     <div className="flex flex-col gap-3">
                       {currentUrlIndex < resumeUrls.length - 1 && (
                         <motion.button
@@ -204,7 +210,7 @@ function Resume() {
                           whileTap={{ scale: 0.95 }}
                         >
                           <FaRedo className="h-4 w-4" />
-                          Try Again
+                          <Editable path="resume.buttons.tryAgain" />
                         </motion.button>
                       )}
                       <motion.a
@@ -216,7 +222,7 @@ function Resume() {
                         whileTap={{ scale: 0.95 }}
                       >
                         <FaExternalLinkAlt className="h-4 w-4" />
-                        View in Google Drive
+                        <Editable path="resume.buttons.viewInDrive" />
                       </motion.a>
                     </div>
                   </div>
@@ -248,7 +254,7 @@ function Resume() {
             >
               <div className="text-center text-white">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
-                <p>Loading Resume...</p>
+                <Editable path="resume.loading" as="p" />
               </div>
             </div>
           )}

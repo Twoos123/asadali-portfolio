@@ -1,0 +1,60 @@
+{
+  "back": "Back",
+  "eyebrow": "Case study",
+  "notFound": {
+    "heading": "Project not found",
+    "back": "Back"
+  },
+  "headerButtons": {
+    "viewRepository": "View Repository",
+    "liveDemo": "Live Demo"
+  },
+  "noCaseStudy": "Head to the repository above for the full write-up and code.",
+  "origin": {
+    "eyebrow": "How it started"
+  },
+  "sections": {
+    "problem": {
+      "eyebrow": "The problem",
+      "title": "Why this exists"
+    },
+    "approach": {
+      "eyebrow": "The approach",
+      "title": "How it works"
+    },
+    "architecture": {
+      "eyebrow": "Architecture",
+      "title": "Four layers, one pipeline"
+    },
+    "features": {
+      "eyebrow": "Features",
+      "title": "What it does"
+    },
+    "decisions": {
+      "eyebrow": "Engineering decisions",
+      "title": "Why these choices"
+    },
+    "learnings": {
+      "eyebrow": "What I learned",
+      "title": "Lessons carried forward"
+    },
+    "credits": {
+      "eyebrow": "Credits",
+      "title": "Built with"
+    }
+  },
+  "cta": {
+    "eyebrow": "Go deeper",
+    "withDemo": {
+      "title": "Check it out live",
+      "body": "See it running in production, or dig through the source on GitHub."
+    },
+    "withoutDemo": {
+      "title": "Read the code",
+      "body": "Full source is on GitHub, including setup instructions and implementation notes."
+    },
+    "liveSite": "Live Site",
+    "viewOnGithub": "View on GitHub",
+    "back": "Back"
+  }
+}

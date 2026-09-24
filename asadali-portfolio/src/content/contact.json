@@ -1,0 +1,22 @@
+{
+  "eyebrow": "Say hello",
+  "heading": "Let's Connect",
+  "info": {
+    "heading": "Get in Touch",
+    "intro": "I'm always open to discussing new opportunities, interesting projects, or just having a chat about technology. Feel free to reach out!",
+    "email": "masadbali190@gmail.com",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "note": "You can also find my LinkedIn and GitHub links in the footer below."
+  },
+  "form": {
+    "heading": "Send a Message",
+    "submit": "Send Message",
+    "sending": "Sending...",
+    "successFallback": "Your message has been sent successfully!",
+    "success": {
+      "heading": "Success!",
+      "again": "Send Another Message"
+    }
+  }
+}

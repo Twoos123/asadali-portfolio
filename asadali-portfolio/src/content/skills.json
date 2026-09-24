@@ -1,0 +1,37 @@
+{
+  "eyebrow": "Toolkit",
+  "heading": "Skills",
+  "intro": "The tech I reach for most often, flowing by. Hover to pause, click any chip for the docs.",
+  "viewAll": "View all",
+  "categories": {
+    "languages": {
+      "rowLabel": "01 · LANGUAGES",
+      "modalLabel": "01 · LANGUAGES",
+      "title": "Programming Languages"
+    },
+    "frameworks": {
+      "rowLabel": "02 · FRAMEWORKS",
+      "modalLabel": "02 · FRAMEWORKS",
+      "title": "Frameworks & Libraries"
+    },
+    "cloudDevops": {
+      "rowLabel": "03 · CLOUD & DEVOPS",
+      "modalLabel": "03 · CLOUD & DEVOPS",
+      "title": "Cloud, Infrastructure & DevOps"
+    },
+    "databases": {
+      "rowLabel": "04 · DATABASES",
+      "modalLabel": "04 · DATABASES",
+      "title": "Databases & Storage"
+    },
+    "tools": {
+      "rowLabel": "05 · TOOLS & ECOSYSTEM",
+      "modalLabel": "05 · TOOLS",
+      "title": "Developer Tools & Ecosystem"
+    }
+  },
+  "modal": {
+    "eyebrow": "Full toolkit",
+    "heading": "Everything I work with"
+  }
+}

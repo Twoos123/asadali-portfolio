@@ -5,6 +5,7 @@ const { Resend } = require('resend');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
+const editorRouter = require('./editor');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -236,10 +237,14 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     endpoints: {
       contact: 'POST /api/contact',
-      health: 'GET /api/health'
+      health: 'GET /api/health',
+      editor: 'POST /api/editor/login, POST /api/editor/save, GET /api/editor/status'
     }
   });
 });
+
+// On-site text editor (see editor.js)
+app.use('/api/editor', editorRouter);
 
 // 404 handler
 app.use('*', (req, res) => {

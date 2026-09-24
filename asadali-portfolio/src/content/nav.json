@@ -1,0 +1,18 @@
+{
+  "logo": {
+    "name": "Asad Ali",
+    "subtitle": "Software Engineer"
+  },
+  "links": {
+    "home": "Home",
+    "about": "About",
+    "skills": "Skills",
+    "projects": "Projects",
+    "experience": "Experience",
+    "resume": "Resume"
+  },
+  "cta": {
+    "label": "Let's talk",
+    "mobileLabel": "Contact"
+  }
+}

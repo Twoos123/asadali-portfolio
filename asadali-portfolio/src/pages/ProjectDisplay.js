@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt, FaArrowLeft, FaArrowRight, FaChevronLeft, FaChevronRight, FaLinkedin } from 'react-icons/fa';
-import { projectList } from '../helpers/ProjectList';
+import Editable from '../editor/Editable';
+import { useContent } from '../editor/store';
 
 function ProjectDisplay() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const project = projectList.find((p) => p.id.toString() === id);
+  const projectList = useContent('projects').items;
+  // Text is edited by the project's position in projects.json, not its id.
+  const projectIndex = projectList.findIndex((p) => p.id.toString() === id);
+  const project = projectList[projectIndex];
+  const path = `projects.items.${projectIndex}`;
+  const csPath = `${path}.caseStudy`;
   const goBack = () => {
     if (window.history.length > 1) navigate(-1);
     else navigate('/');
@@ -16,9 +22,9 @@ function ProjectDisplay() {
   if (!project) {
     return (
       <div className="py-32 px-4 max-w-2xl mx-auto text-center">
-        <h1 className="font-display text-3xl font-semibold text-white mb-4">Project not found</h1>
+        <Editable path="caseStudy.notFound.heading" as="h1" className="font-display text-3xl font-semibold text-white mb-4" />
         <button onClick={goBack} className="text-ocean-300 hover:text-ocean-200 inline-flex items-center gap-2">
-          <FaArrowLeft className="h-3 w-3" /> Back
+          <FaArrowLeft className="h-3 w-3" /> <Editable path="caseStudy.notFound.back" />
         </button>
       </div>
     );
@@ -26,6 +32,7 @@ function ProjectDisplay() {
 
   const skills = Array.isArray(project.skills) ? project.skills : [];
   const cs = project.caseStudy;
+  const ctaVariant = project.demo ? 'withDemo' : 'withoutDemo';
 
   return (
     <div className="project-display relative py-24 md:py-28 px-4">
@@ -41,18 +48,18 @@ function ProjectDisplay() {
           onClick={goBack}
           className="inline-flex items-center gap-2 text-ocean-200/80 hover:text-white text-sm font-medium transition-colors mb-8"
         >
-          <FaArrowLeft className="h-3 w-3" /> Back
+          <FaArrowLeft className="h-3 w-3" /> <Editable path="caseStudy.back" />
         </button>
 
         <header className="mb-10">
-          <span className="eyebrow">Case study</span>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight">
-            {project.name}
-          </h1>
+          <Editable path="caseStudy.eyebrow" className="eyebrow" />
+          <Editable path={`${path}.name`} as="h1" className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight" />
           {cs?.tagline && (
-            <p className="text-lg md:text-xl text-ocean-100/80 mt-4 max-w-3xl leading-relaxed">
-              {cs.tagline}
-            </p>
+            <Editable
+              path={`${csPath}.tagline`}
+              as="p"
+              className="text-lg md:text-xl text-ocean-100/80 mt-4 max-w-3xl leading-relaxed"
+            />
           )}
 
           <div className="flex flex-wrap gap-2 mt-6">
@@ -74,7 +81,7 @@ function ProjectDisplay() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 border border-white/15 text-white text-sm font-semibold hover:bg-white/20 transition-colors"
             >
               <FaGithub className="h-4 w-4" />
-              View Repository
+              <Editable path="caseStudy.headerButtons.viewRepository" />
             </a>
             {project.demo && (
               <a
@@ -84,7 +91,7 @@ function ProjectDisplay() {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-ocean-500 to-ocean-400 hover:from-ocean-400 hover:to-ocean-300 text-white text-sm font-semibold shadow-glow"
               >
                 <FaExternalLinkAlt className="h-3 w-3" />
-                Live Demo
+                <Editable path="caseStudy.headerButtons.liveDemo" />
               </a>
             )}
           </div>
@@ -104,7 +111,7 @@ function ProjectDisplay() {
         {!cs && (
           <div className="rounded-3xl border border-white/15 bg-ocean-950/40 shadow-glass p-8 text-center"
             style={{ backdropFilter: 'blur(18px) saturate(180%)', WebkitBackdropFilter: 'blur(18px) saturate(180%)' }}>
-            <p className="text-ocean-100/80">Head to the repository above for the full write-up and code.</p>
+            <Editable path="caseStudy.noCaseStudy" as="p" className="text-ocean-100/80" />
           </div>
         )}
 
@@ -117,23 +124,25 @@ function ProjectDisplay() {
               >
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-ocean-300 to-ocean-500" />
                 <div className="pl-4 md:pl-6">
-                  <span className="eyebrow">How it started</span>
-                  <p className="mt-4 text-ocean-50/90 leading-relaxed text-base md:text-lg italic">
-                    {cs.origin}
-                  </p>
+                  <Editable path="caseStudy.origin.eyebrow" className="eyebrow" />
+                  <Editable
+                    path={`${csPath}.origin`}
+                    as="p"
+                    className="mt-4 text-ocean-50/90 leading-relaxed text-base md:text-lg italic"
+                  />
                 </div>
               </div>
             )}
 
-            <Section eyebrow="The problem" title="Why this exists">
-              <p className="text-ocean-50/85 leading-relaxed text-base md:text-lg">{cs.problem}</p>
+            <Section path="caseStudy.sections.problem">
+              <Editable path={`${csPath}.problem`} as="p" className="text-ocean-50/85 leading-relaxed text-base md:text-lg" />
             </Section>
 
-            <Section eyebrow="The approach" title="How it works">
-              <p className="text-ocean-50/85 leading-relaxed text-base md:text-lg">{cs.solution}</p>
+            <Section path="caseStudy.sections.approach">
+              <Editable path={`${csPath}.solution`} as="p" className="text-ocean-50/85 leading-relaxed text-base md:text-lg" />
             </Section>
 
-            <Section eyebrow="Architecture" title="Four layers, one pipeline">
+            <Section path="caseStudy.sections.architecture">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {cs.architecture.map((layer, i) => (
                   <motion.div
@@ -146,14 +155,20 @@ function ProjectDisplay() {
                   >
                     <div className="absolute left-0 top-6 bottom-6 w-1 rounded-r bg-gradient-to-b from-ocean-400 to-ocean-600" />
                     <div className="pl-3">
-                      <span className="eyebrow text-[10px]">{layer.subtitle}</span>
-                      <h3 className="font-display text-lg font-semibold text-white mt-1 tracking-tight">{layer.title}</h3>
-                      <p className="text-sm text-ocean-100/80 mt-2 leading-relaxed">{layer.desc}</p>
+                      <Editable path={`${csPath}.architecture.${i}.subtitle`} className="eyebrow text-[10px]" />
+                      <Editable
+                        path={`${csPath}.architecture.${i}.title`}
+                        as="h3"
+                        className="font-display text-lg font-semibold text-white mt-1 tracking-tight"
+                      />
+                      <Editable path={`${csPath}.architecture.${i}.desc`} as="p" className="text-sm text-ocean-100/80 mt-2 leading-relaxed" />
                       <div className="flex flex-wrap gap-1.5 mt-3">
-                        {layer.tech.map((t) => (
-                          <span key={t} className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-ocean-200/80">
-                            {t}
-                          </span>
+                        {layer.tech.map((t, j) => (
+                          <Editable
+                            key={t}
+                            path={`${csPath}.architecture.${i}.tech.${j}`}
+                            className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-ocean-200/80"
+                          />
                         ))}
                       </div>
                     </div>
@@ -162,7 +177,7 @@ function ProjectDisplay() {
               </div>
             </Section>
 
-            <Section eyebrow="Features" title="What it does">
+            <Section path="caseStudy.sections.features">
               <div className="space-y-10">
                 {cs.features.map((feat, i) => (
                   <motion.div
@@ -191,15 +206,19 @@ function ProjectDisplay() {
                     </div>
                     <div className="md:col-span-2">
                       <span className="eyebrow text-[10px]">0{i + 1}</span>
-                      <h3 className="font-display text-xl font-semibold text-white mt-1 tracking-tight">{feat.name}</h3>
-                      <p className="text-sm text-ocean-100/80 mt-2 leading-relaxed">{feat.desc}</p>
+                      <Editable
+                        path={`${csPath}.features.${i}.name`}
+                        as="h3"
+                        className="font-display text-xl font-semibold text-white mt-1 tracking-tight"
+                      />
+                      <Editable path={`${csPath}.features.${i}.desc`} as="p" className="text-sm text-ocean-100/80 mt-2 leading-relaxed" />
                     </div>
                   </motion.div>
                 ))}
               </div>
             </Section>
 
-            <Section eyebrow="Engineering decisions" title="Why these choices">
+            <Section path="caseStudy.sections.decisions">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {cs.decisions.map((d, i) => (
                   <motion.div
@@ -210,14 +229,18 @@ function ProjectDisplay() {
                     transition={{ duration: 0.4, delay: i * 0.06 }}
                     className="rounded-2xl border border-white/15 bg-white/[0.04] p-6"
                   >
-                    <h3 className="font-display text-base font-semibold text-white tracking-tight mb-2">{d.q}</h3>
-                    <p className="text-sm text-ocean-100/80 leading-relaxed">{d.a}</p>
+                    <Editable
+                      path={`${csPath}.decisions.${i}.q`}
+                      as="h3"
+                      className="font-display text-base font-semibold text-white tracking-tight mb-2"
+                    />
+                    <Editable path={`${csPath}.decisions.${i}.a`} as="p" className="text-sm text-ocean-100/80 leading-relaxed" />
                   </motion.div>
                 ))}
               </div>
             </Section>
 
-            <Section eyebrow="What I learned" title="Lessons carried forward">
+            <Section path="caseStudy.sections.learnings">
               <ul className="space-y-4">
                 {cs.learnings.map((l, i) => (
                   <motion.li
@@ -229,25 +252,28 @@ function ProjectDisplay() {
                     className="relative pl-6 text-ocean-50/85 leading-relaxed text-base md:text-lg"
                   >
                     <span className="absolute left-0 top-2.5 h-1.5 w-1.5 rounded-full bg-ocean-300 shadow-[0_0_8px_rgba(56,189,248,0.7)]" />
-                    {l}
+                    <Editable path={`${csPath}.learnings.${i}`} />
                   </motion.li>
                 ))}
               </ul>
             </Section>
 
             {cs.credits && (
-              <Section eyebrow="Credits" title="Built with">
+              <Section path="caseStudy.sections.credits">
                 {cs.credits.blurb && (
-                  <p className="text-ocean-50/85 leading-relaxed text-base md:text-lg mb-8">
-                    {cs.credits.blurb}
-                  </p>
+                  <Editable
+                    path={`${csPath}.credits.blurb`}
+                    as="p"
+                    className="text-ocean-50/85 leading-relaxed text-base md:text-lg mb-8"
+                  />
                 )}
                 <div className="space-y-6">
-                  {cs.credits.groups.map((g) => (
+                  {cs.credits.groups.map((g, gi) => (
                     <div key={g.label}>
-                      <div className="eyebrow mb-3">{g.label}</div>
+                      <Editable path={`${csPath}.credits.groups.${gi}.label`} as="div" className="eyebrow mb-3" />
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {g.people.map((p) => {
+                        {g.people.map((p, pi) => {
+                          const personPath = `${csPath}.credits.groups.${gi}.people.${pi}`;
                           const url = p.url || p.linkedin;
                           const isGithub = url?.includes('github.com');
                           const Icon = isGithub ? FaGithub : FaLinkedin;
@@ -260,9 +286,13 @@ function ProjectDisplay() {
                               className="group flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 px-5 py-4 transition-colors"
                             >
                               <div className="min-w-0">
-                                <div className="font-display text-base font-semibold text-white tracking-tight truncate">{p.name}</div>
+                                <Editable
+                                  path={`${personPath}.name`}
+                                  as="div"
+                                  className="font-display text-base font-semibold text-white tracking-tight truncate"
+                                />
                                 {p.subtitle && (
-                                  <div className="text-xs text-ocean-200/70 mt-0.5 truncate">{p.subtitle}</div>
+                                  <Editable path={`${personPath}.subtitle`} as="div" className="text-xs text-ocean-200/70 mt-0.5 truncate" />
                                 )}
                               </div>
                               {url && <Icon className="h-4 w-4 shrink-0 text-ocean-200/80 group-hover:text-white transition-colors" />}
@@ -278,15 +308,13 @@ function ProjectDisplay() {
 
             <div className="mt-16 rounded-3xl border border-white/15 bg-ocean-950/40 shadow-glass p-8 md:p-10 text-center"
               style={{ backdropFilter: 'blur(18px) saturate(180%)', WebkitBackdropFilter: 'blur(18px) saturate(180%)' }}>
-              <span className="eyebrow">Go deeper</span>
-              <h3 className="font-display text-2xl md:text-3xl font-semibold text-white mt-2 tracking-tight">
-                {project.demo ? 'Check it out live' : 'Read the code'}
-              </h3>
-              <p className="text-ocean-100/75 mt-3 max-w-xl mx-auto">
-                {project.demo
-                  ? 'See it running in production, or dig through the source on GitHub.'
-                  : 'Full source is on GitHub, including setup instructions and implementation notes.'}
-              </p>
+              <Editable path="caseStudy.cta.eyebrow" className="eyebrow" />
+              <Editable
+                path={`caseStudy.cta.${ctaVariant}.title`}
+                as="h3"
+                className="font-display text-2xl md:text-3xl font-semibold text-white mt-2 tracking-tight"
+              />
+              <Editable path={`caseStudy.cta.${ctaVariant}.body`} as="p" className="text-ocean-100/75 mt-3 max-w-xl mx-auto" />
               <div className="flex flex-wrap gap-3 justify-center mt-6">
                 {project.demo && (
                   <a
@@ -295,7 +323,7 @@ function ProjectDisplay() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-ocean-500 to-ocean-400 hover:from-ocean-400 hover:to-ocean-300 text-white text-sm font-semibold shadow-glow"
                   >
-                    <FaExternalLinkAlt className="h-3 w-3" /> Live Site <FaArrowRight className="h-3 w-3" />
+                    <FaExternalLinkAlt className="h-3 w-3" /> <Editable path="caseStudy.cta.liveSite" /> <FaArrowRight className="h-3 w-3" />
                   </a>
                 )}
                 <a
@@ -308,13 +336,13 @@ function ProjectDisplay() {
                       : 'bg-gradient-to-r from-ocean-500 to-ocean-400 hover:from-ocean-400 hover:to-ocean-300 shadow-glow'
                   }`}
                 >
-                  <FaGithub className="h-4 w-4" /> View on GitHub
+                  <FaGithub className="h-4 w-4" /> <Editable path="caseStudy.cta.viewOnGithub" />
                 </a>
                 <button
                   onClick={goBack}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 border border-white/15 text-white text-sm font-semibold hover:bg-white/20 transition-colors"
                 >
-                  Back
+                  <Editable path="caseStudy.cta.back" />
                 </button>
               </div>
             </div>
@@ -384,12 +412,13 @@ function FeatureSlider({ files, base, alt }) {
   );
 }
 
-function Section({ eyebrow, title, children }) {
+// `path` points at the section's labels in caseStudy.json, e.g. "caseStudy.sections.problem".
+function Section({ path, children }) {
   return (
     <section className="mb-16">
       <div className="mb-6">
-        <span className="eyebrow">{eyebrow}</span>
-        <h2 className="font-display text-2xl md:text-3xl font-semibold text-white mt-2 tracking-tight">{title}</h2>
+        <Editable path={`${path}.eyebrow`} className="eyebrow" />
+        <Editable path={`${path}.title`} as="h2" className="font-display text-2xl md:text-3xl font-semibold text-white mt-2 tracking-tight" />
       </div>
       {children}
     </section>

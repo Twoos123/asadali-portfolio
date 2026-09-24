@@ -15,6 +15,8 @@ import WaterSurface from '../components/ocean/WaterSurface';
 import DeepLight from '../components/ocean/DeepLight';
 import MarineSnow from '../components/ocean/MarineSnow';
 import { SURFACE_COLOR, setWaterColor } from '../components/ocean/waterColor';
+import Editable from '../editor/Editable';
+import { useContent } from '../editor/store';
 
 // Slim kelp fronds framing the page edges (desktop only).
 const SIDE_KELP = {
@@ -286,7 +288,7 @@ function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                Asad Ali
+                <Editable path="hero.name" />
               </motion.h1>
               <motion.p 
                 className="text-xl md:text-2xl text-blue-100 mb-8 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
@@ -294,7 +296,7 @@ function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
               >
-                4th Year Software Engineering Student | Full-Stack Developer
+                <Editable path="hero.subtitle" />
               </motion.p>
               <StaggerContainer 
                 className="flex justify-center space-x-6" 
@@ -302,8 +304,8 @@ function Home() {
                 direction="up"
                 distance={20}
               >
-                <SocialLink href="https://www.linkedin.com/in/asadbinali/" icon={FaLinkedin} label="LinkedIn" hoverColor="hover:text-blue-300" />
-                <SocialLink href="https://github.com/Twoos123" icon={FaGithub} label="GitHub" hoverColor="hover:text-gray-300" />
+                <SocialLink href="https://www.linkedin.com/in/asadbinali/" icon={FaLinkedin} labelKey="linkedin" hoverColor="hover:text-blue-300" />
+                <SocialLink href="https://github.com/Twoos123" icon={FaGithub} labelKey="github" hoverColor="hover:text-gray-300" />
                
               </StaggerContainer>
             </motion.div>
@@ -333,7 +335,9 @@ function Home() {
   );
 }
 
-function SocialLink({ href, icon: Icon, label, hoverColor }) {
+// labelKey picks the hover label from hero.social in src/content/hero.json.
+function SocialLink({ href, icon: Icon, labelKey, hoverColor }) {
+  const { social } = useContent('hero');
   return (
     <motion.a 
       href={href} 
@@ -348,14 +352,14 @@ function SocialLink({ href, icon: Icon, label, hoverColor }) {
       whileTap={{ scale: 0.9 }}
     >
       <Icon className={`text-4xl md:text-5xl text-white ${hoverColor} transition-all duration-300 drop-shadow-lg`} />
-      <span className="sr-only">{label}</span>
+      <span className="sr-only">{social[labelKey]}</span>
       <motion.span 
         className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-sm bg-blue-900 bg-opacity-80 text-white px-3 py-1 rounded-lg whitespace-nowrap pointer-events-none"
         initial={{ opacity: 0, y: 10 }}
         whileHover={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
       >
-        {label}
+        <Editable path={`hero.social.${labelKey}`} />
       </motion.span>
     </motion.a>
   );

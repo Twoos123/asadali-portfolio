@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaExpand, FaTimes, FaAws } from 'react-icons/fa';
 import { FadeInSection } from '../components/animations';
 import OceanLife from '../components/ocean/OceanLife';
+import Editable from '../editor/Editable';
 import { SiSupabase, SiStripe, SiTerraform, SiAnsible, SiPrometheus, SiGrafana, SiDuckdb, SiBitbucket, SiTrino } from 'react-icons/si';
 
 const SVG_FILE_MAP = {
@@ -108,7 +109,7 @@ function SkillChip({ name, link }) {
   );
 }
 
-function MarqueeRow({ label, items, direction, duration }) {
+function MarqueeRow({ labelPath, items, direction, duration }) {
   const trackStyle = { animationDuration: `${duration}s` };
   const doubled = [...items, ...items];
 
@@ -125,7 +126,7 @@ function MarqueeRow({ label, items, direction, duration }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 px-2">
-        <span className="eyebrow">{label}</span>
+        <Editable path={labelPath} className="eyebrow" />
         <span className="flex-1 h-px bg-gradient-to-r from-white/15 via-white/5 to-transparent" />
         <span className="text-xs font-semibold text-ocean-100/70 tabular-nums px-2 py-0.5 rounded-full bg-white/5 border border-white/10">
           {items.length}
@@ -209,10 +210,12 @@ function ExpandedSkillsModal({ open, onClose, categories }) {
           >
             <div className="flex items-center justify-between px-6 md:px-10 py-5 border-b border-white/10">
               <div>
-                <span className="eyebrow">Full toolkit</span>
-                <h2 className="font-display text-2xl md:text-3xl font-semibold text-white mt-1 tracking-tight">
-                  Everything I work with
-                </h2>
+                <Editable path="skills.modal.eyebrow" className="eyebrow" />
+                <Editable
+                  path="skills.modal.heading"
+                  as="h2"
+                  className="font-display text-2xl md:text-3xl font-semibold text-white mt-1 tracking-tight"
+                />
               </div>
               <motion.button
                 onClick={onClose}
@@ -228,17 +231,19 @@ function ExpandedSkillsModal({ open, onClose, categories }) {
             <div className="overflow-y-auto max-h-[calc(90vh-5.5rem)] px-6 md:px-10 py-8 space-y-10">
               {categories.map((cat, ci) => (
                 <motion.section
-                  key={cat.label}
+                  key={cat.key}
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.08 + ci * 0.08, duration: 0.4 }}
                 >
                   <div className="flex items-end justify-between mb-5">
                     <div>
-                      <span className="eyebrow">{cat.label}</span>
-                      <h3 className="font-display text-xl md:text-2xl font-semibold text-white mt-1 tracking-tight">
-                        {cat.title}
-                      </h3>
+                      <Editable path={`skills.categories.${cat.key}.modalLabel`} className="eyebrow" />
+                      <Editable
+                        path={`skills.categories.${cat.key}.title`}
+                        as="h3"
+                        className="font-display text-xl md:text-2xl font-semibold text-white mt-1 tracking-tight"
+                      />
                     </div>
                     <span className="text-xs font-semibold text-ocean-100/70 tabular-nums px-2.5 py-1 rounded-full bg-white/5 border border-white/10">
                       {cat.items.length}
@@ -343,11 +348,9 @@ function Skills() {
       <div className="container mx-auto px-4 relative z-10">
         <FadeInSection direction="up" delay={0.2} threshold={0.3}>
           <div className="text-center mb-10">
-            <span className="eyebrow">Toolkit</span>
-            <h1 className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight">Skills</h1>
-            <p className="text-ocean-100/70 mt-3 max-w-xl mx-auto text-sm md:text-base">
-              The tech I reach for most often, flowing by. Hover to pause, click any chip for the docs.
-            </p>
+            <Editable path="skills.eyebrow" className="eyebrow" />
+            <Editable path="skills.heading" as="h1" className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight" />
+            <Editable path="skills.intro" as="p" className="text-ocean-100/70 mt-3 max-w-xl mx-auto text-sm md:text-base" />
           </div>
         </FadeInSection>
 
@@ -364,35 +367,35 @@ function Skills() {
               aria-label="Expand skills"
             >
               <FaExpand className="h-3 w-3" />
-              <span className="hidden sm:inline text-xs font-medium tracking-tight">View all</span>
+              <Editable path="skills.viewAll" className="hidden sm:inline text-xs font-medium tracking-tight" />
             </motion.button>
 
             <MarqueeRow
-              label="01 · LANGUAGES"
+              labelPath="skills.categories.languages.rowLabel"
               items={programmingLanguages}
               direction="left"
               duration={38}
             />
             <MarqueeRow
-              label="02 · FRAMEWORKS"
+              labelPath="skills.categories.frameworks.rowLabel"
               items={frameworks}
               direction="right"
               duration={44}
             />
             <MarqueeRow
-              label="03 · CLOUD & DEVOPS"
+              labelPath="skills.categories.cloudDevops.rowLabel"
               items={cloudDevops}
               direction="left"
               duration={40}
             />
             <MarqueeRow
-              label="04 · DATABASES"
+              labelPath="skills.categories.databases.rowLabel"
               items={databases}
               direction="right"
               duration={36}
             />
             <MarqueeRow
-              label="05 · TOOLS & ECOSYSTEM"
+              labelPath="skills.categories.tools.rowLabel"
               items={toolsPlatforms}
               direction="left"
               duration={46}
@@ -405,11 +408,11 @@ function Skills() {
         open={expanded}
         onClose={() => setExpanded(false)}
         categories={[
-          { label: '01 · LANGUAGES', title: 'Programming Languages', items: programmingLanguages },
-          { label: '02 · FRAMEWORKS', title: 'Frameworks & Libraries', items: frameworks },
-          { label: '03 · CLOUD & DEVOPS', title: 'Cloud, Infrastructure & DevOps', items: cloudDevops },
-          { label: '04 · DATABASES', title: 'Databases & Storage', items: databases },
-          { label: '05 · TOOLS', title: 'Developer Tools & Ecosystem', items: toolsPlatforms },
+          { key: 'languages', items: programmingLanguages },
+          { key: 'frameworks', items: frameworks },
+          { key: 'cloudDevops', items: cloudDevops },
+          { key: 'databases', items: databases },
+          { key: 'tools', items: toolsPlatforms },
         ]}
       />
     </div>

@@ -357,6 +357,33 @@
   transform-origin: 50% 100%;
 }
 
+/* On-site text editor (src/editor): editable text is outlined while editing. */
+.site-editable {
+  outline: 1px dashed rgba(186, 230, 253, 0.35);
+  outline-offset: 3px;
+  border-radius: 3px;
+  cursor: text;
+  transition: outline-color 0.15s, background-color 0.15s;
+}
+
+.site-editable:hover {
+  outline-color: rgba(186, 230, 253, 0.85);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.site-editable:focus {
+  outline: 2px solid #38bdf8;
+  background-color: rgba(8, 47, 73, 0.35);
+}
+
+.site-editable--changed {
+  outline-color: rgba(251, 191, 36, 0.85);
+}
+
+.site-editable--rich:not(:focus) {
+  cursor: pointer;
+}
+
 /* Footer "Pause animations" toggle (see hooks/useReducedMotion.js). Loading spinners keep
    turning so a pending action never looks frozen. */
 html[data-motion-paused] *:not(.animate-spin),

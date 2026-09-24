@@ -3,13 +3,12 @@ import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { FaEnvelope, FaCopy, FaCheck, FaPaperPlane } from 'react-icons/fa';
 import SuccessAnimation from '../components/animations/SuccessAnimation';
 import OceanLife from '../components/ocean/OceanLife';
-
-const API_BASE =
-  process.env.NODE_ENV === 'production'
-    ? 'https://asadali-portfolio.onrender.com'
-    : 'http://localhost:5000';
+import Editable from '../editor/Editable';
+import { useContent } from '../editor/store';
+import { API_BASE } from '../config';
 
 function Contact() {
+  const content = useContent('contact');
   const [emailCopied, setEmailCopied] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -31,7 +30,7 @@ function Contact() {
     fetch(`${API_BASE}/api/health`, { method: 'GET', mode: 'cors' }).catch(() => {});
   }, [titleInView]);
 
-    const myEmail = "masadbali190@gmail.com";
+  const myEmail = content.info.email;
 
   const copyEmail = async () => {
     try {
@@ -67,7 +66,7 @@ function Contact() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        setFeedbackMessage(data.message || 'Your message has been sent successfully!');
+        setFeedbackMessage(data.message || content.form.successFallback);
         setSubmissionStatus('success');
         // Cue the ocean layer's celebration (a golden school and a burst of bubbles).
         window.dispatchEvent(new Event('ocean:celebrate'));
@@ -102,10 +101,12 @@ function Contact() {
           animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <span className="eyebrow">Say hello</span>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight">
-            Let's Connect
-          </h1>
+          <Editable path="contact.eyebrow" className="eyebrow" />
+          <Editable
+            path="contact.heading"
+            as="h1"
+            className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight"
+          />
         </motion.div>
 
         <div className="max-w-4xl mx-auto">
@@ -125,17 +126,14 @@ function Contact() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                   {/* Contact Info Section */}
                   <div className="space-y-6">
-                    <h2 className="font-display text-2xl font-semibold text-white mb-4 tracking-tight">Get in Touch</h2>
-                    <p className="text-ocean-100/80 leading-relaxed">
-                      I'm always open to discussing new opportunities, interesting projects,
-                      or just having a chat about technology. Feel free to reach out!
-                    </p>
+                    <Editable path="contact.info.heading" as="h2" className="font-display text-2xl font-semibold text-white mb-4 tracking-tight" />
+                    <Editable path="contact.info.intro" as="p" className="text-ocean-100/80 leading-relaxed" />
 
                     <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/10"
                       style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}>
                       <div className="flex items-center gap-3 min-w-0">
                         <FaEnvelope className="text-ocean-300 h-5 w-5 flex-shrink-0" />
-                        <span className="text-white truncate">{myEmail}</span>
+                        <Editable path="contact.info.email" className="text-white truncate" />
                       </div>
                       <motion.button
                         onClick={copyEmail}
@@ -144,18 +142,16 @@ function Contact() {
                         whileTap={{ scale: 0.95 }}
                       >
                         {emailCopied ? <FaCheck className="h-3 w-3" /> : <FaCopy className="h-3 w-3" />}
-                        {emailCopied ? 'Copied!' : 'Copy'}
+                        <Editable path={emailCopied ? 'contact.info.copied' : 'contact.info.copy'} />
                       </motion.button>
                     </div>
 
-                    <p className="text-ocean-200/70 text-sm">
-                      You can also find my LinkedIn and GitHub links in the footer below.
-                    </p>
+                    <Editable path="contact.info.note" as="p" className="text-ocean-200/70 text-sm" />
                   </div>
 
                   {/* Contact Form Section */}
                   <div>
-                    <h2 className="font-display text-2xl font-semibold text-white mb-6 tracking-tight">Send a Message</h2>
+                    <Editable path="contact.form.heading" as="h2" className="font-display text-2xl font-semibold text-white mb-6 tracking-tight" />
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -213,7 +209,7 @@ function Contact() {
                         ) : (
                           <FaPaperPlane className="h-4 w-4 relative z-10" />
                         )}
-                        <span className="relative z-10">{isSubmitting ? 'Sending...' : 'Send Message'}</span>
+                        <Editable path={isSubmitting ? 'contact.form.sending' : 'contact.form.submit'} className="relative z-10" />
                       </motion.button>
                     </form>
                   </div>

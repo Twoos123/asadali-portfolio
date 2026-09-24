@@ -1,8 +1,9 @@
 import React, { useRef, useMemo, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { projectList } from "../helpers/ProjectList";
 import { motion, useInView } from 'framer-motion';
 import OceanLife from '../components/ocean/OceanLife';
+import Editable from '../editor/Editable';
+import { useContent } from '../editor/store';
 import { FaSearch, FaFilter, FaGithub, FaBookOpen } from 'react-icons/fa';
 import { SiSupabase, SiStripe } from 'react-icons/si';
 
@@ -148,7 +149,8 @@ const SkillIcon = React.memo(({ skill }) => {
 });
 
 // Move ProjectCard OUTSIDE the Projects component
-const ProjectCard = React.memo(({ project, index }) => {
+// `path` is the project's place in the content, e.g. "projects.items.3".
+const ProjectCard = React.memo(({ project, path, index }) => {
   const cardRef = useRef(null);
   const isInView = useInView(cardRef, { threshold: 0.1, once: true });
   const [skillsExpanded, setSkillsExpanded] = useState(false);
@@ -219,19 +221,25 @@ const ProjectCard = React.memo(({ project, index }) => {
           {hasCaseStudy && (
             <div className="absolute top-4 left-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ocean-400/25 border border-ocean-300/40 text-ocean-50 text-[10px] font-semibold uppercase tracking-wider backdrop-blur-sm">
               <FaBookOpen className="h-2.5 w-2.5" />
-              Case Study
+              <Editable path="projects.page.card.caseStudyBadge" />
             </div>
           )}
           {!hasCaseStudy && project.demo && (
-            <div className="absolute top-4 left-4 px-2.5 py-1 rounded-full bg-emerald-400/20 border border-emerald-300/40 text-emerald-100 text-[10px] font-semibold uppercase tracking-wider backdrop-blur-sm">
-              Live Demo
-            </div>
+            <Editable
+              path="projects.page.card.liveDemoBadge"
+              as="div"
+              className="absolute top-4 left-4 px-2.5 py-1 rounded-full bg-emerald-400/20 border border-emerald-300/40 text-emerald-100 text-[10px] font-semibold uppercase tracking-wider backdrop-blur-sm"
+            />
           )}
         </div>
 
         <div className="p-6 flex flex-col flex-1 gap-3">
-          <h3 className="font-display text-xl font-semibold text-white tracking-tight">{project.name}</h3>
-          <p className="text-ocean-100/80 text-sm leading-relaxed line-clamp-3 min-h-[3.75rem]">{project.description}</p>
+          <Editable path={`${path}.name`} as="h3" className="font-display text-xl font-semibold text-white tracking-tight" />
+          <Editable
+            path={`${path}.description`}
+            as="p"
+            className="text-ocean-100/80 text-sm leading-relaxed line-clamp-3 min-h-[3.75rem]"
+          />
 
           <div className="flex flex-wrap gap-3 items-center pt-2 mt-auto">
             {(skillsExpanded ? skillsArray : skillsArray.slice(0, 7)).map((skill, skillIndex) => (
@@ -247,7 +255,7 @@ const ProjectCard = React.memo(({ project, index }) => {
                 className="text-xs text-ocean-100 font-medium px-2.5 py-1 rounded-full bg-white/10 border border-white/15 hover:bg-white/20 hover:border-white/25 transition-colors"
                 aria-label={skillsExpanded ? 'Show fewer skills' : 'Show all skills'}
               >
-                {skillsExpanded ? 'Show less' : `+${skillsArray.length - 7}`}
+                {skillsExpanded ? <Editable path="projects.page.card.showLessSkills" /> : `+${skillsArray.length - 7}`}
               </button>
             )}
           </div>
@@ -259,13 +267,18 @@ const ProjectCard = React.memo(({ project, index }) => {
   );
 });
 
-// Memoize the project list outside to prevent recreation
-const memoizedProjectList = projectList;
-
 function Projects() {
   const titleRef = useRef(null);
   const titleInView = useInView(titleRef, { threshold: 0.3, once: true });
-  
+  const projectList = useContent('projects').items;
+
+  // Card text is edited by the project's position in projects.json, not its id.
+  const pathById = useMemo(() => {
+    const paths = new Map();
+    projectList.forEach((project, i) => paths.set(project.id, `projects.items.${i}`));
+    return paths;
+  }, [projectList]);
+
   // State for projects functionality
   const [visibleProjects, setVisibleProjects] = useState(6);
   const [searchTerm, setSearchTerm] = useState('');
@@ -275,17 +288,17 @@ function Projects() {
   // Get unique tags from all projects
   const allTags = useMemo(() => {
     const tags = new Set(['All']);
-    memoizedProjectList.forEach(project => {
+    projectList.forEach(project => {
       if (Array.isArray(project.skills)) {
         project.skills.forEach(skill => tags.add(skill));
       }
     });
     return Array.from(tags);
-  }, []);
+  }, [projectList]);
 
   // Filter projects based on search and tags
   const filteredProjects = useMemo(() => {
-    return memoizedProjectList.filter(project => {
+    return projectList.filter(project => {
       const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            project.description.toLowerCase().includes(searchTerm.toLowerCase());
       
@@ -294,7 +307,7 @@ function Projects() {
       
       return matchesSearch && matchesTag;
     });
-  }, [searchTerm, selectedTag]);
+  }, [projectList, searchTerm, selectedTag]);
 
   const showSeeMore = filteredProjects.length > visibleProjects;
   const displayedProjects = filteredProjects.slice(0, visibleProjects);
@@ -327,10 +340,8 @@ function Projects() {
         animate={titleInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <span className="eyebrow">Selected work</span>
-        <h1 className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight">
-          Personal Projects
-        </h1>
+        <Editable path="projects.page.eyebrow" className="eyebrow" />
+        <Editable path="projects.page.heading" as="h1" className="font-display text-4xl md:text-5xl font-bold text-white mt-3 tracking-tight" />
       </motion.div>
 
       {/* Search and Filter Section */}
@@ -358,7 +369,7 @@ function Projects() {
             whileTap={{ scale: 0.95 }}
           >
             <FaFilter className="h-4 w-4" />
-            Filter by Technology
+            <Editable path="projects.page.filters.toggle" />
           </motion.button>
         </div>
 
@@ -385,7 +396,7 @@ function Projects() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {tag}
+                {tag === 'All' ? <Editable path="projects.page.filters.all" /> : tag}
               </motion.button>
             ))}
           </div>
@@ -393,16 +404,21 @@ function Projects() {
 
         {/* Results Count */}
         <div className="text-center text-blue-200 text-sm mb-6">
-          Showing {displayedProjects.length} of {filteredProjects.length} projects
+          <Editable path="projects.page.resultsCount.showing" />
+          {' '}{displayedProjects.length}{' '}
+          <Editable path="projects.page.resultsCount.of" />
+          {' '}{filteredProjects.length}{' '}
+          <Editable path="projects.page.resultsCount.projects" />
         </div>
       </div>
 
       {/* Projects Grid */}
       <div className="projectList grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 max-w-7xl mx-auto items-stretch relative z-10">
         {displayedProjects.map((project, index) => (
-          <ProjectCard 
+          <ProjectCard
             key={project.id}
             project={project}
+            path={pathById.get(project.id)}
             index={index}
           />
         ))}
@@ -420,7 +436,10 @@ function Projects() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            See More Projects ({filteredProjects.length - visibleProjects} remaining)
+            <Editable path="projects.page.seeMore.label" />
+            {' ('}{filteredProjects.length - visibleProjects}{' '}
+            <Editable path="projects.page.seeMore.remaining" />
+            {')'}
           </motion.button>
         </div>
       )}
@@ -428,7 +447,7 @@ function Projects() {
       {/* No Results Message */}
       {filteredProjects.length === 0 && (
         <div className="text-center text-blue-200 mt-12 relative z-10">
-          <p className="text-lg">No projects found matching your criteria.</p>
+          <Editable path="projects.page.noResults.message" as="p" className="text-lg" />
           <button
             onClick={() => {
               setSearchTerm('');
@@ -437,7 +456,7 @@ function Projects() {
             }}
             className="mt-4 px-6 py-2 rounded-lg backdrop-blur-md bg-white/10 border border-white/20 text-blue-100 hover:bg-white/20 transition-all duration-300"
           >
-            Clear Filters
+            <Editable path="projects.page.noResults.clearFilters" />
           </button>
         </div>
       )}

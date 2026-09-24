@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import { useMotionPaused } from './hooks/useReducedMotion';
 import { SURFACE_COLOR, onWaterColor } from './components/ocean/waterColor';
+import EditorBar from './editor/EditorBar';
 
 function App() {
   const waterRef = useRef(null);
@@ -46,6 +47,8 @@ function App() {
         </main>
         <Footer />
         </div>
+        {/* On-site text editor, only shown with ?edit */}
+        <EditorBar />
       </Router>
       </MotionConfig>
     </div>
