@@ -537,17 +537,41 @@ function spawnBurst(pool, x, y, count, spread) {
     p.vy = -rand(50, 130);
     p.life = p.maxLife = rand(1.1, 1.9);
     p.seed = rand(0, TAU);
+    p.age = 0;
+    p.passedUp = false;
+    p.adoptedAt = -1;
     if (++spawned >= count) break;
   }
 }
 
-function updateBurst(p, dt, env) {
+function updateBurst(p, dt) {
   if (p.life <= 0) return;
   p.life -= dt;
+  p.age += dt;
   p.vy -= 40 * dt;
   p.vx *= Math.exp(-2.5 * dt);
-  p.x += (p.vx + Math.sin(env.t * 9 + p.seed) * 12) * dt;
+  // Wobble on the bubble's own clock, so a copy handed to the section above stays in step.
+  p.x += (p.vx + Math.sin(p.age * 9 + p.seed) * 12) * dt;
   p.y += p.vy * dt;
+}
+
+// Each section's layer clips at its edges, so a bubble rising out of the top of one would
+// vanish mid-water. Instead the section above takes over an identical copy: while the
+// bubble straddles the edge both sections draw it (each showing its own half), then the
+// lower one lets it go. Running sections register here with their size this frame.
+const liveSims = new Set();
+
+function passBurstUp(from, p, now) {
+  const x = from.rect.left + p.x;
+  const y = from.rect.top + p.y;
+  for (const sim of liveSims) {
+    const r = sim.rect;
+    if (sim === from || sim.frame !== now || !r) continue;
+    if (x >= r.left && x <= r.right && r.top <= from.rect.top - 1 && r.bottom >= from.rect.top - 4) {
+      sim.adopt(p, x - r.left, y - r.top, now);
+      return;
+    }
+  }
 }
 
 function renderBurst(p) {
@@ -699,9 +723,29 @@ export function createOceanSim(container, plan, { reducedMotion = false } = {}) 
   let lastTap = performance.now();
   let rect = null;
 
+  // This section as other sections see it, for bubbles crossing between them.
+  const self = {
+    rect: null,
+    frame: -1,
+    // A bubble rising in from the section below: carry it on in a free slot, sized to match.
+    adopt(src, x, y, now) {
+      const p = bursts.find((b) => b.life <= 0);
+      if (!p) return;
+      Object.assign(p, { x, y, vx: src.vx, vy: src.vy, life: src.life, maxLife: src.maxLife, seed: src.seed, age: src.age, passedUp: false, adoptedAt: now });
+      if (p.size !== src.size) {
+        p.size = src.size;
+        p.el.style.width = `${src.size}px`;
+        p.el.style.height = `${src.size}px`;
+      }
+    },
+  };
+  liveSims.add(self);
+
   // Measure in the ticker's read phase, before anything on the page has moved this frame.
-  const read = () => {
+  const read = (now) => {
     rect = measure();
+    self.rect = rect;
+    self.frame = now;
   };
 
   const write = (now) => {
@@ -734,7 +778,17 @@ export function createOceanSim(container, plan, { reducedMotion = false } = {}) 
       if (!c.school?.dormant) UPDATE[c.species.motion](c, dt, env);
     }
     for (const b of bubbles) updateBubble(b, dt, env);
-    for (const p of bursts) updateBurst(p, dt, env);
+    for (const p of bursts) {
+      // A bubble adopted earlier this frame has already moved in the section it came from.
+      if (p.adoptedAt !== now) updateBurst(p, dt);
+      if (p.life <= 0) continue;
+      if (!p.passedUp && p.y - p.size / 2 < 0) {
+        p.passedUp = true;
+        passBurstUp(self, p, now);
+      }
+      // Fully into the section above: that section carries it from here.
+      if (p.passedUp && p.y + p.size / 2 < 0) p.life = 0;
+    }
     for (const f of food) updateFood(f, dt, env);
     render();
     for (const p of bursts) renderBurst(p);
@@ -759,6 +813,7 @@ export function createOceanSim(container, plan, { reducedMotion = false } = {}) 
   return {
     destroy() {
       stop();
+      liveSims.delete(self);
       releasePointer();
       window.removeEventListener('ocean:celebrate', onCelebrate);
     },
