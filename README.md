@@ -6,6 +6,12 @@
 
 My personal portfolio, live at **[asadbinali.com](https://asadbinali.com)**: projects with case studies, experience, skills and resume, set in an ocean you sink deeper into as you scroll.
 
+## Demo
+
+A quick tour of the on-site editor: every section of the site edited in place, with changes held until they're reviewed and published.
+
+https://github.com/user-attachments/assets/d1c79ecf-d6dc-454b-81fe-6ae09bac4f1e
+
 ## Highlights
 
 - **A living ocean.** Hand-drawn SVG sea life (schools of fish, jellyfish, an anglerfish, a kraken) that swims, turns, flees the cursor and comes to feed when you click. The water darkens with depth, marine snow drifts past, and the deep end has a flashlight that follows the cursor. All motion runs on one shared animation loop, pauses off screen, freezes in place with the footer's pause button, and respects the system's reduce-motion setting.
