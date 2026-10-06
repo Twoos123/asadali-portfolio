@@ -8,7 +8,7 @@ export const projectList = projectsContent.items;
 // case-study page read, so a new item renders (and saves) like the existing ones.
 
 // Shown on a new project (and its first screenshot) until a real image is picked.
-export const PLACEHOLDER_IMAGE = '/assets/AsadLogo.png';
+export const PLACEHOLDER_IMAGE = '/assets/AsadLogo.svg?v=2';
 
 export const NEW_SKILL = 'New skill';
 export const NEW_TECH = 'New tech';
