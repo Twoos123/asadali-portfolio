@@ -1,16 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <defs>
-    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0ea5e9"/>
-      <stop offset="1" stop-color="#075985"/>
-    </linearGradient>
-    <linearGradient id="foam" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#bae6fd"/>
-      <stop offset="1" stop-color="#38bdf8"/>
-    </linearGradient>
-    <clipPath id="above"><rect x="0" y="0" width="100" height="56"/></clipPath>
-    <clipPath id="below"><rect x="0" y="56" width="100" height="44"/></clipPath>
-  </defs><circle cx="50" cy="50" r="50" fill="url(#sea)"/>
-  <g clip-path="url(#above)"><path d="M17 72 L31 26 L45 72 M55 72 L69 26 L83 72" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt"/></g>
-  <g clip-path="url(#below)" opacity="0.45"><path d="M17 72 L31 26 L45 72 M55 72 L69 26 L83 72" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt"/></g>
-  <path d="M8 56 H92" stroke="#fff" stroke-width="4"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs>
+  <linearGradient id="sea" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#075985"/></linearGradient>
+  <linearGradient id="deep" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#075985"/><stop offset="1" stop-color="#082f49"/></linearGradient>
+  <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs><circle cx="50" cy="50" r="50" fill="url(#deep)"/><g transform="translate(50 50) scale(0.86) translate(-50 -50)"><defs><mask id="m0" maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="120"><rect x="-10" y="-10" width="120" height="120" fill="#fff"/><path d="M60.34 58.25 L66.46 41.75" stroke="#000" stroke-width="10.3" stroke-linecap="butt"/><path d="M30.80 42.00 L48.40 42.00" stroke="#000" stroke-width="10.3" stroke-linecap="butt"/></mask><mask id="m1" maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="120"><rect x="-10" y="-10" width="120" height="120" fill="#fff"/><path d="M36.54 49.75 L42.66 66.25" stroke="#000" stroke-width="10.3" stroke-linecap="butt"/></mask><mask id="m2" maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="120"><rect x="-10" y="-10" width="120" height="120" fill="#fff"/><path d="M33.54 58.25 L39.66 41.75" stroke="#000" stroke-width="10.3" stroke-linecap="butt"/><path d="M51.60 58.00 L69.20 58.00" stroke="#000" stroke-width="10.3" stroke-linecap="butt"/></mask><mask id="m3" maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="120"><rect x="-10" y="-10" width="120" height="120" fill="#fff"/><path d="M57.34 33.75 L63.46 50.25" stroke="#000" stroke-width="10.3" stroke-linecap="butt"/></mask></defs><path d="M24 84 L50 14 L76 84" fill="none" stroke="#fff" stroke-width="5.5" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt" mask="url(#m0)" /><path d="M33.66 58 H66.34" fill="none" stroke="#fff" stroke-width="5.5" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt" mask="url(#m1)" /><path d="M24 16 L50 86 L76 16" fill="none" stroke="#7dd3fc" stroke-width="5.5" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt" mask="url(#m2)" /><path d="M33.66 42 H66.34" fill="none" stroke="#7dd3fc" stroke-width="5.5" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt" mask="url(#m3)" /></g></svg>
