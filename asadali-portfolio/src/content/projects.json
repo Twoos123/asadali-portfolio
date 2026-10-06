@@ -29,7 +29,7 @@
     {
       "id": 10,
       "name": "CS2 Meta Engine",
-      "description": "A pro-level CS2 demo analysis platform: mines HLTV and FACEIT demos, clusters grenade lineups, renders 2D match replays, tracks economy, generates heatmaps, and produces automated anti-strat scouting reports — features neither Refrag nor SCL offer.",
+      "description": "A CS2 demo-analysis platform for players, coaches and analysts. It ingests pro, FACEIT and your own matchmaking demos, mines impact-ranked grenade lineups, renders 2D replays with key moments, computes HLTV-style ratings and anti-strat scouting reports, exports practice configs you can load in-game, and shows a live radar fed by CS2 itself. Runs locally, or self-hosted on Kubernetes with Postgres, a job worker, CI/CD and monitoring.",
       "image": "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/landing.png",
       "skills": [
         "Python",
@@ -40,21 +40,27 @@
         "Vite",
         "Tailwind CSS",
         "Recharts",
+        "PostgreSQL",
+        "Docker",
+        "Kubernetes",
+        "Terraform",
+        "Ansible",
+        "Playwright",
         "Anthropic Claude"
       ],
       "github": "https://github.com/Twoos123/cs2-meta-engine",
       "demo": "",
       "caseStudy": {
-        "tagline": "Turning raw .dem files into pro-level CS2 intel — grenade lineups, 2D replays, economy tracking, heatmaps, and AI scouting reports, all in one dashboard.",
+        "tagline": "Turning raw .dem files into pro-level CS2 intel: impact-ranked grenade lineups, 2D replays, Rating 2.0 player profiles, anti-strat reports, practice configs and a live radar, running on a self-hosted Kubernetes cluster.",
         "heroImage": "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/landing.png",
         "origin": "This one started with a conversation. I was in an interview and the interviewer brought up OpenClaw and Claude, and how agentic AI workflows are already good enough to handle a real chunk of analyst-style work. It stuck with me, because I'd been sitting on a problem for a while: every time I wanted to dig into a CS2 match properly, I was either scrubbing demos manually or looking at Refrag and SCL, the two main paid platforms, each running around $70/team for roughly 6 slots. That conversation flipped the question for me. Instead of paying for the product, how far could I push things on my own? How much of that paid tool could I actually build with a good pipeline and the right AI in the loop?",
-        "problem": "I built this for myself. I'm currently top 2,000 in NA on Faceit, and at that level the gap between players is mostly about preparation: util timings, opponent tendencies, map-specific habits. Pro teams have analysts and six-figure tools to surface that stuff; solo ranked players don't. Refrag and SCL sell exactly this kind of intel, but locked behind a $70/team subscription built for orgs, not individuals. CS2 Meta Engine is me rebuilding that pipeline end-to-end so I can run the same analysis on my own demos, with AI doing the scouting work I'd otherwise pay an analyst for.",
-        "solution": "A three-layer system that ingests HLTV and FACEIT demos, extracts tick-level events into structured data, and surfaces the result as grenade lineups, 2D replays, economy breakdowns, heatmaps, Player Profiles, and auto-generated anti-strat reports — all in a single React dashboard. Anti-strat and Player Profile computation is fully client-side from cached timeline JSON, so there are zero extra backend calls after the first parse.",
+        "problem": "I built this for myself. I'm currently top 2,000 in NA on Faceit, and at that level the gap between players is mostly about preparation: util timings, opponent tendencies, map-specific habits. Pro teams have analysts and six-figure tools to surface that stuff; solo ranked players don't. Refrag and SCL sell exactly this kind of intel, but locked behind a $70/team subscription built for orgs, not individuals. CS2 Meta Engine is me rebuilding that pipeline end-to-end: the same analysis on pro demos and on my own matchmaking games, with practice tooling that closes the loop back into CS2 itself, and AI in the loop where prose actually helps.",
+        "solution": "A pipeline that takes demos in from four sources (your own matchmaking games, FACEIT, HLTV through a browser extension, and plain uploads), rebuilds every grenade throw, and turns the result into lineups, 2D replays, player ratings, scouting reports, practice configs and a live radar inside one React app. The same code runs as a single local process or on a k3s cluster with two API replicas, a job worker and Postgres, and the whole deployment (Terraform, Ansible, Kubernetes manifests, CI/CD, monitoring, backups) lives in the repo.",
         "architecture": [
           {
             "title": "Parse Layer",
             "subtitle": "Rust + demoparser2",
-            "desc": "Demos ship as binary blobs: multi-MB compressed tickstreams. A Rust-backed parser (demoparser2) extracts round-by-round events into typed Pydantic schemas, keeping memory flat even on pro-length matches.",
+            "desc": "Demos ship as binary blobs: multi-MB compressed tickstreams. A Rust-backed parser (demoparser2) extracts round-by-round events into typed Pydantic schemas, keeping memory flat on pro-length matches. Current CS2 builds no longer emit a grenade_thrown event, so throws are rebuilt from each grenade's flight path, a reconstruction that matches the real event on all 5,003 throws in the reference pro demos. Demos that end before the match did are flagged as partial, and restarted rounds are dropped.",
             "tech": [
               "Rust",
               "demoparser2",
@@ -63,11 +69,12 @@
           },
           {
             "title": "Service Layer",
-            "subtitle": "FastAPI + SQLite",
-            "desc": "A FastAPI server coordinates parsing, caches parsed demos in SQLite, and exposes REST endpoints for the frontend. Uvicorn workers handle concurrent parses; an RCON bridge hooks into live CS2 servers for practice flows.",
+            "subtitle": "FastAPI + job queue + Postgres",
+            "desc": "A FastAPI server (77 endpoints) serves lineups, replay timelines, players, the match catalog and the live radar. Long work (ingest, the lineup pipeline, catalog refreshes, photo warm-up) is a row in a jobs table: a worker process claims it atomically, and progress and heartbeats live in the row, so every API replica reports the same status. One connection layer speaks both SQLite and Postgres, and a migration script copies a local SQLite database into Postgres.",
             "tech": [
               "Python",
               "FastAPI",
+              "PostgreSQL",
               "SQLite",
               "uvicorn"
             ]
@@ -75,52 +82,78 @@
           {
             "title": "Experience Layer",
             "subtitle": "React + Vite + Recharts",
-            "desc": "A React 18 dashboard renders the 2D replay, heatmaps, and economy charts. Recharts drives the round-flow and money graphs; a custom canvas layer handles tactical map overlays and lineup playback.",
+            "desc": "A React 18 app renders the 2D replay, heatmaps, economy charts and scouting reports, with a canvas layer for radar overlays and lineup playback. Every page works at 375px with stacked panels and touch controls. A Chrome extension adds a Send to CS2 Meta Engine button to HLTV match pages, and the live radar streams CS2's Game State Integration to the browser over server-sent events. Playwright drives the whole thing end to end at phone and desktop sizes.",
             "tech": [
               "React",
+              "TypeScript",
               "Vite",
               "Tailwind CSS",
               "Recharts",
-              "Axios"
+              "Playwright"
             ]
           },
           {
-            "title": "Intelligence Layer",
-            "subtitle": "Claude + HLTV + FACEIT",
-            "desc": "Anthropic Claude reads parsed demos and generates opponent scouting reports in natural-language prose. HLTV and FACEIT scrapers handle demo acquisition, roster data, and team logo extraction automatically.",
+            "title": "Platform Layer",
+            "subtitle": "k3s on Proxmox + Cloudflare",
+            "desc": "Terraform creates the VM through the Proxmox API; Ansible takes it from a bare OS to Docker, a registry, k3s, a CI runner and the app's secrets. Kubernetes runs Postgres, two API replicas with rolling updates, one worker, the web tier, CronJobs for catalog refreshes and nightly pg_dump backups, and Prometheus + Grafana dashboards and alerts. Cloudflare Tunnel and Access give it public HTTPS behind an email one-time-PIN login with no open ports, and GitHub Actions tests, builds and rolls out every push to main.",
             "tech": [
-              "Anthropic Claude",
-              "OpenRouter",
-              "HLTV scraper",
-              "FACEIT API"
+              "Kubernetes",
+              "Terraform",
+              "Ansible",
+              "Docker",
+              "Cloudflare",
+              "GitHub Actions",
+              "Prometheus",
+              "Grafana"
             ]
           }
         ],
         "features": [
           {
+            "name": "Getting demos in",
+            "desc": "Four sources, none of them a scraper. A folder watcher picks up your own matchmaking demos the moment CS2 downloads them and filters the picker to games you played in. FACEIT demos come through the official Data and Downloads APIs from a profile URL. HLTV blocks server-side requests, so a Chrome extension adds a Send to CS2 Meta Engine button to match pages and your own browser does the download, roster and logos included. Anything else (.dem, .rar, .zip, .gz, .bz2, .zst) can be dragged onto the picker or dropped in an inbox folder. Every import is de-duplicated, named from the demo header, and parsed into a timeline right away, with a progress bar per phase.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/demo-picker.png",
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/ingest-auto-import.png"
+            ]
+          },
+          {
             "name": "Grenade lineup intelligence",
-            "desc": "Every smoke/flash/molly across pro demos, clustered by throw position + angle and ranked by win_rate × log(throws) × avg_damage. Technique detection (stand/walk/run/crouch/jump), callout labels, execute combo detection, and 1024×1024 radar overlay with adjustable sliders.",
+            "desc": "Every smoke, flash, molly and HE from every demo, bucketed by throw position (75u), stand position and angle (6°), and ranked by round win rate × log1p(throws) × (1 + avg utility damage / 100). Technique detection (stand / walk / run / crouch / jump / running jump) and left / right / both click, read from velocity, stance, buttons and throw strength. Each lineup is labelled with its nearest callout, executes surface recurring 3-4 grenade cores thrown within 10 seconds, and any lineup can be copied as a setpos / setang string, teleported to over RCON, or opened at the exact throw in the demo.",
             "screenshots": [
               "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/lineups.png"
             ]
           },
           {
-            "name": "Demo picker & ingestion",
-            "desc": "Browse demos grouped by map, or pull them directly from HLTV (filter by team/event/map) or FACEIT (look up any player by profile URL). The pipeline auto-downloads, extracts, parses, clusters lineups, and updates Player Profiles — with a real-time progress bar for each phase.",
+            "name": "Practice lists and CS2 configs",
+            "desc": "Star lineups into per-map lists, reorder and annotate them, then download or install a practice config. In CS2, exec practice_<list> loads it and the ] and [ keys cycle through the lineups, so the reps happen in-game rather than in a browser tab.",
             "screenshots": [
-              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/demo-picker.png",
-              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/landing.png"
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/practice-lists.png"
             ]
           },
           {
             "name": "2D match replay",
-            "desc": "Full match playback on a 1024×1024 radar. Player positions, yaw direction, health bars, weapon icons, armor indicators. Smoke clouds (20s), molotov patches (7s), flash bursts, HE shockwaves with countdown timers. HUD scrubber with round tick markers, kill feed with headshot/wallbang/noscope icons, and AI match recap.",
+            "desc": "Full match playback on the radar: positions, view direction, health, armor, weapons, smokes, molotovs, flashes, HEs and bomb timers, with mouse or touch zoom and pan. A kill feed, a round timeline with alive counts and how each round ended, notes and bookmarks, and an AI recap. Partial HLTV demos are flagged everywhere, replayed rounds are dropped, and the final score comes from the game's own scoreboard.",
             "screenshots": [
               "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/replay.png"
             ]
           },
           {
-            "name": "Insights — round, patterns & heatmap",
+            "name": "Key moments and share links",
+            "desc": "Entries, multi-kills, clutches won or lost, plants, defuses and eco wins are detected per round. Click one to jump there, and every moment has a link: /replay/<demo>?round=14&t=45 opens the replay paused at that second, so a teammate can see exactly what you mean.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/key-moments.png"
+            ]
+          },
+          {
+            "name": "Compare: your throw vs the pro lineup",
+            "desc": "A replay tab that matches each of a player's throws to the nearest pro lineup on the same map and says exactly what was off, relative to the pro's facing: 12u left, 3° too high, landed 40u short. Both throws are overlaid on the radar with an on-point / close / off badge.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/compare.png"
+            ]
+          },
+          {
+            "name": "Insights: round, patterns and heatmap",
             "desc": "Three overlay modes: Round mode shows utility paths, victim entry/exit markers, flash blinds, and AOE radii. Patterns mode detects repeated grenade sequences with flash effectiveness scoring and lets you live-scrub to any throw. Heatmap mode aggregates all grenade landings, filterable by HE / Smoke / Flash / Molotov.",
             "screenshots": [
               "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/insights.png",
@@ -130,7 +163,7 @@
           },
           {
             "name": "Economy tracker",
-            "desc": "Equipment value bar chart (T vs CT per round), buy-type classification (Eco / Force / Half / Full), loss-bonus tracking ($1400 base + $500/loss), and a round-by-round table with winner, buy types, equipment values, and cash spent for both sides.",
+            "desc": "Equipment value bar chart (T vs CT per round), buy-type classification (Pistol / Eco / Force / Half / Full), loss-bonus tracking, and a round-by-round table with winner, buy types, equipment values, and cash spent for both sides.",
             "screenshots": [
               "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/economy.png"
             ]
@@ -143,27 +176,49 @@
             ]
           },
           {
-            "name": "Per-player stats",
-            "desc": "Full scoreboard with K/D, +/-, HS%, first kills/deaths, 2K–5K rounds, and survival rate. Expandable detail cards break down kill types (headshot, wallbang, noscope, smoke, blind), opening duels won/lost, utility usage, and multi-kill rounds — all computed client-side from timeline data.",
+            "name": "Per-match stats",
+            "desc": "Scoreboard with K / D / ±, HS%, opening kills and multi-kills, plus ADR, KAST, 1vX clutches and a trade breakdown (trade kills and traded deaths). Expandable cards break down kill types (headshot, wallbang, noscope, through smoke, blind), opening duels won and lost, and utility usage.",
             "screenshots": [
               "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/stats.png"
             ]
           },
           {
-            "name": "Anti-Strat scouting report",
-            "desc": "Select any opponent team: get site hit frequency bars, utility tendency radar heatmap, AWP position heatmap (primary AWPer identified), first-blood timing, round-win pattern SVG donut rings, and per-player breakdowns with weapons and opening duels — computed entirely client-side from cached timelines, no new backend calls.",
+            "name": "Anti-strat scouting report",
+            "desc": "Pick a map and a team, and every demo of theirs is analysed together: CT setups and the T default spread at 0:20 as callouts and A / Mid / B zones with win rates; site hits, utility tendencies and AWP positions as radar heatmaps; first-blood timing and round-win patterns (sides, pistols, eco conversion); and a per-player breakdown of weapons, utility and opening duels. Partial demos carry a warning, /anti-strat?map=de_mirage&team=G2 runs the report straight from a link, and Print / PDF produces a clean handout for the team.",
             "screenshots": [
               "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/anti-strat.png",
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/anti-strat-setups.png",
               "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/anti-strat-2.png",
               "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/anti-strat-3.png"
             ]
           },
           {
-            "name": "Player Profiles",
-            "desc": "Cross-demo leaderboard ranked by rating, with role inference (AWP / Entry / Support / Lurker / Rifler) derived from AWP ratio, opening kill rate, utility rate, and survival rate. Detail view shows a role radar chart, per-map/side splits, and recent match history up to 50 matches.",
+            "name": "Player profiles",
+            "desc": "A cross-demo leaderboard on Rating 2.0 (the community approximation of HLTV's formula, falling back to Rating 1.0 for old demos without damage counters), filterable to pro games, your games or everything. Profiles carry ADR, KAST, APR, trade-kill and traded-death percentages, clutches 1v1 through 1v5, an inferred role (AWP / Entry / Support / Lurker / Rifler) with a radar chart, per-map and per-side splits, and match history. Player photos are only openly licensed images from Liquipedia, with attribution, refreshed in the background.",
             "screenshots": [
               "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/players.png",
               "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/player-detail.png"
+            ]
+          },
+          {
+            "name": "Match catalog",
+            "desc": "Recent and upcoming pro matches from the Liquipedia API: teams, scores, tier, maps and links to HLTV and Liquipedia, with demos already on disk matched to their row. The client follows Liquipedia's API terms to the letter: an identifying User-Agent, gzip, one request every two seconds, disk caching and CC-BY-SA attribution. Refreshes run as background jobs, every two hours on the cluster.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/matches.png"
+            ]
+          },
+          {
+            "name": "Live radar",
+            "desc": "CS2's Game State Integration posts straight to the app; one click installs the config into CS2. While spectating, on GOTV or watching a demo, all ten players appear with facing arrows, HP, money, weapons and utility, plus the bomb, smokes and fires in flight, a scoreboard and the phase timer. Nuke and Vertigo show upper and lower radars side by side. While you're playing, CS2 only sends your own data, by Valve's anti-cheat design.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/live-radar.png"
+            ]
+          },
+          {
+            "name": "Works on a phone",
+            "desc": "Every page works at 375px: a menu button below 1024px, stacked panels, tables that scroll inside their panel, and touch-friendly replay controls. Playwright runs the end-to-end suite at phone and desktop sizes on every push, and a deploy only goes out when it passes.",
+            "screenshots": [
+              "https://raw.githubusercontent.com/Twoos123/cs2-meta-engine/main/screenshots/mobile.png"
             ]
           }
         ],
@@ -174,22 +229,38 @@
           },
           {
             "q": "Why FastAPI over Flask or Express?",
-            "a": "Demos are deeply structured, and Pydantic models double as parse targets and API contracts. FastAPI lets one schema drive both validation and OpenAPI docs, so the React client gets typed response shapes almost for free."
+            "a": "Demos are deeply structured, and Pydantic models double as parse targets and API contracts. FastAPI lets one schema drive both validation and OpenAPI docs, so the React client gets typed response shapes almost for free. At 77 endpoints that still holds: the frontend's typed clients mirror the backend models one for one."
           },
           {
-            "q": "Why Claude for scouting?",
-            "a": "Opponent scouting is a reasoning task, not a retrieval task. \"This team defaults long with util X when down 0-2\" isn't a vector search. Claude's long context lets me feed an entire tournament's worth of parsed events + HLTV articles into a single prompt and get coherent strategic narratives back."
+            "q": "Why both SQLite and Postgres?",
+            "a": "Locally, SQLite is still the right call: file-backed, zero-config, and fast enough for millions of tick events. Once the app ran on a cluster with two API replicas and a separate worker, a single file on a shared volume stopped making sense, so the database layer became one connect() that speaks both dialects. It translates placeholders, identity columns, INSERT OR IGNORE and datetime functions, the test suite runs on SQLite and on a Postgres 16 service in CI, and a migration script copies a local database into Postgres, which the worker also does on its own the first time it meets an empty one."
           },
           {
-            "q": "Why SQLite, not Postgres?",
-            "a": "Single-tenant local tool. SQLite is file-backed, zero-config, and fast enough for millions of tick events. Swapping to Postgres would add ops overhead without any product value, and the data never leaves the analyst's machine."
+            "q": "Why a database job queue instead of Celery and Redis?",
+            "a": "Long work (ingesting a demo, the lineup pipeline, catalog refreshes, photo warm-up) is a row in a jobs table. Workers claim rows atomically with FOR UPDATE SKIP LOCKED, jobs in a group run one at a time, and progress and heartbeats are stored in the row, so whichever API replica a browser hits reports the same status, and stale jobs get reaped. That's one less service to run on a home cluster, and locally the API process simply runs the worker and the folder watcher itself."
+          },
+          {
+            "q": "Why a browser extension for HLTV instead of a scraper?",
+            "a": "HLTV sits behind Cloudflare and blocks automated server-side requests. An earlier version scraped it directly; that was retired, and the current app never tries to get around the block. A Chrome extension adds a Send to CS2 Meta Engine button to match pages, your own browser downloads the demo, and the app imports the archive and writes the roster from the page you sent. The same principle holds everywhere: FACEIT through its official APIs, Liquipedia within its published rate limits, and only openly licensed player photos."
+          },
+          {
+            "q": "Why self-host on Kubernetes at all?",
+            "a": "It runs fine as two local processes, and that's still the quick start. But I wanted to open it from a phone, keep demos and data on hardware I control, and treat the deployment as part of the project rather than a one-off. So the whole thing is in the repo: Terraform for the VM, Ansible from bare OS to k3s, manifests for Postgres, two API replicas, a worker, CronJobs, Prometheus and Grafana, and a GitHub Actions pipeline that tests on SQLite and Postgres, runs Playwright, and rolls out every push to main. Cloudflare Tunnel plus Access means public HTTPS and a login with no open ports on the home network."
+          },
+          {
+            "q": "Where does the AI actually fit?",
+            "a": "In fewer places than the origin story might suggest, on purpose. Everything a coach would check (setups, site hits, ratings, lineups) is computed deterministically from the demos, because those numbers have to be reproducible. Claude writes the parts where prose helps: match recaps and lineup descriptions, with OpenRouter as a free fallback so nothing is paywalled by default. Round summaries and structured stats make far better context for it than raw event dumps at the same token budget."
           }
         ],
         "learnings": [
           "Pydantic schemas as the single source of truth between parser and API saved more time than any other decision: changes in the demo shape surface as type errors, not runtime bugs.",
           "Designing the system around demo caching (parse once, query many) turned what should have been a 30-second wait per interaction into instant reads.",
-          "Claude's scouting quality scales with the *shape* of context, not just the size. Round summaries + structured player stats beat raw event dumps for the same token budget.",
-          "Client-side computation for Anti-Strat and Player Profiles (derived entirely from cached timeline JSON) meant zero new backend endpoints and sub-second report generation — the architecture decision that made those features feel instant."
+          "The game changed under the parser. Current CS2 builds stopped emitting grenade_thrown, so lineups had to be rebuilt from flight paths. Having 5,003 throws from older demos as a reference set is what made that change safe: the reconstruction could be checked against the real events before it replaced them.",
+          "Supporting two databases from the start is cheaper than migrating later. One connect() that speaks SQLite and Postgres, and the same test suite on both in CI, caught dialect bugs (concurrent CREATE IF NOT EXISTS, placeholders, identity columns) long before they reached the cluster.",
+          "Respecting a data source's terms is a design constraint, not a compliance footnote. The browser extension, the Liquipedia throttling and the licensed-photos-only rule all came from asking what each source actually allows, and each one turned into a more robust feature than the workaround would have been.",
+          "Claude's output quality scales with the shape of context, not just the size. Round summaries plus structured player stats beat raw event dumps for the same token budget.",
+          "Client-side computation for Anti-Strat and Player Profiles (derived from cached timeline JSON) meant zero new backend endpoints and sub-second report generation: the architecture decision that made those features feel instant.",
+          "End-to-end tests at phone width paid for themselves immediately. Playwright at 375px gates every deploy, and the mobile pass that came out of it is why the app is usable from a phone between matches."
         ],
         "credits": {
           "blurb": "Huge props to the open-source projects and data sources that made this possible. None of the CS2-specific parts would exist without them.",
@@ -204,13 +275,13 @@
                 },
                 {
                   "name": "awpy",
-                  "subtitle": "Radar assets and map calibration data",
+                  "subtitle": "Radar images and map calibration data",
                   "url": "https://github.com/pnxenopoulos/awpy"
                 },
                 {
-                  "name": "CS2CalloutExtractor",
-                  "subtitle": "Callout origin positions for lineup labels (by xobust)",
-                  "url": "https://github.com/xobust/CS2CalloutExtractor"
+                  "name": "CS2Callouts",
+                  "subtitle": "Callout polygons extracted from CS2's map files (by mwridgway)",
+                  "url": "https://github.com/mwridgway/CS2Callouts"
                 }
               ]
             },
@@ -218,18 +289,28 @@
               "label": "Data & services",
               "people": [
                 {
-                  "name": "HLTV.org",
-                  "subtitle": "Match metadata, demos, team logos, and roster data",
-                  "url": "https://www.hltv.org"
+                  "name": "Liquipedia",
+                  "subtitle": "Match catalog and openly licensed player photos (CC-BY-SA)",
+                  "url": "https://liquipedia.net"
                 },
                 {
                   "name": "FACEIT",
-                  "subtitle": "Matchmaking demo source and player profile lookup",
-                  "url": "https://www.faceit.com"
+                  "subtitle": "Official Data and Downloads APIs for matches and demos",
+                  "url": "https://developers.faceit.com"
+                },
+                {
+                  "name": "HLTV.org",
+                  "subtitle": "Match pages and demos, through your own browser and the extension",
+                  "url": "https://www.hltv.org"
+                },
+                {
+                  "name": "Valve",
+                  "subtitle": "CS2 Game State Integration behind the live radar",
+                  "url": "https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive_Game_State_Integration"
                 },
                 {
                   "name": "OpenRouter",
-                  "subtitle": "Fallback LLM provider alongside Claude",
+                  "subtitle": "Free fallback LLM provider alongside Claude",
                   "url": "https://openrouter.ai"
                 }
               ]

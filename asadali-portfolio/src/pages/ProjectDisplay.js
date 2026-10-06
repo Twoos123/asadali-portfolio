@@ -274,7 +274,7 @@ function ProjectDisplay() {
                         )}
                         <div className={`relative md:col-span-2${editing ? ' pt-8' : ''}`}>
                           <ItemControls listPath={`${csPath}.features`} index={i} count={features.length} label="feature" />
-                          <span className="eyebrow text-[10px]">0{i + 1}</span>
+                          <span className="eyebrow text-[10px]">{String(i + 1).padStart(2, '0')}</span>
                           <Editable
                             path={`${featurePath}.name`}
                             as="h3"
